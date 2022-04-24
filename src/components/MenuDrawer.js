@@ -15,7 +15,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Grid } from '@mui/material';
+import { Grid, Tooltip } from '@mui/material';
 import { ButtonBase } from '@mui/material';
 
 import ActivityHandler from './ActivityHandler';
@@ -107,8 +107,8 @@ const drawerStyles = {
 
 
 const menuActividades = [
-    { actividad: "Buscador Avanzado", id: "buscadorAvanzado" },
-    { actividad: "Buscador Simplificado", id: "buscadorSimple" },
+    { actividad: "Buscador avanzado", id: "buscadorAvanzado" },
+    { actividad: "Buscador simplificado", id: "buscadorSimple" },
     { actividad: "Editor de articulos", id: "editor" },
     { actividad: "Centro de novedades", id: "novedades" },
     { actividad: "Centro de reportes", id: "reportes" }
@@ -173,26 +173,28 @@ export default function MenuDrawer(props) {
                 <Divider />
                 <List>
                     {menuActividades.map((item) => (
-                        <ListItemButton
-                            key={item}
-                            onClick={() => cambiarPagina(item.id)}
-                            sx={{
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                            }}
-                        >
-                            <ListItemIcon
+                        <Tooltip title={item.actividad} placement="right">
+                            <ListItemButton
+                                key={item}
+                                onClick={() => cambiarPagina(item.id)}
                                 sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
+                                    minHeight: 48,
+                                    justifyContent: open ? 'initial' : 'center',
+                                    px: 2.5,
                                 }}
                             >
-                                <IconoMenu id={item.id} />
-                            </ListItemIcon>
-                            <ListItemText primary={item.actividad} sx={{ opacity: open ? 1 : 0 }} />
-                        </ListItemButton>
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0,
+                                        mr: open ? 3 : 'auto',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <IconoMenu id={item.id} />
+                                </ListItemIcon>
+                                <ListItemText primary={item.actividad} sx={{ opacity: open ? 1 : 0 }} />
+                            </ListItemButton>
+                        </Tooltip>
                     ))}
                 </List>
             </Drawer>
