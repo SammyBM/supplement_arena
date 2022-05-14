@@ -7,6 +7,7 @@ import RegistroUsuario from './RegistroUsuario';
 import BuscadorAvanzado from './BuscadorAvanzado';
 import CentroReportes from './CentroReportes';
 import BuscadorSimple from './BuscadorSimple';
+import VisualizadorArticulos from './VisualizadorArticulos';
 
 
 export default function ActivityHandler(props) {
@@ -26,8 +27,14 @@ export default function ActivityHandler(props) {
         case "buscadorSimple":
             return <BuscadorSimple />;
             break;
+        case "resultados":
+            return <></>;
+            break;
         case "editor":
             return <EditorArticulos />; //Falta
+            break;
+        case "visualizador":
+            return <VisualizadorArticulos />;
             break;
         case "novedades":
             return <CentroNovedades />; //Falta

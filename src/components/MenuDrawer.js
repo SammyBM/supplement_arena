@@ -111,7 +111,9 @@ const menuActividades = [
     { actividad: "Buscador simplificado", id: "buscadorSimple" },
     { actividad: "Editor de articulos", id: "editor" },
     { actividad: "Centro de novedades", id: "novedades" },
-    { actividad: "Centro de reportes", id: "reportes" }
+    { actividad: "Centro de reportes", id: "reportes" },
+    { actividad: "Visualizador", id: "visualizador" },
+    { actividad: "Resultados", id: "resultados" }
 ];
 
 export default function MenuDrawer(props) {

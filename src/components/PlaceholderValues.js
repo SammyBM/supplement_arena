@@ -1,14 +1,19 @@
 
 const articuloFake = {
     id: 1,
-    Titulo: "Gold Standard Whey",
-    Etiquetas: [1, 3, 4],
-    TipoSuplemento: 1,
-    Ingredientes: [1, 4, 6],
-    IngActivo: 1,
-    Imagen: {},
-    PerfilAminos: 1,
-    PerfilAG: 1,
+    titulo: "Gold Standard Whey",
+    etiquetas: [1, 3, 4],
+    tipoSuplemento: 1,
+    ingredientes: [1, 4, 6],
+    ingActivo: 1,
+    imagen: {},
+    tamano: 30,
+    calorias: 120,
+    proteina: 21,
+    lipidos: 1,
+    carbos: 2,
+    perfilAminos: 1,
+    perfilAG: 1
 };
 
 
@@ -241,4 +246,10 @@ export function getTiposSuplementos() {
 
 export function getTweetsFake() {
     return tweetsFake;
+}
+
+export function getEtiquetaByID(id) {
+    let ans;
+    listaEtiquetas.map((item) => item.id == id ? ans = item : ans = null);
+    return ans;
 }
