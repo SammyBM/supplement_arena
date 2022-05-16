@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Card, CardMedia, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 
 import * as PlaceholderValues from "./PlaceholderValues";
 
@@ -24,6 +24,7 @@ export default function VisualizadorArticulos(props) {
         }
     );
 
+
     React.useEffect(() => {
         setArticulo({
             titulo: articuloFake.titulo,
@@ -31,7 +32,7 @@ export default function VisualizadorArticulos(props) {
             tipoSuplemento: articuloFake.tipo,
             ingredientes: articuloFake.ingredientes,
             ingActivo: articuloFake.ingActivo,
-            imagen: "",
+            imagen: articuloFake.imagen,
             tamano: articuloFake.tamano,
             calorias: articuloFake.calorias,
             proteina: articuloFake.proteina,
@@ -43,13 +44,13 @@ export default function VisualizadorArticulos(props) {
     }, []
     );
 
-    const datos = [articulo.titulo, articulo.tamano, articulo.calorias, articulo.proteina, articulo.lipidos, articulo.carbos];
+
 
     return (
         <>
-            <Grid container direction="row">
+            <Grid container direction="row" rowSpacing={2} alignItems="center" >
                 <Grid item xs={12} md={6}>
-                    <Stack direction="column" alignItems="center" justifyContent="center" spacing={2}>
+                    <Stack direction="column" alignItems="center" justifyContent="flex-start" spacing={2}>
                         <Typography variant="h3" color="primary">{articulo.titulo}</Typography>
                         <Typography variant="subtitle2" color="secondary">{articulo.etiquetas}</Typography>
                         <Typography variant="h5" color="primary">Ingredientes</Typography>
@@ -59,10 +60,18 @@ export default function VisualizadorArticulos(props) {
                     </Stack>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Box sx={{ bgcolor: '#cfe8fc', maxMeight: '500px', maxWidth: "500px" }}><Paper /></Box>
+                    <Box sx={{ bgcolor: '#cfe8fc', maxHeight: '500px', maxWidth: "500px" }}>
+                        <Card elevation={4}>
+                            <CardMedia
+                                component="img"
+                                height="inherit"
+                                image={articulo.imagen}
+                            />
+                        </Card>
+                    </Box>
                 </Grid>
                 <Grid item xs={12}>
-                    <TablaNutrimental {...datos} />
+                    <TablaNutrimental titulo={articulo.titulo} tamano={articulo.tamano} calorias={articulo.calorias} proteina={articulo.proteina} lipidos={articulo.lipidos} carbos={articulo.carbos} />
                 </Grid>
                 {articulo.tipoSuplemento >= 2 ? <></> : <Grid item xs={12}>
                     <Typography variant="body1" color="initial">Grafiquita</Typography>
@@ -72,14 +81,14 @@ export default function VisualizadorArticulos(props) {
     );
 }
 
-function TablaNutrimental({ titulo, tamano, calorias, proteina, lipidos, carbos }) {
+function TablaNutrimental(props) {
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <caption>Información nutrimental {titulo}</caption>
+                <caption>Información nutrimental {props.titulo}</caption>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Nutrimento (porción de {tamano}&nbsp;g)</TableCell>
+                        <TableCell>Nutrimento (porción de {props.tamano}&nbsp;g)</TableCell>
                         <TableCell align="right"></TableCell>
                         <TableCell align="right">Unidad</TableCell>
                     </TableRow>
@@ -87,22 +96,22 @@ function TablaNutrimental({ titulo, tamano, calorias, proteina, lipidos, carbos 
                 <TableBody>
                     <TableRow>
                         <TableCell>Calorias</TableCell>
-                        <TableCell align="right">{calorias}</TableCell>
+                        <TableCell align="right">{props.calorias}</TableCell>
                         <TableCell align="right">Cal</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell>Proteina</TableCell>
-                        <TableCell align="right">{proteina}</TableCell>
+                        <TableCell align="right">{props.proteina}</TableCell>
                         <TableCell align="right">g</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell>Lipidos</TableCell>
-                        <TableCell align="right">{lipidos}</TableCell>
+                        <TableCell align="right">{props.lipidos}</TableCell>
                         <TableCell align="right">g</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell>Hidratos de carbono</TableCell>
-                        <TableCell align="right">{carbos}</TableCell>
+                        <TableCell align="right">{props.carbos}</TableCell>
                         <TableCell align="right">g</TableCell>
                     </TableRow>
                 </TableBody>

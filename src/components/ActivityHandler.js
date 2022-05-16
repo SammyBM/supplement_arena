@@ -8,6 +8,7 @@ import BuscadorAvanzado from './BuscadorAvanzado';
 import CentroReportes from './CentroReportes';
 import BuscadorSimple from './BuscadorSimple';
 import VisualizadorArticulos from './VisualizadorArticulos';
+import ResultadosBusqueda from './ResultadosBusqueda/ResultadosBusqueda';
 
 
 export default function ActivityHandler(props) {
@@ -28,7 +29,7 @@ export default function ActivityHandler(props) {
             return <BuscadorSimple />;
             break;
         case "resultados":
-            return <></>;
+            return <ResultadosBusqueda funcionMenu={props.funcionMenu} />;
             break;
         case "editor":
             return <EditorArticulos />; //Falta

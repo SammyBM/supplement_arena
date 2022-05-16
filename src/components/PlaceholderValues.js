@@ -6,7 +6,7 @@ const articuloFake = {
     tipoSuplemento: 1,
     ingredientes: [1, 4, 6],
     ingActivo: 1,
-    imagen: {},
+    imagen: "https://gnc.com.mx/media/catalog/product/cache/d5c3974ef86b1c3c0d3b6947ccba778f/1/0/107206001-on-gold-standard-100-whey-choc-5-lbs.png",
     tamano: 30,
     calorias: 120,
     proteina: 21,
@@ -238,6 +238,15 @@ export function getOmegas() {
 
 export function getReportesFake() {
     return reportesFake;
+}
+
+export function getResultadosFake() {
+    let output = [];
+    for (let x = 0; x < 20; x++) {
+        output.push(getArticuloFake());
+    }
+
+    return output;
 }
 
 export function getTiposSuplementos() {
