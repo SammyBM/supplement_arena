@@ -1,7 +1,11 @@
 import * as React from 'react';
-import { Box, Card, CardMedia, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Card, CardMedia, Chip, Grid, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 
-import * as PlaceholderValues from "./PlaceholderValues";
+import * as PlaceholderValues from "../PlaceholderValues";
+import Aminograma from './Graficas/Aminograma';
+import ComposicionOmegas from './Graficas/ComposicionOmegas';
+import FormatoReportes from '../Reportes/FormatoReportes';
 
 const articuloFake = PlaceholderValues.getArticuloFake();
 
@@ -20,27 +24,39 @@ export default function VisualizadorArticulos(props) {
             lipidos: "",
             carbos: "",
             perfilAminos: "",
-            perfilAG: ""
+            perfilAG: "",
+            tiposOmegas: []
         }
     );
 
+    const [abrirReporte, setAbrirReporte] = React.useState(false);
+
+    const handleClickAbrir = () => {
+        setAbrirReporte(true);
+    }
+
+    const handleClickCerrar = () => {
+        setAbrirReporte(false);
+    }
 
     React.useEffect(() => {
         setArticulo({
-            titulo: articuloFake.titulo,
-            etiquetas: articuloFake.etiquetas,
-            tipoSuplemento: articuloFake.tipo,
-            ingredientes: articuloFake.ingredientes,
-            ingActivo: articuloFake.ingActivo,
-            imagen: articuloFake.imagen,
-            tamano: articuloFake.tamano,
-            calorias: articuloFake.calorias,
-            proteina: articuloFake.proteina,
-            lipidos: articuloFake.lipidos,
-            carbos: articuloFake.carbos,
-            perfilAminos: PlaceholderValues.getPerfilAminosFake(),
-            perfilAG: PlaceholderValues.getPerfilAGFake()
+            titulo: props.articulo.titulo,
+            etiquetas: props.articulo.etiquetas,
+            tipoSuplemento: props.articulo.tipoSuplemento,
+            ingredientes: props.articulo.ingredientes,
+            ingActivo: props.articulo.ingActivo,
+            imagen: props.articulo.imagen,
+            tamano: props.articulo.tamano,
+            calorias: props.articulo.calorias,
+            proteina: props.articulo.proteina,
+            lipidos: props.articulo.lipidos,
+            carbos: props.articulo.carbos,
+            perfilAminos: props.articulo.perfilAminos,
+            perfilAG: props.articulo.perfilAG,
+            tiposOmegas: props.articulo.tiposOmegas,
         });
+        console.log(articulo);
     }, []
     );
 
@@ -57,9 +73,10 @@ export default function VisualizadorArticulos(props) {
                         <Typography variant="body1" color="secondary">{articulo.ingredientes}</Typography>
                         <Typography variant="h5" color="primary">Ingrediente activo</Typography>
                         <Typography variant="body1" color="secondary">{articulo.ingActivo}</Typography>
+                        {articulo.tiposOmegas.length > 0 && <Stack direction="row" alignItems="center" justifyContent="center" spacing={1}>{articulo.tiposOmegas.map((item) => <Chip label={PlaceholderValues.getOmegaByID(item).tipo} color="primary" />)}</Stack>}
                     </Stack>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={5}>
                     <Box sx={{ bgcolor: '#cfe8fc', maxHeight: '500px', maxWidth: "500px" }}>
                         <Card elevation={4}>
                             <CardMedia
@@ -70,12 +87,20 @@ export default function VisualizadorArticulos(props) {
                         </Card>
                     </Box>
                 </Grid>
+                <Grid item xs={12} md={1}>
+                    <Stack direction="column" justifyContent="flex-start" alignItems="center">
+                        <IconButton onClick={handleClickAbrir}><ReportProblemIcon /></IconButton>
+                    </Stack>
+                    <FormatoReportes abierto={abrirReporte} funcionCerrar={handleClickCerrar} />
+                </Grid>
                 <Grid item xs={12}>
                     <TablaNutrimental titulo={articulo.titulo} tamano={articulo.tamano} calorias={articulo.calorias} proteina={articulo.proteina} lipidos={articulo.lipidos} carbos={articulo.carbos} />
                 </Grid>
-                {articulo.tipoSuplemento >= 2 ? <></> : <Grid item xs={12}>
-                    <Typography variant="body1" color="initial">Grafiquita</Typography>
-                </Grid>}
+                <Grid item xs={2}></Grid>
+                <Grid item xs={8}>
+                    <Grafica articulo={articulo} tipo={articulo.tipoSuplemento} />
+                </Grid>
+                <Grid item xs={2}></Grid>
             </Grid>
         </>
     );
@@ -118,4 +143,20 @@ function TablaNutrimental(props) {
             </Table>
         </TableContainer>
     );
+}
+
+function Grafica(props) {
+    const articulo = props.articulo;
+
+    switch (props.tipo) {
+        case 1:
+            return <Aminograma articulo={articulo} />;
+            break;
+        case 2:
+            return <ComposicionOmegas articulo={articulo} />;
+            break;
+        default:
+            return <></>;
+            break;
+    }
 }

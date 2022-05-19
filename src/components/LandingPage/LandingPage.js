@@ -31,16 +31,16 @@ export default function LandingPage() {
     ]
 
     return (
-        <div>
+        <>
             <Carousel>
                 {
                     items.map((item, i) => <Item key={i} item={item} />)
                 }
             </Carousel>
             <Stack direction="row" alignItems="center" justifyContent="end">
-                <CarrouselEditor />
+                <CarrouselEditor key="editor-carrusel" />
             </Stack>
-        </div>
+        </>
     );
 }
 

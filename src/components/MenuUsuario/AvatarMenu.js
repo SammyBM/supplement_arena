@@ -9,7 +9,6 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { Tooltip } from '@mui/material';
 import { IconButton } from '@mui/material';
-import MenuDrawer from './MenuDrawer';
 
 export default function AvatarMenu(props) {
 
@@ -33,7 +32,7 @@ export default function AvatarMenu(props) {
     };
 
     return (
-        <div>
+        <>
             <Tooltip title="Sesión">
                 <IconButton
                     onClick={handleClick}
@@ -91,6 +90,6 @@ export default function AvatarMenu(props) {
                     Logout
                 </MenuItem>
             </Menu>
-        </div>
+        </>
     )
 }

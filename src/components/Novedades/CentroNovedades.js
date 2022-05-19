@@ -1,9 +1,9 @@
 import * as React from 'react';
-import * as PlaceholderValues from './PlaceholderValues';
-import { Card, CardContent, Container, Grid, Paper, Typography } from "@mui/material";
-import Tweet from './Tweet';
+import { Card, CardContent, Grid, Paper, Typography } from "@mui/material";
 import { Box, height } from '@mui/system';
 
+import * as PlaceholderValues from '../PlaceholderValues';
+import Tweet from './Tweet';
 
 
 const descripcionActividad = "En esta herramienta encontrarás una selección de información que se considera relevante sobre el mercado actual de suplementos." + '\n' + "La información mostrada aquí es adquirida a través de las herramientas para desarrrolladores de Twitter.";

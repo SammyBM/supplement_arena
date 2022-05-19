@@ -1,10 +1,11 @@
+import * as React from 'react';
 import { Box, Card, CardContent, Checkbox, Divider, FormGroup, FormControlLabel, Grid, Paper, Slider, Stack, Switch, Typography, Tab, FormLabel, Tooltip, ToggleButtonGroup, ToggleButton, Button, Badge, Chip } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import EggAltTwoToneIcon from '@mui/icons-material/EggAltTwoTone';
 import LocalFloristTwoToneIcon from '@mui/icons-material/LocalFloristTwoTone';
 import PhishingTwoToneIcon from '@mui/icons-material/PhishingTwoTone';
+
 import SelectorPredictivo from './SelectorPredictivo';
-import * as React from 'react';
 
 const descripcionActividad = "Esta herramienta te permite buscar suplementos a tráves de sus caracteristicas en lugar de por su nombre." + '\n' + "Esto resulta especialmente util para usuarios más expermentados o personas que tengan un conocimiento previo en temas de nutriologia o bioquimica."
 

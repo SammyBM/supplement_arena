@@ -3,19 +3,13 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import SendIcon from "@mui/icons-material/Send"
 
 export default function FormatoReportes(props) {
-    const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
     const handleClose = () => {
-        setOpen(false);
-    };
+        props.funcionCerrar();
+    }
 
     return (
         <>
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={props.abierto} onClose={handleClose}>
                 <DialogTitle>Crear un reporte.</DialogTitle>
                 <DialogContent>
                     <DialogContentText>

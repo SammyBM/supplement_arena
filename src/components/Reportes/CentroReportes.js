@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { getReportesFake } from './PlaceholderValues';
+import { getReportesFake } from '../PlaceholderValues';
 import { Card, CardContent, Grid, Paper, Typography } from "@mui/material";
 
 import Reporte from './Reporte';

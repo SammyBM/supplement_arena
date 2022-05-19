@@ -2,10 +2,14 @@ import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/m
 import * as React from 'react';
 
 export default function TarjetaArticulo(props) {
+    const abrirArticulo = (articulo) => {
+        console.log(articulo);
+        props.funcionMenu("visualizador", articulo);
+    }
 
     return (
         <Card>
-            <CardActionArea>
+            <CardActionArea onClick={() => abrirArticulo(props.articulo)}>
                 <CardMedia
                     component="img"
                     height="inherit"

@@ -6,7 +6,7 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-import * as PlaceholderValues from "./PlaceholderValues";
+import * as PlaceholderValues from "../PlaceholderValues";
 
 
 const listaEtiquetas = PlaceholderValues.getEtiquetas();

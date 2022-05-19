@@ -1,3 +1,4 @@
+import Aminoacido from '../classes/Aminoacido';
 
 const articuloFake = {
     id: 1,
@@ -13,7 +14,8 @@ const articuloFake = {
     lipidos: 1,
     carbos: 2,
     perfilAminos: 1,
-    perfilAG: 1
+    perfilAG: 1,
+    tiposOmegas: []
 };
 
 
@@ -24,6 +26,13 @@ const perfilesAcidosGrasos = [
             { id: 1, cantidad: 0 },
             { id: 2, cantidad: 0 }
         ]
+    },
+    {
+        id: 2,
+        AcidosGrasos: [
+            { id: 1, cantidad: 3 },
+            { id: 2, cantidad: 2 }
+        ]
     }
 ];
 
@@ -31,29 +40,56 @@ const perfilesAminosFake = [
     {
         id: 1,
         aminos: [
-            { id: 1, cantidad: 2 },
-            { id: 2, cantidad: 2 },
-            { id: 3, cantidad: 2 },
+            { id: 1, cantidad: 5.3 },
+            { id: 2, cantidad: 11 },
+            { id: 3, cantidad: 7.7 },
             { id: 4, cantidad: 2 },
-            { id: 5, cantidad: 2 },
-            { id: 6, cantidad: 2 },
-            { id: 7, cantidad: 2 },
-            { id: 8, cantidad: 2 },
-            { id: 9, cantidad: 2 },
-            { id: 10, cantidad: 2 },
-            { id: 11, cantidad: 2 },
-            { id: 12, cantidad: 2 },
-            { id: 13, cantidad: 2 },
-            { id: 14, cantidad: 2 },
-            { id: 15, cantidad: 2 },
-            { id: 16, cantidad: 2 },
-            { id: 17, cantidad: 2 },
-            { id: 18, cantidad: 2 },
-            { id: 19, cantidad: 2 },
-            { id: 20, cantidad: 2 },
+            { id: 5, cantidad: 7.7 },
+            { id: 6, cantidad: 7.7 },
+            { id: 7, cantidad: 5.3 },
+            { id: 8, cantidad: 5.3 },
+            { id: 9, cantidad: 11 },
+            { id: 10, cantidad: 11 },
+            { id: 11, cantidad: 11 },
+            { id: 12, cantidad: 11 },
+            { id: 13, cantidad: 7.7 },
+            { id: 14, cantidad: 11 },
+            { id: 15, cantidad: 11 },
+            { id: 16, cantidad: 5.3 },
+            { id: 17, cantidad: 7.7 },
+            { id: 18, cantidad: 11 },
+            { id: 19, cantidad: 7.7 },
+            { id: 20, cantidad: 7.7 },
+        ],
+    },
+    {
+        id: 2,
+        aminos: [
+            { id: 1, cantidad: 0 },
+            { id: 2, cantidad: 0 },
+            { id: 3, cantidad: 0 },
+            { id: 4, cantidad: 0 },
+            { id: 5, cantidad: 0 },
+            { id: 6, cantidad: 0 },
+            { id: 7, cantidad: 0 },
+            { id: 8, cantidad: 0 },
+            { id: 9, cantidad: 0 },
+            { id: 10, cantidad: 0 },
+            { id: 11, cantidad: 0 },
+            { id: 12, cantidad: 0 },
+            { id: 13, cantidad: 0 },
+            { id: 14, cantidad: 0 },
+            { id: 15, cantidad: 0 },
+            { id: 16, cantidad: 0 },
+            { id: 17, cantidad: 0 },
+            { id: 18, cantidad: 0 },
+            { id: 19, cantidad: 0 },
+            { id: 20, cantidad: 0 },
         ],
     }
 ];
+
+
 
 const listaAcidosGrasos = [
     { id: 1, nombre: "DHA" },
@@ -65,6 +101,29 @@ const listaAlergenos = [
     { id: 2, nombre: "caseina" },
     { id: 3, nombre: "nueces" }
 ];
+
+/* const listaAminoacidos = [
+    new Aminoacido(1, "Serina"),
+    new Aminoacido(2, "Treonina"),
+    new Aminoacido(3, "Glutamina"),
+    new Aminoacido(4, "Asparagina"),
+    new Aminoacido(5, "Tirosina"),
+    new Aminoacido(6, "Cisteina"),
+    new Aminoacido(7, "Glicina"),
+    new Aminoacido(8, "Alanina"),
+    new Aminoacido(9, "Valina"),
+    new Aminoacido(10, "Leucina"),
+    new Aminoacido(11, "Isoleucina"),
+    new Aminoacido(12, "Metionina"),
+    new Aminoacido(13, "Prolina"),
+    new Aminoacido(14, "Fenilalanina"),
+    new Aminoacido(15, "Triptofano"),
+    new Aminoacido(16, "Acido Aspartico"),
+    new Aminoacido(17, "Acido Glutamico"),
+    new Aminoacido(18, "Lisina"),
+    new Aminoacido(19, "Arginina"),
+    new Aminoacido(20, "Histidia")
+]; */
 
 const listaAminoacidos = [
     { id: 1, nombre: "Serina" },
@@ -257,8 +316,38 @@ export function getTweetsFake() {
     return tweetsFake;
 }
 
+export function getAcidoGrasoById(id) {
+    let ans;
+    listaAcidosGrasos.map((item) => item.id == id && (ans = item));
+    return ans;
+}
+
+export function getAminoById(id) {
+    let ans;
+    listaAminoacidos.map((item) => item.id == id && (ans = item));
+    return ans;
+}
+
 export function getEtiquetaByID(id) {
     let ans;
-    listaEtiquetas.map((item) => item.id == id ? ans = item : ans = null);
+    listaEtiquetas.map((item) => item.id == id && (ans = item));
+    return ans;
+}
+
+export function getOmegaByID(id) {
+    let ans;
+    listaOmegas.map((item) => item.id == id && (ans = item));
+    return ans;
+}
+
+export function getPerfilAGById(id) {
+    let ans;
+    perfilesAcidosGrasos.map((item) => item.id == id && (ans = item));
+    return ans;
+}
+
+export function getPerfilAminosById(id) {
+    let ans;
+    perfilesAminosFake.map((item) => item.id == id && (ans = item));
     return ans;
 }
