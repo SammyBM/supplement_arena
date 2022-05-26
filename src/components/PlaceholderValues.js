@@ -1,4 +1,3 @@
-import Aminoacido from '../classes/Aminoacido';
 
 const articuloFake = {
     id: 1,

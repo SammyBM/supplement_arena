@@ -6,6 +6,7 @@ import * as PlaceholderValues from "../PlaceholderValues";
 import Aminograma from './Graficas/Aminograma';
 import ComposicionOmegas from './Graficas/ComposicionOmegas';
 import FormatoReportes from '../Reportes/FormatoReportes';
+import Advertencia from '../Advertencia/Advertencia';
 
 const articuloFake = PlaceholderValues.getArticuloFake();
 
@@ -73,6 +74,8 @@ export default function VisualizadorArticulos(props) {
                         <Typography variant="body1" color="secondary">{articulo.ingredientes}</Typography>
                         <Typography variant="h5" color="primary">Ingrediente activo</Typography>
                         <Typography variant="body1" color="secondary">{articulo.ingActivo}</Typography>
+                        <Typography variant="h5" color="primary">Advertencias</Typography>
+                        <Advertencia advertencia={1} />
                         {articulo.tiposOmegas.length > 0 && <Stack direction="row" alignItems="center" justifyContent="center" spacing={1}>{articulo.tiposOmegas.map((item) => <Chip label={PlaceholderValues.getOmegaByID(item).tipo} color="primary" />)}</Stack>}
                     </Stack>
                 </Grid>

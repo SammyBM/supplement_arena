@@ -271,7 +271,7 @@ function InterfazVariable(props) {
     const handleOmegas = (event, newOmegas) => props.omegasFunction(event, newOmegas);
 
     const textfieldsAminos = aminoacidos.map((item) => <Grid item xs={12} md={6} lg={3}><TextField id={"aminos-" + item.id} label={item.nombre} type="number" helperText="Por porción" /></Grid>);
-    const botonesOmegas = listaOmegas.map((value) => <ToggleButton value={value.tipo} key={value.id}><Chip label={value.numero} color={omegas.includes(value.tipo) ? "primary" : "secondary"} variant={omegas.includes(value.tipo) ? "filled" : "outlined"}></Chip></ToggleButton>);
+    const botonesOmegas = listaOmegas.map((value) => <ToggleButton value={value.tipo} key={value.id}><Chip label={value.tipo.charAt(value.tipo.length - 1)} color={omegas.includes(value.tipo) ? "primary" : "secondary"} variant={omegas.includes(value.tipo) ? "filled" : "outlined"}></Chip></ToggleButton>);
     const textfieldAcidosGrasos = acidosGrasos.map((item => <TextField id={"acidos-grasos-" + item.id} label={item.nombre} type="number" helperText="Por porción" disabled={omegas.includes(listaOmegas[0].tipo) ? false : true} />))
 
 
