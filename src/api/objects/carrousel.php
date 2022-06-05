@@ -2,7 +2,7 @@
 
 include_once "../utils/file.php";
 
-class Carrusel
+class Carrousel
 {
 
     private $connection;

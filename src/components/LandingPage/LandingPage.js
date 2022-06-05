@@ -1,12 +1,17 @@
 import * as React from 'react';
 import Carousel from 'react-material-ui-carousel'
-import { Paper, Button, IconButton, Stack, CardContent, Typography } from '@mui/material'
+import { Stack, CardContent, Typography } from '@mui/material'
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
-import EditIcon from '@mui/icons-material/Edit'
+
+import axios from 'axios';
 
 import CarrouselEditor from "./CarrouselEditor"
 
+const api = "http://localhost/xampp/api_rest/";
+
+const pathh = require("path");
+const imageResource = pathh.join(__dirname, "..", "..", "uploads", "carrousel");
 
 export default function LandingPage() {
     var items = [
@@ -14,27 +19,43 @@ export default function LandingPage() {
             id: 1,
             name: "Random Name #1",
             description: "Probably the most random thing you have ever seen!",
-            picture: "https://parade.com/wp-content/uploads/2018/09/colorful-vegetables-in-bowl-FTR.jpg"
+            picture: <img src="https://parade.com/wp-content/uploads/2018/09/colorful-vegetables-in-bowl-FTR.jpg" />
         },
         {
             id: 2,
             name: "Random Name #2",
             description: "Hello World!",
-            picture: "https://i0.wp.com/post.healthline.com/wp-content/uploads/2021/03/pills-vitamins-pill-1296x728-header.jpg?w=1155&h=1528"
+            picture: <img src="https://i0.wp.com/post.healthline.com/wp-content/uploads/2021/03/pills-vitamins-pill-1296x728-header.jpg?w=1155&h=1528" />
         },
         {
             id: 3,
             name: "Proteina",
             description: "Proteina en polvo mamalona",
-            picture: "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/chocolate-whey-protein-powder-with-a-filled-scoop-royalty-free-image-1626898564.jpg?crop=1.00xw:0.753xh;0,0.110xh&resize=1200:*"
+            picture: <img src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/chocolate-whey-protein-powder-with-a-filled-scoop-royalty-free-image-1626898564.jpg?crop=1.00xw:0.753xh;0,0.110xh&resize=1200:*" />
         }
     ]
+
+    const [imagenes, setImagenes] = React.useState([]);
+    var imgs = new Array();
+    function imageArray(item) {
+        item.nombre_foto = pathh.join(imageResource, item.nombre_foto);
+    }
+
+    React.useEffect((
+        axios.get(api.concat('imagenes_carrousel/read.php')).then(
+            (response) => {
+                imgs = response.data;
+                imgs.forEach(imageArray);
+                setImagenes(imgs);
+            }
+        ).catch((error) => { console.error(error) })
+    ), []);
 
     return (
         <>
             <Carousel>
                 {
-                    items.map((item, i) => <Item key={i} item={item} />)
+                    imagenes.map((item, i) => <Item key={i} item={item} />)
                 }
             </Carousel>
             <Stack direction="row" alignItems="center" justifyContent="end">
@@ -51,7 +72,7 @@ function Item(props) {
                 component="img"
                 width="500"
                 height="400"
-                image={props.item.picture}
+                src={props.item.nombre_foto}
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">{props.item.name}</Typography>
