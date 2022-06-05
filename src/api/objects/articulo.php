@@ -32,6 +32,8 @@ class Articulo
 
     public function create()
     {
+
+
         $query = "INSERT INTO " . $this->table_nombre . " SET titulo=:titulo, etiquetas=:etiquetas, imagen=:imagen,categoriaID=:categoriaID,tamanoPorcion=:tamanoPorcion,calorias=:calorias, proteina=:proteina, lipidos=:lipidos, carbohidratos=:carbohidratos";
 
         $stmt = $this->connection->prepare($query);

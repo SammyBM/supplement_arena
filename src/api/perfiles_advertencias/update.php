@@ -7,29 +7,29 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 include_once '../config/database.php';
-include_once '../objects/perfil_acido_grasos.php';
+include_once '../objects/perfil_advertencias.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
-$perf = new PerfilAG($db);
+$perf = new PerfilAdvertencias($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-$perf->acidosGrasos = $data->acidosGrasos;
+$perf->advertencias = $data->advertencias;
 
-if (count($perf->acidosGrasos) != 20) {
+if (count($perf->advertencias) != 20) {
     if ($perf->update()) {
         http_response_code(200);
 
-        echo json_encode(array("message" => "Perfil acidos grasos was updated."));
+        echo json_encode(array("message" => "Perfil advertencias was updated."));
     } else {
         http_response_code(503);
 
-        echo json_encode(array("message" => "Unable to update perfil acidos grasos."));
+        echo json_encode(array("message" => "Unable to update perfil advertencias."));
     }
 } else {
     http_response_code(418);
 
-    echo json_encode(array("message" => "Informacion incompatible con perfil acidos grasos"));
+    echo json_encode(array("message" => "Informacion incompatible con perfil advertencias"));
 }

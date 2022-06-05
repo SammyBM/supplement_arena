@@ -25,6 +25,7 @@ if ($usuario->correo != null) {
 
     $usuario_array = array(
         "usuarioID" => $usuario->id,
+        "tipoUsuarioID" => $usuario->tipoUsuarioID,
         "correo" => $usuario->correo,
         "nombre" => $usuario->nombre,
         "apellido" => $usuario->apellido,

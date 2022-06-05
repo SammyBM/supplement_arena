@@ -17,6 +17,7 @@ $usuario = new Usuario($db);
 $data = json_decode(file_get_contents("php://input"));
 
 if (
+    empty($data->tipoUsuario) &&
     empty($data->correo) &&
     empty($data->nombre) &&
     empty($data->apellido) &&
@@ -28,6 +29,7 @@ if (
 
     echo json_encode(array("message" => "Unable to create usuario. Data incomplete."));
 } else {
+    $usuario->tipoUsuario = $data->tipoUsuario;
     $usuario->correo = $data->correo;
     $usuario->nombre = $data->nombre;
     $usuario->apellido = $data->apellido;

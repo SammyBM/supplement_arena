@@ -226,26 +226,28 @@ export default function MenuDrawer(props) {
                 <List>
                     {menuActividades.map((item) => (
                         <Tooltip key={item.actividad} title={item.actividad} placement="right">
-                            <ListItemButton
-                                key={item.id}
-                                onClick={() => cambiarPagina(item.id)}
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
+                            <ListItem key={item.actividad} disablePadding>
+                                <ListItemButton
+                                    key={item.id}
+                                    onClick={() => cambiarPagina(item.id)}
                                     sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
                                     }}
                                 >
-                                    <IconoMenu id={item.id} />
-                                </ListItemIcon>
-                                <ListItemText primary={item.actividad} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        <IconoMenu id={item.id} />
+                                    </ListItemIcon>
+                                    <ListItemText primary={item.actividad} sx={{ opacity: open ? 1 : 0 }} />
+                                </ListItemButton>
+                            </ListItem>
                         </Tooltip>
                     ))}
                     <Tooltip key="menu-admin" title="Funciones admin" placement="right">

@@ -18,6 +18,7 @@ $data = json_decode(file_get_contents("php://input"));
 
 $usuario->id = $data->id;
 
+$usuario->tipoUsuario = $data->tipoUsuario;
 $usuario->correo = $data->correo;
 $usuario->nombre = $data->nombre;
 $usuario->apellido = $data->apellido;

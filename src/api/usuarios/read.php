@@ -23,6 +23,7 @@ if ($num > 0) {
 
         $usuario_item  = array(
             "usuarioID" => $id,
+            "tipoUsuarioID" => $tipoUsuario,
             "correo" => $correo,
             "nombre" => $nombre,
             "apellido" => $apellido,

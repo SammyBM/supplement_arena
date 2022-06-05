@@ -5,6 +5,7 @@ class Usuario
     private $table_name = "usuarios";
 
     public $id;
+    public $tipoUsuario;
     public $correo;
     public $nombre;
     public $apellido;
@@ -28,13 +29,18 @@ class Usuario
 
     public function create()
     {
-        $query = "INSERT INTO " . $this->table_name . " SET correo=:correo, nombre=:nombre, apellido=:apellido,nombreUsuario=:nombreUsuario,fechaNacimiento=:fechaNacimiento,contrasena=:contrasena";
+        $query = "INSERT INTO " . $this->table_name . " SET tipoUsuarioID=:tipoUsuario, correo=:correo, nombre=:nombre, apellido=:apellido,nombreUsuario=:nombreUsuario,fechaNacimiento=:fechaNacimiento,contrasena=:contrasena";
 
         $stmt = $this->connection->prepare($query);
 
+        $this->tipoUsuario = htmlspecialchars(strip_tags($this->tipoUsuario));
+        $this->correo = htmlspecialchars(strip_tags($this->correo));
         $this->nombre = htmlspecialchars(strip_tags($this->nombre));
-        $this->alergeno = htmlspecialchars(strip_tags($this->alergeno));
+        $this->apellido = htmlspecialchars(strip_tags($this->apellido));
+        $this->nombreUsuario = htmlspecialchars(strip_tags($this->nombreUsuario));
+        $this->fechaNacimiento = htmlspecialchars(strip_tags($this->fechaNacimiento));
 
+        $stmt->bindParam(':tipoUsuario', $this->tipoUsuario);
         $stmt->bindParam(':correo', $this->correo);
         $stmt->bindParam(':nombre', $this->nombre);
         $stmt->bindParam(':apellido', $this->apellido);
@@ -51,7 +57,7 @@ class Usuario
 
     function readRow()
     {
-        $query = "SELECT nombre, apellido, nombreUsuario, fechaNacimiento, contrasena FROM " . $this->table_name . " WHERE usuarioID = ? LIMIT 1";
+        $query = "SELECT tipoUsuarioID, nombre, apellido, nombreUsuario, fechaNacimiento, contrasena FROM " . $this->table_name . " WHERE usuarioID = ? LIMIT 1";
         $stmt = $this->connection->prepare($query);
 
         $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
@@ -60,6 +66,7 @@ class Usuario
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        $this->tipoUsuario = $row['tipoUsuarioID'];
         $this->nombre = $row['nombre'];
         $this->apellido = $row['apellido'];
         $this->nombreUsuario = $row['nombreUsuario'];
@@ -69,16 +76,20 @@ class Usuario
 
     function update()
     {
-        $query = "UPDATE" . $this->table_name . "SET nombre = :nombre, apellido = :apellido, nombreUsuario = :nombreUsuario, fechaNacimiento = :fechaNacimiento WHERE usuarioID = :id";
+        $query = "UPDATE" . $this->table_name . "SET tipoUsuarioID=:tipoUsuarioID, nombre = :nombre, apellido = :apellido, nombreUsuario = :nombreUsuario, fechaNacimiento = :fechaNacimiento WHERE usuarioID = :id";
 
         $stmt = $this->connection->prepare($query);
 
+        $this->tipoUsuario = htmlspecialchars(strip_tags($this->tipoUsuario));
+        $this->correo = htmlspecialchars(strip_tags($this->correo));
         $this->nombre = htmlspecialchars(strip_tags($this->nombre));
         $this->apellido = htmlspecialchars(strip_tags($this->apellido));
         $this->nombreUsuario = htmlspecialchars(strip_tags($this->nombreUsuario));
         $this->fechaNacimiento = htmlspecialchars(strip_tags($this->fechaNacimiento));
         $this->id = htmlspecialchars(strip_tags($this->id));
 
+        $stmt->bindParam(':tipoUsuario', $this->tipoUsuario);
+        $stmt->bindParam(':correo', $this->correo);
         $stmt->bindParam(':nombre', $this->nombre);
         $stmt->bindParam(':apellido', $this->apellido);
         $stmt->bindParam(':nombreUsuario', $this->nombreUsuario);

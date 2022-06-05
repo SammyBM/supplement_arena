@@ -1,11 +1,18 @@
 import * as React from 'react';
-import { Grid, Pagination } from '@mui/material';
+import { Grid, Pagination, Typography } from '@mui/material';
+import { SentimentVeryDissatisfied } from '@mui/icons-material';
 import TarjetaArticulo from './TarjetaArticulo';
 import * as PlaceholderValues from "../PlaceholderValues";
 
-const resultados = PlaceholderValues.getResultadosFake();
+import axios from 'axios';
+
+const resultadxs = PlaceholderValues.getResultadosFake();
+
+
 
 export default function ResultadosBusqueda(props) {
+    const [resultados, setResultados] = React.useState([]);
+
     const [page, setPage] = React.useState(1);
     const handleChange = (event, value) => {
         setPage(value);
@@ -32,12 +39,32 @@ export default function ResultadosBusqueda(props) {
         }
     );
 
+    React.useEffect(() => {
+        axios.get("http://localhost/xampp/api_rest/articulos/read.php")
+            .then(res => {
+                const data = res.data;
+                setResultados(data.records);
+            })
+    });
 
 
     return (
         <>
             <Grid container direction="row" alignItems="center" justifyContent="center" spacing={1}>
-                {resultados.slice(limites.min, limites.max).map((item) => <Grid item xs={12} md={6} lg={3}><TarjetaArticulo articulo={item} funcionMenu={props.funcionMenu} /></Grid>)}
+
+                {resultados.length === 0 ? <Grid container direction="column" alignItems="center" justifyContent="center">
+                    <br />
+                    <Grid item xs={12}>
+                        <Typography variant="h1" color="#6c6960" size=""><SentimentVeryDissatisfied sx={{ fontSize: 100 }} /></Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant="h2" color="#6c6960">No encontramos resultados.</Typography>
+                    </Grid>
+                </Grid>
+                    :
+                    resultados.slice(limites.min, limites.max).map((item) => <Grid item key={item.articuloID} xs={12} md={6} lg={3}><TarjetaArticulo articulo={item} funcionMenu={props.funcionMenu} /></Grid>)
+
+                }
             </Grid>
             <Pagination count={resultados.length % 12 == 0 ? resultados.length / 12 : Math.floor(resultados.length / 12) + 1} page={page} onChange={handleChange} />
         </>

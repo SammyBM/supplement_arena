@@ -1,10 +1,10 @@
 <?php
-class PerfilAminos
+class PerfilVitaminas
 {
     private $connection;
-    private $table_nombre = "perfil_aminoacidos";
+    private $table_nombre = "vitaminasxarticulo";
 
-    public $aminos = array();
+    public $vitaminas = array();
 
     public function __construct($db)
     {
@@ -13,7 +13,7 @@ class PerfilAminos
 
     public function read()
     {
-        $query = "SELECT * FROM " . $this->table_nombre . " ORDER BY articuloID, aminoID";
+        $query = "SELECT * FROM " . $this->table_nombre . " ORDER BY articuloID, vitaminaID";
         echo $query;
         $stmt = $this->connection->prepare($query);
         $stmt->execute();
@@ -23,8 +23,8 @@ class PerfilAminos
 
     public function create()
     {
-        for ($x = 0; $x < count($this->aminos); $x++) {
-            if ($this->createRow($this->aminos[$x]->articuloID, $this->aminos[$x]->aminoID, $this->aminos[$x]->cantidad))
+        for ($x = 0; $x < count($this->vitaminas); $x++) {
+            if ($this->createRow($this->vitaminas[$x]->articuloID, $this->vitaminas[$x]->vitaminaID, $this->vitaminas[$x]->cantidad))
                 continue;
             else {
                 return false;
@@ -34,18 +34,18 @@ class PerfilAminos
         return true;
     }
 
-    public function createRow($articuloID, $aminoID, $cantidad)
+    public function createRow($articuloID, $vitaminaID, $cantidad)
     {
-        $query = "INSERT INTO " . $this->table_nombre . " SET articuloID=:articuloID, aminoID=:aminoID, cantidad=:cantidad";
+        $query = "INSERT INTO " . $this->table_nombre . " SET articuloID=:articuloID, vitaminaID=:vitaminaID, cantidad=:cantidad";
 
         $stmt = $this->connection->prepare($query);
 
         $articuloID = htmlspecialchars(strip_tags($articuloID));
-        $aminoID = htmlspecialchars(strip_tags($aminoID));
+        $vitaminaID = htmlspecialchars(strip_tags($vitaminaID));
         $cantidad = htmlspecialchars(strip_tags($cantidad));
 
         $stmt->bindParam('articuloID', $articuloID);
-        $stmt->bindParam('aminoID', $aminoID);
+        $stmt->bindParam('vitaminaID', $vitaminaID);
         $stmt->bindParam('cantidad', $cantidad);
 
         if ($stmt->execute()) {
@@ -57,9 +57,9 @@ class PerfilAminos
 
     function readByArticulo($articulo)
     {
-        $query = "SELECT a.nombre, pa.cantidad FROM " . $this->table_nombre . " AS pa
-        INNER JOIN aminoacidos as a ON pa.aminoID = a.aminoID
-        WHERE pa.articuloID = :articuloID ORDER BY pa.aminoID";
+        $query = "SELECT v.nombre, pv.cantidad FROM " . $this->table_nombre . " AS pv
+        INNER JOIN vitaminas as v ON pv.vitaminaID = v.vitaminaID
+        WHERE pv.articuloID = :articuloID ORDER BY pa.vitaminaID";
 
         $stmt = $this->connection->prepare($query);
 
@@ -73,8 +73,8 @@ class PerfilAminos
 
     function update()
     {
-        for ($x = 0; $x < count($this->aminos); $x++) {
-            if ($this->updateRow($this->aminos[$x]->articuloID, $this->aminos[$x]->aminoID, $this->aminos[$x]->cantidad))
+        for ($x = 0; $x < count($this->vitaminas); $x++) {
+            if ($this->updateRow($this->vitaminas[$x]->articuloID, $this->vitaminas[$x]->vitaminaID, $this->vitaminas[$x]->cantidad))
                 continue;
             else {
                 return false;
@@ -84,18 +84,18 @@ class PerfilAminos
         return true;
     }
 
-    function updateRow($aminoID, $articuloID, $cantidad)
+    function updateRow($vitaminaID, $articuloID, $cantidad)
     {
-        $query = "UPDATE" . $this->table_nombre . "SET cantidad=:cantidad WHERE articuloID=:articuloID AND aminoID=:aminoID";
+        $query = "UPDATE" . $this->table_nombre . "SET cantidad=:cantidad WHERE articuloID=:articuloID AND vitaminaID=:vitaminaID";
 
         $stmt = $this->connection->prepare($query);
 
         $articuloID = htmlspecialchars(strip_tags($articuloID));
-        $aminoID = htmlspecialchars(strip_tags($aminoID));
+        $vitaminaID = htmlspecialchars(strip_tags($vitaminaID));
         $cantidad = htmlspecialchars(strip_tags($cantidad));
 
         $stmt->bindParam(':articuloID', $articuloID);
-        $stmt->bindParam(':aminoID', $aminoID);
+        $stmt->bindParam(':vitaminaID', $vitaminaID);
         $stmt->bindParam(':cantidad', $cantidad);
 
         if ($stmt->execute()) {
@@ -110,7 +110,7 @@ class PerfilAminos
         $query = "DELETE FROM " . $this->table_nombre . " WHERE articuloID = ?";
         $stmt = $this->connection->prepare($query);
 
-        $id = htmlspecialchars(strip_tags($this->aminos[0]->aminosID));
+        $id = htmlspecialchars(strip_tags($this->vitaminas[0]->vitaminasID));
 
 
         $stmt->bindParam(1, $id, PDO::PARAM_INT);
