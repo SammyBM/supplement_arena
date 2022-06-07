@@ -10,7 +10,7 @@ import ComposicionOmegas from './Graficas/ComposicionOmegas';
 import FormatoReportes from '../Reportes/FormatoReportes';
 import Advertencia from '../Advertencia/Advertencia';
 
-const api = "http://localhost/xampp/api_rest/";
+const api = "http://localhost/api/";
 
 export default function VisualizadorArticulos(props) {
     const [articulo, setArticulo] = React.useState(
@@ -28,7 +28,9 @@ export default function VisualizadorArticulos(props) {
             carbos: "",
             perfilAminos: [],
             perfilAG: [],
-            tiposOmegas: []
+            tiposOmegas: [], 
+            vitaminas: [], 
+            advertencias: []
         }
     );
 
@@ -43,56 +45,57 @@ export default function VisualizadorArticulos(props) {
     }
 
     React.useEffect(() => {
-        let ams, oms, acs;
-        const acidos = new Array();
-        const aminos = new Array();
-        const omegas = new Array();
-        axios.get(api.concat("perfiles_aminos/read_by_articulo.php?id=", props.articulo.articuloID.toString()))
-            .then(res => {
-                ams = res.data;
-            }).catch(err => {
-                console.error(err);
-                ams = [];
-            }).finally(() => {
-                aminos.push(ams);
-            });
-        axios.get(api.concat("perfiles_acidos_grasos/read_by_articulo.php?id=", props.articulo.articuloID.toString()))
-            .then(res => {
-                acs = res.data;
-            }).catch(err => {
-                console.error(err);
-                acs = [];
-            }).finally(() => {
-                acidos.push(acs);
-            });
-        axios.get(api.concat("perfiles_omegas/read_by_articulo.php?id=", props.articulo.articuloID.toString()))
-            .then(res => {
-                oms = res.data;
+        const acidos = [];
+        const aminos = [];
+        const omegas = [];
+        const vitaminas = [];
+        const advertencias = [];
+        const ingredientes = [];
+
+        function executePromisesInRow(queue, index) {
+            if (index >= queue.length) {
+                setArticulo({
+                    titulo: props.articulo.titulo,
+                    etiquetas: props.articulo.etiquetas,
+                    tipoSuplemento: props.articulo.tipoSuplemento,
+                    ingredientes: ingredientes,
+                    ingActivo: props.articulo.ingActivo,
+                    imagen: props.articulo.imagen,
+                    tamano: props.articulo.tamano,
+                    calorias: props.articulo.calorias,
+                    proteina: props.articulo.proteina,
+                    lipidos: props.articulo.lipidos,
+                    carbos: props.articulo.carbos,
+                    perfilAG: acidos,
+                    perfilAminos: aminos,
+                    tiposOmegas: omegas,
+                    advertencias: advertencias
+                });
+                return;
+            }
+    
+            axios.get(queue[index].route).then(
+                res => {
+                    res.data.forEach(item => {
+                        queue[index].ref.push(item);    
+                    })
+            }).catch(
+                err => {
+                    console.log(err);
+            }).finally(
+                () => {
+                    executePromisesInRow(queue, index+1);
             })
-            .catch(err => {
-                console.error(err);
-                oms = [];
-            }).finally(() => {
-                omegas.push(oms);
-            });
-        axios.get(api.concat(""))
-        setArticulo({
-            titulo: props.articulo.titulo,
-            etiquetas: props.articulo.etiquetas,
-            tipoSuplemento: props.articulo.tipoSuplemento,
-            ingredientes: props.articulo.ingredientes,
-            ingActivo: props.articulo.ingActivo,
-            imagen: props.articulo.imagen,
-            tamano: props.articulo.tamano,
-            calorias: props.articulo.calorias,
-            proteina: props.articulo.proteina,
-            lipidos: props.articulo.lipidos,
-            carbos: props.articulo.carbos,
-            perfilAG: acidos,
-            perfilAG: aminos,
-            tiposOmegas: omegas
-        });
-        console.log(articulo);
+        }
+
+        executePromisesInRow([
+            {route: api.concat("perfiles_aminos/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: aminos}, 
+            {route: api.concat("perfiles_acidos_grasos/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: acidos}, 
+            {route: api.concat("perfiles_omegas/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: omegas}, 
+            {route: api.concat("perfiles_vitaminas/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: vitaminas}, 
+            {route: api.concat("perfiles_advertencias/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: advertencias}
+        ], 0);
+
     }, []
     );
 
@@ -111,7 +114,7 @@ export default function VisualizadorArticulos(props) {
                         <Typography variant="body1" color="secondary">{articulo.ingActivo}</Typography>
                         <Typography variant="h5" color="primary">Advertencias</Typography>
                         <Advertencia advertencia={1} />
-                        {articulo.tiposOmegas.length > 0 && <Stack direction="row" alignItems="center" justifyContent="center" spacing={1}>{articulo.tiposOmegas.map((item) => <Chip label={PlaceholderValues.getOmegaByID(item).nombre} color="primary" />)}</Stack>}
+                        {articulo.tiposOmegas.length > 0 && <Stack direction="row" alignItems="center" justifyContent="center" spacing={1}>{articulo.tiposOmegas.map((item) => <Chip label={item.nombre} color="primary" />)}</Stack>}
                     </Stack>
                 </Grid>
                 <Grid item xs={12} md={5}>

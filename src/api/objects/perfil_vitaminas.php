@@ -59,7 +59,7 @@ class PerfilVitaminas
     {
         $query = "SELECT v.nombre, pv.cantidad FROM " . $this->table_nombre . " AS pv
         INNER JOIN vitaminas as v ON pv.vitaminaID = v.vitaminaID
-        WHERE pv.articuloID = :articuloID ORDER BY pa.vitaminaID";
+        WHERE pv.articuloID = :articuloID ORDER BY pv.vitaminaID";
 
         $stmt = $this->connection->prepare($query);
 

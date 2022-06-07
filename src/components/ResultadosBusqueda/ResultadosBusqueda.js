@@ -40,19 +40,18 @@ export default function ResultadosBusqueda(props) {
     );
 
     React.useEffect(() => {
-        axios.get("http://localhost/xampp/api_rest/articulos/read.php")
+        axios.get("http://localhost/api/articulos/read.php")
             .then(res => {
                 const data = res.data;
                 setResultados(data.records);
             })
     });
 
-
     return (
         <>
             <Grid container direction="row" alignItems="center" justifyContent="center" spacing={1}>
 
-                {resultados.length === 0 ? <Grid container direction="column" alignItems="center" justifyContent="center">
+                {(!resultados || resultados.length === 0) ? <Grid container direction="column" alignItems="center" justifyContent="center">
                     <br />
                     <Grid item xs={12}>
                         <Typography variant="h1" color="#6c6960" size=""><SentimentVeryDissatisfied sx={{ fontSize: 100 }} /></Typography>
@@ -66,7 +65,7 @@ export default function ResultadosBusqueda(props) {
 
                 }
             </Grid>
-            <Pagination count={resultados.length % 12 == 0 ? resultados.length / 12 : Math.floor(resultados.length / 12) + 1} page={page} onChange={handleChange} />
+            {(!resultados || resultados.length === 0) ? <></> : <Pagination count={resultados.length % 12 === 0 ? resultados.length / 12 : Math.floor(resultados.length / 12) + 1} page={page} onChange={handleChange} />}
         </>
     );
 }

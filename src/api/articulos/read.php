@@ -22,7 +22,7 @@ if ($num > 0) {
         extract($row);
 
         $articulo_item  = array(
-            "articuloID" => $id,
+            "articuloID" => $articuloID,
             "titulo" => $titulo,
             "etiquetas" => $etiquetas,
             "imagen" => $imagen,

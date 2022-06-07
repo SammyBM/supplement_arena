@@ -12,7 +12,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
-const api = "http://localhost/xampp/api_rest/";
+const api = "http://localhost/api/";
 
 
 const Input = styled('input')({
@@ -46,7 +46,7 @@ function SimpleDialog(props) {
         setSelectedImage(event.target.files[0]);
         console.log(selectedImage);
         axios.post(api.concat('imagenes_carrousel/create.php'), {
-            nombre_foto: xd
+            nombre_foto: null
         }).then((response) => { });
     }
 

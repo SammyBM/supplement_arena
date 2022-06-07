@@ -4,12 +4,12 @@ header("Access-Control-Allow-Origin: *");
 header('Content-Type: application/json; charset=utf8');
 
 include_once '../config/database.php';
-include_once '../objects/perfil_aminoacidos.php';
+include_once '../objects/perfil_ingredientes.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
-$articulo = new PerfilAminos($db);
+$articulo = new PerfilIngredientes($db);
 
 $stmt = $articulo->read();
 $num = $stmt->rowCount();
@@ -23,8 +23,10 @@ if ($num > 0) {
 
         $articulo_item  = array(
             "articuloID" => $articuloID,
-            "aminoID" => $aminoID,
-            "cantidad" => $cantidad
+            "ingredienteID" => $ingredienteID,
+            "nombre" => $nombre,
+            "ingActivo" => $ingActivo,
+            "alergeno" => $alergeno
         );
 
         array_push($articulos_array["records"], $articulo_item);
@@ -37,6 +39,6 @@ if ($num > 0) {
     http_response_code(404);
 
     echo json_encode(
-        array("message" => "Perfil aminos Not Found")
+        array("message" => "Perfil Ingredientes Not Found")
     );
 }

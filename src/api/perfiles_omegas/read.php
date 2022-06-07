@@ -35,6 +35,6 @@ if ($num > 0) {
     http_response_code(404);
 
     echo json_encode(
-        array("message" => "Perfil acidos grasos Not Found")
+        array("message" => "Perfil omegas Not Found")
     );
 }

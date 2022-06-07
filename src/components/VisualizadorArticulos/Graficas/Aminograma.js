@@ -2,10 +2,8 @@ import * as React from 'react';
 import 'chart.js/auto';
 import { Radar } from 'react-chartjs-2';
 
-import * as PlaceholderValues from "../../PlaceholderValues";
-
 export default function Aminograma(props) {
-    const aminos = getLabels();
+    const aminos = getLabels(props.articulo.perfilAminos);
     const valores = getAminoData(props.articulo.perfilAminos);
 
     const data = {
@@ -27,23 +25,24 @@ export default function Aminograma(props) {
         ]
     };
 
+
     return (
         <Radar data={data} />
     );
 }
 
-function getLabels() {
+function getLabels(perfilAminos) {
     let output = [];
-    PlaceholderValues.getAminos().map((item) => {
-        output.push(PlaceholderValues.getAminoById(item.id).nombre);
+    perfilAminos.forEach((item) => {
+        output.push(item.nombre);
     });
     console.log("nombres aminos", output);
     return output;
 }
 
-function getAminoData(id_perfil) {
+function getAminoData(perfilAminos) {
     let output = [];
-    PlaceholderValues.getPerfilAminosById(id_perfil).aminos.map((item) => {
+    perfilAminos.forEach((item) => {
         output.push(item.cantidad);
     });
     console.log("valores aminos", output);

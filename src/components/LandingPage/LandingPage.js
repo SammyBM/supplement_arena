@@ -8,7 +8,7 @@ import axios from 'axios';
 
 import CarrouselEditor from "./CarrouselEditor"
 
-const api = "http://localhost/xampp/api_rest/";
+const api = "http://localhost/api/";
 
 const path = require("path-browserify");
 const imageResource = path.join(__dirname, "..", "..", "uploads", "carrousel");

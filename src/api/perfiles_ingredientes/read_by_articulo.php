@@ -8,13 +8,13 @@ header('Content-Type: application/json');
 
 
 include_once '../config/database.php';
-include_once '../objects/perfil_aminoacidos.php';
+include_once '../objects/perfil_ingredientes.php';
 
 
 $database = new Database();
 $db = $database->getConnection();
 
-$perf = new PerfilAminos($db);
+$perf = new PerfilIngredientes($db);
 
 $id = isset($_GET['id']) ? $_GET['id'] : die();
 
@@ -31,7 +31,8 @@ if ($num > 0) {
 
         $articulo_item  = array(
             "nombre" => $nombre,
-            "cantidad" => $cantidad
+            "alergeno" => $alergeno,
+            "ingActivo" => $ingActivo
         );
 
         array_push($articulos_array, $articulo_item);
@@ -44,6 +45,6 @@ if ($num > 0) {
     http_response_code(404);
 
     echo json_encode(
-        array("message" => "Perfil aminos Not Found")
+        array("message" => "Perfil ingrdientes Not Found")
     );
 }
