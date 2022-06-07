@@ -45,6 +45,9 @@ function SimpleDialog(props) {
     const handleImageSelect = (event) => {
         setSelectedImage(event.target.files[0]);
         console.log(selectedImage);
+        axios.post(api.concat('imagenes_carrousel/create.php'), {
+            nombre_foto: xd
+        }).then((response) => { });
     }
 
     const handleImagenes = () => {

@@ -22,14 +22,14 @@ class Carrousel
     {
         $isFileUpload = $this->fileController->postFile();
 
-        if ($isFileUpload === true) {
+        if ($isFileUpload !== false) {
 
             $query = "INSERT INTO " . $this->table_nombre . " nombre_foto = ?";
 
             $stmt = $this->connection->prepare($query);
 
             $this->titulo = htmlspecialchars(strip_tags($this->nombre_foto));
-            $stmt->bindParam(-1, $this->nombre_foto);
+            $stmt->bindParam(-1, json_decode($isFileUpload)["Success:"]);
 
             if ($stmt->execute()) {
                 return true;

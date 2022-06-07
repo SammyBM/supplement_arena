@@ -10,8 +10,8 @@ import CarrouselEditor from "./CarrouselEditor"
 
 const api = "http://localhost/xampp/api_rest/";
 
-const pathh = require("path");
-const imageResource = pathh.join(__dirname, "..", "..", "uploads", "carrousel");
+const path = require("path-browserify");
+const imageResource = path.join(__dirname, "..", "..", "uploads", "carrousel");
 
 export default function LandingPage() {
     var items = [
@@ -38,10 +38,10 @@ export default function LandingPage() {
     const [imagenes, setImagenes] = React.useState([]);
     var imgs = new Array();
     function imageArray(item) {
-        item.nombre_foto = pathh.join(imageResource, item.nombre_foto);
+        item.nombre_foto = path.join(imageResource, item.nombre_foto);
     }
 
-    React.useEffect((
+    React.useEffect((() => {
         axios.get(api.concat('imagenes_carrousel/read.php')).then(
             (response) => {
                 imgs = response.data;
@@ -49,6 +49,7 @@ export default function LandingPage() {
                 setImagenes(imgs);
             }
         ).catch((error) => { console.error(error) })
+    }
     ), []);
 
     return (
