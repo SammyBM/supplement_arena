@@ -5,6 +5,7 @@ class Reporte
     private $table_name = "reportes";
 
     public $id;
+    public $resumen;
     public $texto;
     public $fechaCreacion;
     public $articuloID;
@@ -26,15 +27,17 @@ class Reporte
 
     public function create()
     {
-        $query = "INSERT INTO " . $this->table_name . " SET texto=:texto, fechaCreacion=:fechaCreacion, articuloID=:articuloID,usuarioID=:usuarioID";
+        $query = "INSERT INTO " . $this->table_name . " SET resumen=:resumen, texto=:texto, fechaCreacion=:fechaCreacion, articuloID=:articuloID,usuarioID=:usuarioID";
 
         $stmt = $this->connection->prepare($query);
 
+        $this->resumen = htmlspecialchars(strip_tags($this->resumen));
         $this->texto = htmlspecialchars(strip_tags($this->texto));
         $this->fechaCreacion = htmlspecialchars(strip_tags($this->fechaCreacion));
         $this->articuloID = htmlspecialchars(strip_tags($this->articuloID));
         $this->usuarioID = htmlspecialchars(strip_tags($this->usuarioID));
 
+        $stmt->bindParam(':resumen', $this->resumen);
         $stmt->bindParam(':texto', $this->texto);
         $stmt->bindParam(':fechaCreacion', $this->fechaCreacion);
         $stmt->bindParam(':articuloID', $this->articuloID);
@@ -49,7 +52,7 @@ class Reporte
 
     function readRow()
     {
-        $query = "SELECT texto, fechaCreacion, articuloID, usuarioID  FROM " . $this->table_name . " WHERE reporteID = ? LIMIT 1";
+        $query = "SELECT resumen, texto, fechaCreacion, articuloID, usuarioID  FROM " . $this->table_name . " WHERE reporteID = ? LIMIT 1";
         $stmt = $this->connection->prepare($query);
 
         $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
@@ -58,6 +61,7 @@ class Reporte
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        $this->resumen = $row['resumen'];
         $this->texto = $row['texto'];
         $this->fechaCreacion = $row['fechaCreacion'];
         $this->articuloID = $row['articuloID'];
@@ -66,15 +70,17 @@ class Reporte
 
     function update()
     {
-        $query = "UPDATE" . $this->table_name . "SET texto=:texto, fechaCreacion=:fechaCreacion, articuloID=:articuloID,usuarioID=:usuarioID WHERE usuarioID = :id";
+        $query = "UPDATE" . $this->table_name . "SET resumen=:resumen, texto=:texto, fechaCreacion=:fechaCreacion, articuloID=:articuloID,usuarioID=:usuarioID WHERE usuarioID = :id";
 
         $stmt = $this->connection->prepare($query);
 
+        $this->resumen = htmlspecialchars(strip_tags($this->resumen));
         $this->texto = htmlspecialchars(strip_tags($this->texto));
         $this->fechaCreacion = htmlspecialchars(strip_tags($this->fechaCreacion));
         $this->articuloID = htmlspecialchars(strip_tags($this->articuloID));
         $this->usuarioID = htmlspecialchars(strip_tags($this->usuarioID));
 
+        $stmt->bindParam(':resumen', $this->resumen);
         $stmt->bindParam(':texto', $this->texto);
         $stmt->bindParam(':fechaCreacion', $this->fechaCreacion);
         $stmt->bindParam(':articuloID', $this->articuloID);

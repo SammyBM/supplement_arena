@@ -6,13 +6,12 @@ import { styled } from '@mui/material/styles';
 
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
+import ApiContext from '../ApiContext';
 
 import EditIcon from '@mui/icons-material/Edit';
 import ImageIcon from '@mui/icons-material/Image';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-
-const api = "http://localhost/api/";
 
 
 const Input = styled('input')({
@@ -20,6 +19,8 @@ const Input = styled('input')({
 });
 
 function SimpleDialog(props) {
+    const api = React.useContext(ApiContext);
+
     const { onClose, open } = props;
 
     const [selectedImage, setSelectedImage] = React.useState(null);

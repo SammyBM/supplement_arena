@@ -1,4 +1,4 @@
-import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
+import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import * as React from 'react';
 
 export default function TarjetaArticulo(props) {
@@ -17,6 +17,9 @@ export default function TarjetaArticulo(props) {
                 />
                 <CardContent><Typography variant="body1" color="secondary">{props.articulo.titulo}</Typography></CardContent>
             </CardActionArea>
+            <CardActions>
+                <Button filled color="primary" onClick={() => console.log("edit")}>Editar</Button>
+            </CardActions>
         </Card>
     );
 }
