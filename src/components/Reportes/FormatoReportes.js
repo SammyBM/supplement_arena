@@ -5,17 +5,19 @@ import SendIcon from "@mui/icons-material/Send"
 import axios from 'axios';
 
 import ApiContext from '../../contexts/ApiContext';
+import UserContext from '../../contexts/UserContext';
 
 export default function FormatoReportes(props) {
     const api = React.useContext(ApiContext);
+    const usuario = React.useContext(UserContext);
 
     const { control, handleSubmit, reset } = useForm({
         defaultValues: {
             resumen: "",
             texto: "",
             articulo: props.articulo.articuloID,
-            fecha: Date.now()
-            //usuario: usuario
+            fecha: Date.now(),
+            usuario: usuario.usuarioID
         }
     });
 
@@ -24,8 +26,8 @@ export default function FormatoReportes(props) {
             articuloID: data.articulo,
             resumen: data.resumen,
             texto: data.texto,
-            fechaCreacion: data.fecha
-            //usuarioID: data.usuario
+            fechaCreacion: data.fecha,
+            usuarioID: data.usuario
         }).catch((err) => {
             console.warn(err);
         });

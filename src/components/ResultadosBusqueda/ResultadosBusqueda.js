@@ -43,7 +43,6 @@ export default function ResultadosBusqueda(props) {
             .then(res => {
                 const data = res.data;
                 setResultados(data.records);
-                console.log(res);
             })
     });
 

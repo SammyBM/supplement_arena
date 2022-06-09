@@ -43,11 +43,13 @@ export default function Login(props) {
     //Leer registro en BD, comparar contraseña, devolver datos de usuario y guardarlos en Contexto, 
     //sino regresar error (no registro o contraseña incorrecta)
     const submit = (data) => {
-        console.log(data);
+        // axios.get(api.concat("usuarios/read_by_email?=", data.correo))
+        // .then(())
+        alert("Button here!")
     };
 
     const onError = (err) => {
-        console.log(err);
+        handleErrores(err);
     }
 
     const handleClickShowPassword = () => {
@@ -62,18 +64,34 @@ export default function Login(props) {
         props.funcionMenu(actividad)
     };
 
+    const handleErrores = (err) => {
+        err.contrasena && mostrarNotificacion(err.contrasena.message, "warning");
+        err.correo && mostrarNotificacion(err.correo.message, "warning");
+    }
+
     const [transition, setTransition] = React.useState(undefined);
+    const [notificacion, setNotificacion] = React.useState({
+        mostrar: true,
+        mensaje: "",
+        severity: "",
+    });
 
     const mostrarNotificacion = (msg, svty) => {
+        setNotificacion({
+            mostrar: true,
+            mensaje: msg,
+            severity: svty
+        });
         setTransition(() => TransitionLeft);
     }
 
     const cerrarNotificacion = () => {
-        setNotificacion({
-            mostrar: false,
-            mensaje: "",
-            severity: ""
-        })
+        setNotificacion(
+            {
+                ...notificacion,
+                mostrar: false
+            }
+        );
     }
 
 
@@ -166,16 +184,14 @@ export default function Login(props) {
                     </Paper>
                 </Container >
             </form>
-            <ErrorMessage errors={errors} name="singleErrorInput" render={({ message }) =>
                 <Snackbar
-                    open={true}
+                    open={notificacion.mostrar}
                     onClose={cerrarNotificacion}
                     TransitionComponent={transition}
-                    message={message}
-                    severity="warning"
-                    key={"notificacion: " + message}
+                    message={notificacion.mensaje}
+                    severity={notificacion.severity}
+                    key={"notificacion: " + notificacion.mensaje}
                 />
-            } />
         </>
     );
 }

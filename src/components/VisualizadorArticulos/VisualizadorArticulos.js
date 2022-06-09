@@ -55,7 +55,8 @@ export default function VisualizadorArticulos(props) {
         const ingredientes = [];
 
         function getActivos(ing) {
-            if (ing.ingActivo)
+            console.log("Ingrediente", ing);
+            if (parseInt(ing.ingActivo))
                 return ing;
         }
 
@@ -141,7 +142,7 @@ export default function VisualizadorArticulos(props) {
                     <Stack direction="column" justifyContent="flex-start" alignItems="center">
                         <IconButton onClick={handleClickAbrir}><ReportProblemIcon /></IconButton>
                     </Stack>
-                    <FormatoReportes articulo={props.articulo} abierto={abrirReporte} funcionCerrar={handleClickCerrar} />
+                    <FormatoReportes articulo={articulo} abierto={abrirReporte} funcionCerrar={handleClickCerrar} />
                 </Grid>
                 <Grid item xs={12}>
                     <TablaNutrimental articulo={articulo} />
@@ -203,8 +204,9 @@ function TablaNutrimental(props) {
 
 function Grafica(props) {
     const articulo = props.articulo;
+    console.log(articulo);
 
-    switch (articulo.tipoSuplemento) {
+    switch (parseInt(articulo.tipoSuplemento)) {
         case 1:
             return <Aminograma articulo={articulo} />;
             break;

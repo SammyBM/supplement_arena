@@ -10,8 +10,8 @@ import { UserProvider } from './contexts/UserContext';
 
 const theme = createTheme(themeOptions);
 
-const api = "http://localhost/xampp/api_rest/";
-//const api = "http://localhost/api";
+//const api = "http://localhost/xampp/api_rest/";
+const api = "http://localhost/api/";
 
 function App() {
 
