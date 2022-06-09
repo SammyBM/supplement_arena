@@ -7,7 +7,7 @@ class Carrousel
 
     private $connection;
     private $table_nombre = "fotos_carrusel";
-    private $fileController = new FileController("uploads/carrusel");
+    private $fileController = new FileController("uploads/carrusel", false);
 
     public  $id;
     public  $nombre_foto;

@@ -4,7 +4,7 @@ import { SentimentVeryDissatisfied } from '@mui/icons-material';
 
 import axios from 'axios';
 
-import ApiContext from '../ApiContext';
+import ApiContext from '../../contexts/ApiContext';
 import TarjetaArticulo from './TarjetaArticulo';
 
 export default function ResultadosBusqueda(props) {

@@ -4,7 +4,7 @@ import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 
 import axios from 'axios';
 
-import ApiContext from '../ApiContext';
+import ApiContext from '../../contexts/ApiContext';
 import Aminograma from './Graficas/Aminograma';
 import ComposicionOmegas from './Graficas/ComposicionOmegas';
 import Vitamina from './Graficas/Vitaminas';

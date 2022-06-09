@@ -17,10 +17,13 @@ import Tooltip from '@mui/material/Tooltip';
 
 export default function RegistroUsuario(props) {
     const [values, setValues] = React.useState({
+        nombre: '',
+        apellido: '',
+        edad: '',
         contrasena: '',
         correo: '',
         usuario: '',
-        showPassword: false,
+        showPassword: false
     });
 
     const handleChange = (prop) => (event) => {
