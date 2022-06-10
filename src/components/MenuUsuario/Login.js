@@ -43,10 +43,20 @@ export default function Login(props) {
     //Leer registro en BD, comparar contraseña, devolver datos de usuario y guardarlos en Contexto, 
     //sino regresar error (no registro o contraseña incorrecta)
     const submit = (data) => {
-        // axios.get(api.concat("usuarios/read_by_email?=", data.correo))
-        // .then(())
-        alert("Button here!")
-    };
+        /* axios.post(api.concat("usuarios/login.php"), data).then((response) => {
+            console.log(response);
+        }).catch((error) => {
+            console.log(error)
+        }); */
+
+        axios({
+            method: 'POST',
+            url: api.concat("usaurios/login.php"),
+            data: data
+        }).catch((error) => {
+            mostrarNotificacion("No encontramos una cuenta con esos datos");
+        })
+    }
 
     const onError = (err) => {
         handleErrores(err);
@@ -125,7 +135,7 @@ export default function Login(props) {
                                         )}
                                             rules={
                                                 {
-                                                    required: "Este campo es obligatorio.",
+                                                    required: "Ingresar un correo electronico es obligatorio.",
                                                     pattern: {
                                                         value: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
                                                         message: "Por favor ingrese un correo electronico."
@@ -156,7 +166,7 @@ export default function Login(props) {
                                             />
                                         )}
                                             rules={{
-                                                required: "Este campo es obligatorio",
+                                                required: "Ingresar la contraseña es obligatorio",
                                                 minLength: {
                                                     value: 8,
                                                     message: "Tu contraseña debe tener al menos 8 caracteres"
@@ -184,14 +194,14 @@ export default function Login(props) {
                     </Paper>
                 </Container >
             </form>
-                <Snackbar
-                    open={notificacion.mostrar}
-                    onClose={cerrarNotificacion}
-                    TransitionComponent={transition}
-                    message={notificacion.mensaje}
-                    severity={notificacion.severity}
-                    key={"notificacion: " + notificacion.mensaje}
-                />
+            <Snackbar
+                open={notificacion.mostrar}
+                onClose={cerrarNotificacion}
+                TransitionComponent={transition}
+                message={notificacion.mensaje}
+                severity={notificacion.severity}
+                key={"notificacion: " + notificacion.mensaje}
+            />
         </>
     );
 }
