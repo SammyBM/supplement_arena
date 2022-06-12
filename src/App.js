@@ -17,7 +17,7 @@ function App() {
 
   const [user, setUser] = React.useState({
     usuarioID: "",
-    tipoUsuarioID: "",
+    tipoUsuarioID: 1,
     nombre: "",
     nombreUsuario: "",
     fechaNacimiento: ""

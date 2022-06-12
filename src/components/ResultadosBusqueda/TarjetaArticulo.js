@@ -1,7 +1,11 @@
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import * as React from 'react';
 
+import UserContext from '../../contexts/UserContext';
+
 export default function TarjetaArticulo(props) {
+    const usuario = React.useContext(UserContext);
+
     const abrirArticulo = (articulo) => {
         console.log(articulo);
         props.funcionMenu("visualizador", articulo);
@@ -17,9 +21,12 @@ export default function TarjetaArticulo(props) {
                 />
                 <CardContent><Typography variant="body1" color="secondary">{props.articulo.titulo}</Typography></CardContent>
             </CardActionArea>
-            <CardActions>
-                <Button filled color="primary" onClick={() => console.log("edit")}>Editar</Button>
-            </CardActions>
+            {
+                usuario.tipoUsuarioID > 1 &&
+                <CardActions>
+                    <Button filled color=" primary" onClick={() => props.funcionMenu("editor", props.articulo)}>Editar</Button>
+                </CardActions>
+            }
         </Card>
     );
 }

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Button, Container, Grid, IconButton, Input, InputAdornment, InputLabel, FormControl, Paper, Slide, Snackbar, Stack, Tooltip } from "@mui/material";
 import { useForm, Controller } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
 
 
 
@@ -20,7 +19,16 @@ export default function Login(props) {
     const { user, setUser } = React.useContext(UserContext);
     const api = React.useContext(ApiContext);
 
-    const [showPassword, setShowPassword] = React.useState(false)
+    const [showPassword, setShowPassword] = React.useState(false);
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+
+
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
             correo: "",
@@ -43,18 +51,14 @@ export default function Login(props) {
     //Leer registro en BD, comparar contraseña, devolver datos de usuario y guardarlos en Contexto, 
     //sino regresar error (no registro o contraseña incorrecta)
     const submit = (data) => {
-        /* axios.post(api.concat("usuarios/login.php"), data).then((response) => {
-            console.log(response);
-        }).catch((error) => {
-            console.log(error)
-        }); */
-
         axios({
             method: 'POST',
             url: api.concat("usaurios/login.php"),
             data: data
         }).catch((error) => {
             mostrarNotificacion("No encontramos una cuenta con esos datos");
+        }).finally(() => {
+            reset();
         })
     }
 
@@ -62,26 +66,18 @@ export default function Login(props) {
         handleErrores(err);
     }
 
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
-
-    const cambiarPagina = (actividad) => {
-        props.funcionMenu(actividad)
-    };
-
     const handleErrores = (err) => {
         err.contrasena && mostrarNotificacion(err.contrasena.message, "warning");
         err.correo && mostrarNotificacion(err.correo.message, "warning");
     }
 
+    const cambiarPagina = (actividad) => {
+        props.funcionMenu(actividad)
+    };
+
     const [transition, setTransition] = React.useState(undefined);
     const [notificacion, setNotificacion] = React.useState({
-        mostrar: true,
+        mostrar: false,
         mensaje: "",
         severity: "",
     });
@@ -159,7 +155,7 @@ export default function Login(props) {
                                                             onClick={handleClickShowPassword}
                                                             onMouseDown={handleMouseDownPassword}
                                                         >
-                                                            {user.showPassword ? <VisibilityOff /> : <Visibility />}
+                                                            {showPassword ? <VisibilityOff /> : <Visibility />}
                                                         </IconButton>
                                                     </InputAdornment>
                                                 }
