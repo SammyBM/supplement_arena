@@ -54,24 +54,17 @@ export default function EditorArticulos(props) {
         display: 'none',
     });
 
-    /*  const botonImagen = document.getElementById("btn-subir-imagen");
-     const imagenSuplemento = document.getElementById("imagenSuplemento");
-     botonImagen.addEventListener("submit", e => {
-         e.preventDefault();
-         const endpoint = "../upload.php";
-         const formData = new FormData();
- 
-         formData.append("imagenSuplemento", imagenSuplemento.files[0]);
- 
-         fetch(endpoint, {
-             method: "post",
-             body: formData
-         }).catch(console.error);
-     }); */
+    const onSubmit = (data) => {
+        alert("submit");
+        console.log(data);
+    }
 
+    const handleDelete = (data) => {
+        alert('deleting');
+    }
 
     return (
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container direction="column" spacing={2}  >
                 <Grid item>
                     <Card>
@@ -123,26 +116,26 @@ export default function EditorArticulos(props) {
                                     <FormLabel id="tipo-suplemento"><Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Tipo de suplemento</Typography></FormLabel>
                                     <Controller name="tipoSuplemento" control={control} render={({ field: { onChange, value } }) => (
                                         <RadioGroup
-                                            value={tipoSuplemento}
-                                            name="radio-buttons-group"
-                                            onChange={handleTipoSup}
+                                            value={value}
+                                            onChange={onChange}
                                         >
                                             {radiosTipoSuplemento}
                                         </RadioGroup>
                                     )}
-                                        rules={{}}
+                                        rules={{
+                                            required: true
+                                        }}
                                     />
                                 </FormControl>
                                 <FormControl sx={{ width: '25ch' }}>
                                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Ingredientes</Typography>
-                                    <Controller name="ingredientes" control={control} render={({ field: { onChange, value } }) => (
+                                    <Controller name="ingredientes" control={control} onChange={([, data]) => data} render={({ field: { onChange, value } }) => (
                                         <Autocomplete
-                                            value={ingredientes}
+                                            value={value}
                                             onChange={(event, newValue) => {
-                                                setIngredientes(newValue);
+                                                onChange(newValue);
                                             }}
                                             multiple
-                                            id="ingredientes"
                                             options={listaIngredientes.map((option) => option.nombre)}
                                             freeSolo
                                             renderTags={(value, getTagProps) =>
@@ -166,19 +159,19 @@ export default function EditorArticulos(props) {
                                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Ingrediente activo</Typography>
                                     <Controller name="ingActivo" control={control} render={({ field: { onChange, value } }) => (
                                         <Autocomplete
-                                            value={ingActivo}
+                                            value={value}
                                             onChange={(event, newIngActivo) => {
                                                 if (typeof newIngActivo === 'string') {
-                                                    setIngActivo({
+                                                    onChange({
                                                         nombre: newIngActivo,
                                                     });
                                                 } else if (newIngActivo && newIngActivo.inputValue) {
                                                     // Create a new value from the user input
-                                                    setIngActivo({
+                                                    onChange({
                                                         nombre: newIngActivo.inputValue,
                                                     });
                                                 } else {
-                                                    setIngActivo(newIngActivo);
+                                                    onChange(newIngActivo);
                                                 }
                                             }}
                                             filterOptions={(options, params) => {
@@ -199,7 +192,6 @@ export default function EditorArticulos(props) {
                                             selectOnFocus
                                             clearOnBlur
                                             handleHomeEndKeys
-                                            id="ingrediente-activo"
                                             options={listaIngredientes}
                                             getOptionLabel={(option) => {
                                                 // Value selected with enter, right from the input
@@ -255,64 +247,78 @@ export default function EditorArticulos(props) {
                     <Grid container direction="row" justifyContent="center" alignItems="center">
                         <Grid item xs={12} md={6} lg={3}>
                             <Controller name="calorias" control={control} render={({ field: { onChange, value } }) => (
-                                <TextField id="calorias" label="Calorias" type="number" helperText="Por porción" required />
+                                <TextField id="calorias" label="Calorias" type="number" onChange={onChange} value={value} helperText="Por porción" />
                             )}
-                                rules={{}}
+                                rules={{
+                                    required: "El campo calorias es obligatorio"
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12} md={6} lg={3}>
                             <Controller name="proteina" control={control} render={({ field: { onChange, value } }) => (
-                                <TextField id="proteina" label="Proteina" type="number" helperText="Por porción" required />
+                                <TextField id="proteina" label="Proteina" type="number" onChange={onChange} value={value} helperText="Por porción" />
                             )}
-                                rules={{}}
+                                rules={{
+                                    required: "El campo proteina es obligatorio"
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12} md={6} lg={3}>
                             <Controller name="lipidos" control={control} render={({ field: { onChange, value } }) => (
-                                <TextField id="lipidos" label="Lipidos" type="number" helperText="Por porción" required />
+                                <TextField id="lipidos" label="Lipidos" type="number" onChange={onChange} value={value} helperText="Por porción" />
                             )}
-                                rules={{}}
+                                rules={{
+                                    required: "El campo carbohidratos es obligatorio"
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12} md={6} lg={3}>
                             <Controller name="carbohidratos" control={control} render={({ field: { onChange, value } }) => (
-                                <TextField id="carbohidratos" label="Carbohidratos" type="number" helperText="Por porción" required />
+                                <TextField id="carbohidratos" label="Carbohidratos" type="number" onChange={onChange} value={value} helperText="Por porción" />
                             )}
-                                rules={{}}
+                                rules={{
+                                    required: "El campo carbohidratos es obligatorio"
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12} md={6} lg={3}>
                             <Controller name="tamano" control={control} render={({ field: { onChange, value } }) => (
-                                <TextField id="tamano" label="Tamaño" type="number" helperText="de una porción" required />
+                                <TextField id="tamano" label="Tamaño" type="number" onChange={onChange} value={value} helperText="de una porción" />
                             )}
-                                rules={{}}
+                                rules={{
+                                    required: "El campo tamaño de porción es obligatorio"
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12} md={6} lg={3}>
                             <Controller name="cantidad" control={control} render={({ field: { onChange, value } }) => (
-                                <TextField id="cantidad" label="Cantidad" type="number" helperText="Numero de porciones" required />
+                                <TextField id="cantidad" label="Cantidad" type="number" onChange={onChange} value={value} helperText="Numero de porciones" />
                             )}
-                                rules={{}}
+                                rules={{
+                                    required: "El campo cantidad de porciones es obligatorio"
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12} md={6} lg={3}>
                             <Controller name="precio" control={control} render={({ field: { onChange, value } }) => (
-                                <TextField id="precio" label="Precio" type="number" helperText="Por empaque" required />
+                                <TextField id="precio" label="Precio" type="number" onChange={onChange} value={value} helperText="Por empaque" />
                             )}
-                                rules={{}}
+                                rules={{
+                                    required: "El campo precio es obligatorio"
+                                }}
                             />
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item>
-                    <InterfazVariable tipoSuplemento={watch(tipoSuplemento)} control={control} watch={watch} />
+                    <InterfazVariable api={api} tipoSuplemento={watch("tipoSuplemento", 1)} control={control} watch={watch} />
                 </Grid>
                 <Grid item>
                     <Divider variant='fullWidth' />
                     <br />
                     <Stack direction="row" alignItems="center" justifyContent="space-evenly">
-                        <Button variant='contained' color="warning" startIcon={<DeleteForeverIcon />}>Eliminar</Button>
-                        <Button variant='contained' endIcon={<SaveIcon />}>Guardar</Button>
+                        <Button variant='contained' onClick={handleDelete} color="warning" startIcon={<DeleteForeverIcon />}>Eliminar</Button>
+                        <Button type="submit" variant='contained' endIcon={<SaveIcon />}>Guardar</Button>
                     </Stack>
                 </Grid>
 
@@ -324,8 +330,9 @@ export default function EditorArticulos(props) {
 
 function InterfazVariable(props) {
 
-    const control = props.control;
-    const watch = props.watch;
+    const { api, control, tipoSuplemento, watch } = props;
+
+    const watchOmegas = watch("omegas");
 
     let textfieldsAminos;
     let botonesOmegas;
@@ -335,7 +342,8 @@ function InterfazVariable(props) {
     const acidosGrasos = [];
 
 
-    switch (props.tipoSuplemento) {
+    switch (tipoSuplemento) {
+
         case 1:
 
             React.useEffect(() => {
@@ -372,7 +380,7 @@ function InterfazVariable(props) {
                     omega = null;
                 }).finally(() => {
                     if (omega !== null)
-                        botonesOmegas = omega.map((value) => <ToggleButton value={value.nombre} key={value.id}><Chip label={value.nombre.charAt(value.nombre.length - 1)} color={watch(omegas) ? "primary" : "secondary"} variant={omegas.includes(value.nombre) ? "filled" : "outlined"}></Chip></ToggleButton>);
+                        botonesOmegas = omega.map((value) => <ToggleButton value={value.nombre} key={value.id}><Chip label={value.nombre.charAt(value.nombre.length - 1)} color={watchOmegas.includes("Omega3") ? "primary" : "secondary"} variant={watchOmegas.includes(value.nombre) ? "filled" : "outlined"}></Chip></ToggleButton>);
                     else
                         botonesOmegas = <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los omegas, intente más tarde.</Typography></Grid>;
                 });
@@ -387,9 +395,7 @@ function InterfazVariable(props) {
                         textfieldAcidosGrasos = acidosGrasos.map((item) => <Controller name={"aminos-" + item.id} control={control} render={({ field: { onChange, value } }) => (<TextField id={"acidos-grasos-" + item.id} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} disabled={watch(omegas) === "Omega3" ? false : true} />)} rules={{}} />);
                     else
                         textfieldAcidosGrasos = <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los acidos grasos, intente más tarde.</Typography></Grid>;
-
-                })
-
+                });
             }, []);
 
             return (
