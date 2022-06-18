@@ -8,7 +8,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import axios from 'axios';
 import { Controller, useForm, FormProvider, useFormContext } from 'react-hook-form';
-import { ApiContext } from '../../contexts/ApiContext';
+import ApiContext from '../../contexts/ApiContext';
 
 
 import * as PlaceholderValues from "../PlaceholderValues";
@@ -30,7 +30,7 @@ export default function EditorArticulos(props) {
         defaultValues: {
             titulo: "",
             etiquetas: "",
-            tipoSuplemento: "",
+            tipoSuplemento: 3,
             ingredientes: "",
             ingActivo: "",
             imagen: "",
@@ -45,6 +45,8 @@ export default function EditorArticulos(props) {
             perfilOmegas: ""
         }
     });
+
+    const switchTipo = watch("tipoSuplemento", 1);
 
     const filter = createFilterOptions();
 
@@ -62,6 +64,7 @@ export default function EditorArticulos(props) {
     const handleDelete = (data) => {
         alert('deleting');
     }
+
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -84,7 +87,7 @@ export default function EditorArticulos(props) {
                             <Stack direction="column" spacing={2} justifyContent="center" alignItems="center">
                                 <FormControl sx={{ width: '25ch' }}>
                                     <Controller name="titulo" control={control} render={({ field: { onChange, value } }) => (
-                                        <TextField label="Titulo" color='primary' variant='standard' required />
+                                        <TextField key="titulo" label="Titulo" onChange={onChange} value={value} color='primary' variant='standard' />
                                     )}
                                         rules={{
                                             required: "El campo titulo es obligatorio."
@@ -92,11 +95,12 @@ export default function EditorArticulos(props) {
                                     />
                                 </FormControl>
                                 <FormControl sx={{ width: '25ch' }}>
-                                    <Controller name="etiquetas" control={control} render={({ field: { onChange, value } }) => (
+                                    <Controller name="etiquetas" control={control} onChange={([, data]) => data} render={({ field: { onChange } }) => (
                                         <Autocomplete
                                             multiple
-                                            id="etiquetas"
-                                            options={listaEtiquetas}
+                                            onChange={(event, newValue) => {
+                                                onChange(newValue);
+                                            }} options={listaEtiquetas}
                                             getOptionLabel={(option) => option.etiqueta}
                                             filterSelectedOptions
                                             renderInput={(params) => (
@@ -112,12 +116,13 @@ export default function EditorArticulos(props) {
                                         rules={{}}
                                     />
                                 </FormControl>
-                                <FormControl>
+                                <FormControl component={"fieldset"}>
                                     <FormLabel id="tipo-suplemento"><Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Tipo de suplemento</Typography></FormLabel>
                                     <Controller name="tipoSuplemento" control={control} render={({ field: { onChange, value } }) => (
                                         <RadioGroup
                                             value={value}
                                             onChange={onChange}
+                                            defaultValue={1}
                                         >
                                             {radiosTipoSuplemento}
                                         </RadioGroup>
@@ -311,7 +316,7 @@ export default function EditorArticulos(props) {
                     </Grid>
                 </Grid>
                 <Grid item>
-                    <InterfazVariable api={api} tipoSuplemento={watch("tipoSuplemento", 1)} control={control} watch={watch} />
+                    <InterfazVariable api={api} tipoSuplemento={switchTipo} control={control} watch={watch} />
                 </Grid>
                 <Grid item>
                     <Divider variant='fullWidth' />
@@ -334,84 +339,94 @@ function InterfazVariable(props) {
 
     const watchOmegas = watch("omegas");
 
-    let textfieldsAminos;
-    let botonesOmegas;
-    let textfieldAcidosGrasos;
-    const aminoacidos = [];
-    const omega = [];
-    const acidosGrasos = [];
+    const [data, setData] = React.useState({
+        aminoacidos: [],
+        omegas: [],
+        acidosGrasos: []
+    });
 
+
+    let amino, omega, acido;
+
+    React.useEffect(() => {
+
+        axios.get(api.concat('aminoacidos/read.php')).then((response) => {
+            amino = response.data.records;
+            console.log(amino);
+        }).catch((error) => {
+            console.error(error);
+            amino = null;
+        });
+
+        axios.get(api.concat('omegas/read.php')).then((response) => {
+            omega = response.data.records;
+            console.log(omega);
+        }).catch((error) => {
+            console.error(error);
+            omega = null;
+        });
+
+        axios.get(api.concat('acidos_grasos/read.php')).then((response) => {
+            acido = response.data.records;
+        }).catch((error) => {
+            console.error(error);
+            acido = null;
+        });
+
+        setData({
+            aminoacidos: amino,
+            omegas: omega,
+            acidosGrasos: acido
+        });
+
+        console.log(data);
+
+    }, []);
 
     switch (tipoSuplemento) {
 
-        case 1:
-
-            React.useEffect(() => {
-                axios.get(api.concat('aminoacidos/read.php')).then((response) => {
-                    aminoacidos = response.data.records;
-                }).catch((error) => {
-                    console.error(error);
-                    aminoacidos = null;
-                }).finally(() => {
-                    if (aminoacidos !== null)
-                        textfieldsAminos = aminoacidos.map((item) => <Grid item xs={12} md={6} lg={3}><Controller name={"aminos-" + item.id} control={control} render={({ field: { onChange, value } }) => (<TextField id={"aminos-" + item.id} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} />)} rules={{}} /></Grid>);
-                    else
-                        textfieldsAminos = <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los aminoacidos, intente más tarde.</Typography></Grid>;
-                })
-            }, []);
-
+        case '1':
             return (
                 <Grid item>
                     <Divider variant="fullWidth" />
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Perfil de aminoacidos</Typography>
                     <Grid container direction="row" justifyContent="center" alignItems="center">
-                        {textfieldsAminos}
+                        {console.log(data)}
+                        {
+                            (data.aminoacidos !== undefined && data.aminoacidos !== null) ?
+                                data.aminoacidos.map((item) => <Grid item xs={12} md={6} lg={3}><Controller name={"aminos-" + item.aminoID} control={control} render={({ field: { onChange, value } }) => (<TextField id={"aminos-" + item.aminoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} />)} rules={{}} /></Grid>)
+                                :
+                                <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los aminoacidos, intente más tarde.</Typography></Grid>
+                        }
                     </Grid>
                 </Grid>
             );
             break;
-        case 2:
-
-            React.useEffect(() => {
-                axios.get(api.concat('omegas/read.php')).then((response) => {
-                    omega = response.data.records;
-                }).catch((error) => {
-                    console.error(error);
-                    omega = null;
-                }).finally(() => {
-                    if (omega !== null)
-                        botonesOmegas = omega.map((value) => <ToggleButton value={value.nombre} key={value.id}><Chip label={value.nombre.charAt(value.nombre.length - 1)} color={watchOmegas.includes("Omega3") ? "primary" : "secondary"} variant={watchOmegas.includes(value.nombre) ? "filled" : "outlined"}></Chip></ToggleButton>);
-                    else
-                        botonesOmegas = <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los omegas, intente más tarde.</Typography></Grid>;
-                });
-
-                axios.get(api.concat('acidos_grasos/read.php')).then((response) => {
-                    acidosGrasos = response.data.records;
-                }).catch((error) => {
-                    console.error(error);
-                    acidosGrasos = null;
-                }).finally(() => {
-                    if (acidosGrasos !== null)
-                        textfieldAcidosGrasos = acidosGrasos.map((item) => <Controller name={"aminos-" + item.id} control={control} render={({ field: { onChange, value } }) => (<TextField id={"acidos-grasos-" + item.id} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} disabled={watch(omegas) === "Omega3" ? false : true} />)} rules={{}} />);
-                    else
-                        textfieldAcidosGrasos = <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los acidos grasos, intente más tarde.</Typography></Grid>;
-                });
-            }, []);
-
+        case '2':
             return (
                 <Grid item >
                     <Divider variant="fullWidth" />
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Omegas</Typography>
                     <Controller name="omegas" control={control} render={({ field: { onChange, value } }) => (
                         <ToggleButtonGroup value={value} onChange={onChange}>
-                            {botonesOmegas}
+                            {
+                                (data.omegas !== undefined && data.omegas !== null) ?
+                                    data.omegas.map((value) => <ToggleButton value={value.nombre} key={value.omegaID}><Chip label={value.nombre.charAt(value.nombre.length - 1)} color={watchOmegas.includes(value.nombre) ? "primary" : "secondary"} variant={watchOmegas.includes(value.nombre) ? "filled" : "outlined"}></Chip></ToggleButton>)
+                                    :
+                                    <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los omegas, intente más tarde.</Typography></Grid>
+                            }
                         </ToggleButtonGroup>
                     )}
                         rules={{}}
                     />
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Perfil de acidos grasos</Typography>
                     <Stack direction="row" spacing={3} alignItems="center" justifyContent="center">
-                        {textfieldAcidosGrasos}
+                        {
+                            (data.acidosGrasos !== undefined && data.acidosGrasos !== null) ?
+                                data.acidosGrasos.map((item) => <Controller name={"aminos-" + item.id} control={control} render={({ field: { onChange, value } }) => (<TextField id={"acidos-grasos-" + item.acidoGrasoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} disabled={watchOmegas.includes("Omega3") ? false : true} />)} rules={{}} />)
+                                :
+                                <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los acidos grasos, intente más tarde.</Typography></Grid>
+                        }
                     </Stack>
                 </Grid >
             );
