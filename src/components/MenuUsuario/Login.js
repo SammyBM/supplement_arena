@@ -1,6 +1,4 @@
 import * as React from 'react';
-import Paper from "@mui/material/Paper";
-import { Grid, Container, Stack } from '@mui/material';
 import { Button, Container, Grid, IconButton, Input, InputAdornment, InputLabel, FormControl, Paper, Slide, Snackbar, Stack, Tooltip } from "@mui/material";
 import { useForm, Controller } from 'react-hook-form';
 import Service from "../../Service";
@@ -8,33 +6,25 @@ import Service from "../../Service";
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import Tooltip from "@mui/material/Tooltip"
 import LoginIcon from "@mui/icons-material/Login"
-import Button from "@mui/material/Button"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { height } from '@mui/system';
 
+import ApiContext from "../../contexts/ApiContext";
+import UserContext from "../../contexts/UserContext";
+import axios from 'axios';
 
 export default function Login(props) {
 
-    const [values, setValues] = React.useState({
-        contrasena: '',
-        correo: '',
-        showPassword: false,
-    });
+    const { user, setUser } = React.useContext(UserContext);
+    const api = React.useContext(ApiContext);
 
+    const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => {
-        setValues({
-            ...values,
-            showPassword: !values.showPassword,
-        });
+        setShowPassword(!showPassword);
     };
+
 
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
@@ -92,6 +82,10 @@ export default function Login(props) {
         err.contrasena && mostrarNotificacion(err.contrasena.message, "warning");
         err.correo && mostrarNotificacion(err.correo.message, "warning");
     }
+    const cambiarPagina = (actividad) => {
+        props.funcionMenu(actividad)
+    };
+
     const [transition, setTransition] = React.useState(undefined);
     const [notificacion, setNotificacion] = React.useState({
         mostrar: false,
@@ -209,4 +203,7 @@ export default function Login(props) {
             </form>
         </>
     );
+}
+function TransitionLeft(props) {
+    return <Slide {...props} direction="left" />;
 }

@@ -5,8 +5,13 @@ import MenuDrawer from './components/MenuDrawer/MenuDrawer';
 import { themeOptions } from './Theme';
 import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@mui/material';
+import { ApiProvider } from './contexts/ApiContext';
+import { UserProvider } from './contexts/UserContext';
 
 const theme = createTheme(themeOptions);
+
+const api = "http://localhost/xampp/api_rest/";
+//const api = "http://localhost/api/";
 
 function App() {
 
@@ -45,8 +50,5 @@ function App() {
 
     </div>
   );
-}
-function NotFound() {
-  return <>Ha llegado a una página que no existe</>;
 }
 export default App;

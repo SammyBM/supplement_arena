@@ -63,7 +63,7 @@ export default function FormatoReportes(props) {
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form>
                 <Dialog open={props.abierto} onClose={handleClose}>
                     <DialogTitle>Crear un reporte.</DialogTitle>
                     <DialogContent>
