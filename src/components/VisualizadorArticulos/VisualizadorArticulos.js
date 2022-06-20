@@ -15,6 +15,7 @@ const api = "http://localhost/api/";
 export default function VisualizadorArticulos(props) {
     const [articulo, setArticulo] = React.useState(
         {
+            articuloID:"",
             titulo: "",
             etiquetas: [],
             tipoSuplemento: "",
@@ -55,6 +56,7 @@ export default function VisualizadorArticulos(props) {
         function executePromisesInRow(queue, index) {
             if (index >= queue.length) {
                 setArticulo({
+                    articuloID:props.articulo.articuloID,
                     titulo: props.articulo.titulo,
                     etiquetas: props.articulo.etiquetas,
                     tipoSuplemento: props.articulo.tipoSuplemento,
@@ -71,6 +73,7 @@ export default function VisualizadorArticulos(props) {
                     tiposOmegas: omegas,
                     advertencias: advertencias
                 });
+                
                 return;
             }
     

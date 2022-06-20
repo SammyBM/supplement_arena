@@ -45,7 +45,7 @@ export default function ResultadosBusqueda(props) {
                 const data = res.data;
                 setResultados(data.records);
             })
-    });
+        });
 
     return (
         <>
@@ -61,7 +61,7 @@ export default function ResultadosBusqueda(props) {
                     </Grid>
                 </Grid>
                     :
-                    resultados.slice(limites.min, limites.max).map((item) => <Grid item key={item.articuloID} xs={12} md={6} lg={3}><TarjetaArticulo articulo={item} funcionMenu={props.funcionMenu} /></Grid>)
+                    resultados.slice(limites.min, limites.max).map((item) => <Grid item key={item.articuloID}  xs={12} md={6} lg={3}><TarjetaArticulo articulo={item} funcionMenu={props.funcionMenu} /></Grid>)
 
                 }
             </Grid>

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import { Box, ButtonBase, CssBaseline, Divider, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Slide, Snackbar, Toolbar, Typography, Tooltip } from '@mui/material';
@@ -9,12 +9,23 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SearchIcon from '@mui/icons-material/Search';
 
-import ActivityHandler from '../ActivityHandler';
 import IconoMenu from './IconoMenu';
 import AvatarMenu from '../MenuUsuario/AvatarMenu';
 import BusquedaPredictiva from '../BuscadorPredictivo/BusquedaPredictiva';
 import MenuAdmin from '../MenuAdmin/MenuAdmin';
 
+import { BrowserRouter, Router, Routes, Route } from "react-router-dom";
+import LandingPage from "../LandingPage/LandingPage";
+import Login from '../MenuUsuario/Login';
+import EditorArticulos from '../EditorArticulos/EditorArticulos';
+import CentroNovedades from '../Novedades/CentroNovedades';
+import RegistroUsuario from '../MenuUsuario/RegistroUsuario';
+import BuscadorAvanzado from '../BuscadorAvanzado/BuscadorAvanzado';
+import CentroReportes from '../Reportes/CentroReportes';
+import BuscadorSimple from '../BuscadorSimple/BuscadorSimple';
+import VisualizadorArticulos from '../VisualizadorArticulos/VisualizadorArticulos';
+import ResultadosBusqueda from '../ResultadosBusqueda/ResultadosBusqueda';
+import Reporte from '../Reportes/Reporte';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -108,7 +119,11 @@ const menuActividades = [
 ];
 
 export default function MenuDrawer(props) {
+    const [conectado, setConectado] = useState(false);
 
+    const acceder = (estado) => {
+        setConectado(estado);
+    };
     const [pagina, setPagina] = React.useState(props.actividad);
     const [articulo, setArticulo] = React.useState(null);
     const [resultados, setResultados] = React.useState(null);
@@ -257,10 +272,30 @@ export default function MenuDrawer(props) {
             </Drawer>
             <Grid component="main" alignItems="center" justifyContent="center" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
-                <ActivityHandler activity={pagina} articulo={articulo} resultados={resultados} funcionMenu={(actividad, art, res) => cambiarPagina(actividad, art, res)}></ActivityHandler>
+                    <BrowserRouter> 
+                        <div>
+                            <Routes>
+                                <Route exact path="/"element={ <LandingPage/>}/>
+                                <Route path="/login"element={ <Login acceder={acceder} />}/>
+                                <Route path="/edart"element={ <EditorArticulos/>}/>
+                                <Route path="/novedades"element={ <CentroNovedades/>}/>
+                                <Route path="/registro"element={ <RegistroUsuario />}/>
+                                <Route path="/avanzado"element={ <BuscadorAvanzado/>}/>
+                                <Route path="/reportes"element={ <Reporte/>}/>
+                                <Route path="/simple"element={ <BuscadorSimple/>}/>
+                                <Route path="/visualizador"element={ <VisualizadorArticulos/>}/>
+                                <Route path="/resultados"element={ <ResultadosBusqueda/>}/>
+                                <Route path="*" component={NotFound} />
+                            </Routes>
+                        </div>
+                </BrowserRouter>
             </Grid>
 
         </Box >
     );
 }
+function NotFound() {
+    return <>Ha llegado a una página que no existe</>;
+  }
 
+  

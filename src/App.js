@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import MenuDrawer from './components/MenuDrawer/MenuDrawer';
@@ -11,6 +11,14 @@ const theme = createTheme(themeOptions);
 function App() {
 
   const [loggedIn, setLoggedIn] = React.useState(true);
+  const [user, setUser] = React.useState({
+    usuarioID: "",
+    tipoUsuarioID: 1,
+    nombre: "",
+    nombreUsuario: "",
+    fechaNacimiento: ""
+  });
+  const usuario = { user, setUser };
 
   /*
   {
@@ -26,13 +34,19 @@ function App() {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <MenuDrawer login={loggedIn} actividad="landing">
-          <h1>hi</h1>
-        </MenuDrawer>
+        <ApiProvider value={api}>
+          <UserProvider value={usuario}>
+            <MenuDrawer  actividad="landing">
+              
+            </MenuDrawer>
+          </UserProvider>
+        </ApiProvider>
       </ThemeProvider>
 
     </div>
   );
 }
-
+function NotFound() {
+  return <>Ha llegado a una página que no existe</>;
+}
 export default App;

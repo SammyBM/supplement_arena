@@ -9,8 +9,8 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { Tooltip } from '@mui/material';
 import { IconButton } from '@mui/material';
-
-export default function AvatarMenu(props) {
+import Service from "../../Service";
+export default  function AvatarMenu(props) {
 
     //Tomar username para avatar
     //Pasar estado a funcion padre para cambiar de actividad
@@ -28,7 +28,8 @@ export default function AvatarMenu(props) {
     };
 
     const cambiarPagina = (actividad) => {
-        props.funcionMenu(actividad)
+        /* props.funcionMenu(actividad) */
+        Service.changePage(actividad);
     };
 
     return (

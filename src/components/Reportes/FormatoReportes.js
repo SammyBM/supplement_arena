@@ -2,19 +2,61 @@ import * as React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import SendIcon from "@mui/icons-material/Send"
+import axios from 'axios';
+import Service from "../../Service";
+import ApiContext from '../../contexts/ApiContext';
+import UserContext from '../../contexts/UserContext';
 
 export default function FormatoReportes(props) {
-    const { control, handleSubmit } = useForm({
+    const api = React.useContext(ApiContext);
+    const usuario = React.useContext(UserContext);
+    const propis = JSON.parse(sessionStorage.getItem("props"))
+    var today = new Date(),
+    date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    const { control, handleSubmit, reset } = useForm({
         defaultValues: {
             resumen: "",
             texto: "",
-            articulo: props.articulo.articuloID,
-            fecha: Date.now()
+            articulo:""+ propis.articuloID,
+            fecha: date,
+            usuario: 1
         }
     });
 
-    const onSubmit = data => console.log(data);
-
+    const submit = (data) => {
+        console.log(data)
+        let user= {
+                articuloID: data.articulo,
+                resumen: data.resumen,
+                texto: data.texto,
+                fechaCreacion: data.fecha,
+                usuarioID: data.usuario
+            };
+        console.log(user);
+        Service.postData("reportes/create",user).then((result) => {
+            updateLoginStatus(result);
+        });
+        /* axios.post(api.concat("reportes/create.php"), {
+            articuloID: data.articulo,
+            resumen: data.resumen,
+            texto: data.texto,
+            fechaCreacion: data.fecha,
+            usuarioID: data.usuario
+        }).catch((err) => {
+            console.warn(err);
+        }); */
+        
+    }
+    const updateLoginStatus = (data) => {
+        if (data.status === "true") {
+            console.log("si sirvo");
+           /*  mostrarNotificacion("Reporte enviado"); */
+          }else{
+            console.log("eres una deshonra para la naturaleza");
+           /*  mostrarNotificacion("No encontramos una cuenta con esos datos"); */
+          }
+          handleClose();
+    }
     const handleClose = () => {
         props.funcionCerrar();
     }
