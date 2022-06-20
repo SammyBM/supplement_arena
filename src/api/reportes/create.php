@@ -1,6 +1,6 @@
 <?php
 
-header('Access-Control-Allow-Origin');
+header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=UTF-8');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Max-Age:3600');
@@ -17,6 +17,7 @@ $reporte = new Reporte($db);
 $data = json_decode(file_get_contents("php://input"));
 
 if (
+    empty($data->resumen) &&
     empty($data->texto) &&
     empty($data->fechaCreacion) &&
     empty($data->articuloID) &&
@@ -26,6 +27,7 @@ if (
 
     echo json_encode(array("message" => "Unable to create reporte. Data incomplete."));
 } else {
+    $reporte->resumen = $data->resumen;
     $reporte->texto = $data->texto;
     $reporte->fechaCreacion = $data->fechaCreacion;
     $reporte->articuloID = $data->articuloID;

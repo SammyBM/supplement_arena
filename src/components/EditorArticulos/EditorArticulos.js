@@ -6,6 +6,11 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
+import axios from 'axios';
+import { Controller, useForm, FormProvider, useFormContext } from 'react-hook-form';
+import ApiContext from '../../contexts/ApiContext';
+
+
 import * as PlaceholderValues from "../PlaceholderValues";
 
 
@@ -15,37 +20,33 @@ const listaTiposSuplementos = PlaceholderValues.getTiposSuplementos();
 
 const listaIngredientes = PlaceholderValues.getIngredientes();
 
-const aminoacidos = PlaceholderValues.getAminos();
-
-const listaOmegas = PlaceholderValues.getOmegas();
-
-const acidosGrasos = PlaceholderValues.getAcidosGrasos();
-
 const descripcionActividad = "Herramienta para la creación y edicion de nuevos articulos de suplementos."
 
 
 export default function EditorArticulos(props) {
+    const api = React.useContext(ApiContext);
 
+    const { control, handleSubmit, reset, watch, formState: { errors } } = useForm({
+        defaultValues: {
+            titulo: "",
+            etiquetas: "",
+            tipoSuplemento: 3,
+            ingredientes: "",
+            ingActivo: "",
+            imagen: "",
+            calorias: "",
+            proteina: "",
+            lipidos: "",
+            carbohidratos: "",
+            tamano: "",
+            precio: "",
+            perfilAminos: "",
+            perfilAG: "",
+            perfilOmegas: ""
+        }
+    });
 
-
-    const [ingredientes, setIngredientes] = React.useState([
-        listaIngredientes[0].nombre
-    ]);
-    const [ingActivo, setIngActivo] = React.useState(null);
-    const [tipoSuplemento, setTipoSuplemento] = React.useState(listaTiposSuplementos[0].id);
-    const [omegas, setOmegas] = React.useState([]);
-
-
-    const handleOmegas = (event, newOmegas) => {
-        setOmegas(newOmegas);
-        console.log(omegas);
-    };
-
-    const handleTipoSup = (event) => {
-        setTipoSuplemento(event.target.value);
-    };
-
-
+    const switchTipo = watch("tipoSuplemento", 1);
 
     const filter = createFilterOptions();
 
@@ -55,220 +56,286 @@ export default function EditorArticulos(props) {
         display: 'none',
     });
 
-    /*  const botonImagen = document.getElementById("btn-subir-imagen");
-     const imagenSuplemento = document.getElementById("imagenSuplemento");
-     botonImagen.addEventListener("submit", e => {
-         e.preventDefault();
-         const endpoint = "../upload.php";
-         const formData = new FormData();
- 
-         formData.append("imagenSuplemento", imagenSuplemento.files[0]);
- 
-         fetch(endpoint, {
-             method: "post",
-             body: formData
-         }).catch(console.error);
-     }); */
+    const onSubmit = (data) => {
+        alert("submit");
+        console.log(data);
+    }
+
+    const handleDelete = (data) => {
+        alert('deleting');
+    }
 
 
     return (
-        <Grid container direction="column" spacing={2}  >
-            <Grid item>
-                <Card>
-                    <Paper elevation={4} sx={{ backgroundColor: "beige" }}>
-                        <CardContent>
-                            <Typography variant="h3" noWrap component="div" fontFamily="Lexend Deca">
-                                Editor de articulos
-                            </Typography>
-                            <Typography variant='p' component="div" color="GrayText">{descripcionActividad}</Typography>
-                        </CardContent>
-                    </Paper>
-                </Card>
-            </Grid>
-            <Grid item xs={12}>
-                <Grid container direction="row" justifyContent="center" alignItems="center" >
-                    <Grid item xs={12} md={6}>
-                        <Stack direction="column" spacing={2} justifyContent="center" alignItems="center">
-                            <FormControl sx={{ width: '25ch' }}>
-                                <TextField label="Titulo" color='primary' variant='standard' required />
-                            </FormControl>
-                            <FormControl sx={{ width: '25ch' }}>
-                                <Autocomplete
-                                    multiple
-                                    id="etiquetas"
-                                    options={listaEtiquetas}
-                                    getOptionLabel={(option) => option.etiqueta}
-                                    filterSelectedOptions
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Etiquetas"
-                                            variant='standard'
-                                            size='small'
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <Grid container direction="column" spacing={2}  >
+                <Grid item>
+                    <Card>
+                        <Paper elevation={4} sx={{ backgroundColor: "beige" }}>
+                            <CardContent>
+                                <Typography variant="h3" noWrap component="div" fontFamily="Lexend Deca">
+                                    Editor de articulos
+                                </Typography>
+                                <Typography variant='p' component="div" color="GrayText">{descripcionActividad}</Typography>
+                            </CardContent>
+                        </Paper>
+                    </Card>
+                </Grid>
+                <Grid item xs={12}>
+                    <Grid container direction="row" justifyContent="center" alignItems="center" >
+                        <Grid item xs={12} md={6}>
+                            <Stack direction="column" spacing={2} justifyContent="center" alignItems="center">
+                                <FormControl sx={{ width: '25ch' }}>
+                                    <Controller name="titulo" control={control} render={({ field: { onChange, value } }) => (
+                                        <TextField key="titulo" label="Titulo" onChange={onChange} value={value} color='primary' variant='standard' />
+                                    )}
+                                        rules={{
+                                            required: "El campo titulo es obligatorio."
+                                        }}
+                                    />
+                                </FormControl>
+                                <FormControl sx={{ width: '25ch' }}>
+                                    <Controller name="etiquetas" control={control} onChange={([, data]) => data} render={({ field: { onChange } }) => (
+                                        <Autocomplete
+                                            multiple
+                                            onChange={(event, newValue) => {
+                                                onChange(newValue);
+                                            }} options={listaEtiquetas}
+                                            getOptionLabel={(option) => option.etiqueta}
+                                            filterSelectedOptions
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label="Etiquetas"
+                                                    variant='standard'
+                                                    size='small'
+                                                />
+                                            )}
                                         />
                                     )}
-                                />
-                            </FormControl>
-                            <FormControl>
-                                <FormLabel id="tipo-suplemento"><Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Tipo de suplemento</Typography></FormLabel>
-                                <RadioGroup
-                                    value={tipoSuplemento}
-                                    name="radio-buttons-group"
-                                    onChange={handleTipoSup}
-                                >
-                                    {radiosTipoSuplemento}
-                                </RadioGroup>
-                            </FormControl>
-                            <FormControl sx={{ width: '25ch' }}>
-                                <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Ingredientes</Typography>
-                                <Autocomplete
-                                    value={ingredientes}
-                                    onChange={(event, newValue) => {
-                                        setIngredientes(newValue);
-                                    }}
-                                    multiple
-                                    id="ingredientes"
-                                    options={listaIngredientes.map((option) => option.nombre)}
-                                    freeSolo
-                                    renderTags={(value, getTagProps) =>
-                                        value.map((option, index) => (
-                                            <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-                                        ))
-                                    }
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            variant="standard"
-                                            label="Ingredientes"
+                                        rules={{}}
+                                    />
+                                </FormControl>
+                                <FormControl component={"fieldset"}>
+                                    <FormLabel id="tipo-suplemento"><Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Tipo de suplemento</Typography></FormLabel>
+                                    <Controller name="tipoSuplemento" control={control} render={({ field: { onChange, value } }) => (
+                                        <RadioGroup
+                                            value={value}
+                                            onChange={onChange}
+                                            defaultValue={1}
+                                        >
+                                            {radiosTipoSuplemento}
+                                        </RadioGroup>
+                                    )}
+                                        rules={{
+                                            required: true
+                                        }}
+                                    />
+                                </FormControl>
+                                <FormControl sx={{ width: '25ch' }}>
+                                    <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Ingredientes</Typography>
+                                    <Controller name="ingredientes" control={control} onChange={([, data]) => data} render={({ field: { onChange, value } }) => (
+                                        <Autocomplete
+                                            value={value}
+                                            onChange={(event, newValue) => {
+                                                onChange(newValue);
+                                            }}
+                                            multiple
+                                            options={listaIngredientes.map((option) => option.nombre)}
+                                            freeSolo
+                                            renderTags={(value, getTagProps) =>
+                                                value.map((option, index) => (
+                                                    <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                                                ))
+                                            }
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    variant="standard"
+                                                    label="Ingredientes"
+                                                />
+                                            )}
                                         />
                                     )}
-                                />
-                            </FormControl>
-                            <FormControl sx={{ width: '25ch' }}>
-                                <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Ingrediente activo</Typography>
-                                <Autocomplete
-                                    value={ingActivo}
-                                    onChange={(event, newIngActivo) => {
-                                        if (typeof newIngActivo === 'string') {
-                                            setIngActivo({
-                                                nombre: newIngActivo,
-                                            });
-                                        } else if (newIngActivo && newIngActivo.inputValue) {
-                                            // Create a new value from the user input
-                                            setIngActivo({
-                                                nombre: newIngActivo.inputValue,
-                                            });
-                                        } else {
-                                            setIngActivo(newIngActivo);
-                                        }
-                                    }}
-                                    filterOptions={(options, params) => {
-                                        const filtered = filter(options, params);
+                                        rules={{}}
+                                    />
+                                </FormControl>
+                                <FormControl sx={{ width: '25ch' }}>
+                                    <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Ingrediente activo</Typography>
+                                    <Controller name="ingActivo" control={control} render={({ field: { onChange, value } }) => (
+                                        <Autocomplete
+                                            value={value}
+                                            onChange={(event, newIngActivo) => {
+                                                if (typeof newIngActivo === 'string') {
+                                                    onChange({
+                                                        nombre: newIngActivo,
+                                                    });
+                                                } else if (newIngActivo && newIngActivo.inputValue) {
+                                                    // Create a new value from the user input
+                                                    onChange({
+                                                        nombre: newIngActivo.inputValue,
+                                                    });
+                                                } else {
+                                                    onChange(newIngActivo);
+                                                }
+                                            }}
+                                            filterOptions={(options, params) => {
+                                                const filtered = filter(options, params);
 
-                                        const { inputValue } = params;
-                                        // Suggest the creation of a new value
-                                        const isExisting = options.some((option) => inputValue === option.nombre);
-                                        if (inputValue !== '' && !isExisting) {
-                                            filtered.push({
-                                                inputValue,
-                                                title: `Agregar "${inputValue}"`,
-                                            });
-                                        }
+                                                const { inputValue } = params;
+                                                // Suggest the creation of a new value
+                                                const isExisting = options.some((option) => inputValue === option.nombre);
+                                                if (inputValue !== '' && !isExisting) {
+                                                    filtered.push({
+                                                        inputValue,
+                                                        title: `Agregar "${inputValue}"`,
+                                                    });
+                                                }
 
-                                        return filtered;
-                                    }}
-                                    selectOnFocus
-                                    clearOnBlur
-                                    handleHomeEndKeys
-                                    id="ingrediente-activo"
-                                    options={listaIngredientes}
-                                    getOptionLabel={(option) => {
-                                        // Value selected with enter, right from the input
-                                        if (typeof option === 'string') {
-                                            return option;
-                                        }
-                                        // Add "xxx" option created dynamically
-                                        if (option.inputValue) {
-                                            return option.inputValue;
-                                        }
-                                        // Regular option
-                                        return option.nombre;
-                                    }}
-                                    renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
-                                    sx={{ width: 300 }}
-                                    freeSolo
-                                    renderInput={(params) => (
-                                        <TextField {...params} label="Ingrediente Activo" />
+                                                return filtered;
+                                            }}
+                                            selectOnFocus
+                                            clearOnBlur
+                                            handleHomeEndKeys
+                                            options={listaIngredientes}
+                                            getOptionLabel={(option) => {
+                                                // Value selected with enter, right from the input
+                                                if (typeof option === 'string') {
+                                                    return option;
+                                                }
+                                                // Add "xxx" option created dynamically
+                                                if (option.inputValue) {
+                                                    return option.inputValue;
+                                                }
+                                                // Regular option
+                                                return option.nombre;
+                                            }}
+                                            renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
+                                            sx={{ width: 300 }}
+                                            freeSolo
+                                            renderInput={(params) => (
+                                                <TextField {...params} label="Ingrediente Activo" />
+                                            )}
+                                        />
                                     )}
-                                />
-                            </FormControl>
-                        </Stack>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <Stack direction="column" justifyContent="center" alignItems="center">
-                            <Container fixed>
-                                <Box sx={{ bgcolor: '#cfe8fc', maxMeight: '500px', maxWidth: "500px" }}>
+                                        rules={{}}
+                                    />
+                                </FormControl>
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Stack direction="column" justifyContent="center" alignItems="center">
+                                <Container fixed>
+                                    <Box sx={{ bgcolor: '#cfe8fc', maxHeight: '500px', maxWidth: "500px" }}>
+                                        <img />
+                                    </Box>
+                                    <label htmlFor="btn-subir-imagen">
+                                        <Controller name="imagenSuplemento" control={control} render={({ field: { onChange, value } }) => (
+                                            <Input accept="image/*" id="btn-subir-imagen" onChange={onChange} value={value} name="imagenSuplemento" type="file" />
+                                        )}
+                                            rules={{
 
-                                </Box>
-                                <label htmlFor="btn-subir-imagen">
-                                    <Input accept="image/*" id="btn-subir-imagen" name="imagenSuplemento" type="file" />
-                                    <Button variant="contained" component="span" endIcon={<AddPhotoAlternateIcon />}>
-                                        Subir imagen
-                                    </Button>
-                                </label>
-                            </Container>
-                        </Stack>
+                                            }}
+                                        />
+                                        <Button variant="contained" component="span" endIcon={<AddPhotoAlternateIcon />}>
+                                            Subir imagen
+                                        </Button>
+                                    </label>
+                                </Container>
+                            </Stack>
+                        </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
-            <Grid item>
-                <Divider variant="fullWidth" />
-                <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Caracteristicas nutrimentales</Typography>
-                <Grid container direction="row" justifyContent="center" alignItems="center">
-                    <Grid item xs={12} md={6} lg={3}>
-                        <TextField id="calorias" label="Calorias" type="number" helperText="Por porción" required />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <TextField id="proteina" label="Proteina" type="number" helperText="Por porción" required />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <TextField id="lipidos" label="Lipidos" type="number" helperText="Por porción" required />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <TextField id="carbohidratos" label="Carbohidratos" type="number" helperText="Por porción" required />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <TextField id="tamano" label="Tamaño" type="number" helperText="de una porción" required />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <TextField id="cantidad" label="Cantidad" type="number" helperText="Numero de porciones" required />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={3}>
-                        <TextField id="precio" label="Precio" type="number" helperText="Por empaque" required />
+                <Grid item>
+                    <Divider variant="fullWidth" />
+                    <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Caracteristicas nutrimentales</Typography>
+                    <Grid container direction="row" justifyContent="center" alignItems="center">
+                        <Grid item xs={12} md={6} lg={3}>
+                            <Controller name="calorias" control={control} render={({ field: { onChange, value } }) => (
+                                <TextField id="calorias" label="Calorias" type="number" onChange={onChange} value={value} helperText="Por porción" />
+                            )}
+                                rules={{
+                                    required: "El campo calorias es obligatorio"
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={3}>
+                            <Controller name="proteina" control={control} render={({ field: { onChange, value } }) => (
+                                <TextField id="proteina" label="Proteina" type="number" onChange={onChange} value={value} helperText="Por porción" />
+                            )}
+                                rules={{
+                                    required: "El campo proteina es obligatorio"
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={3}>
+                            <Controller name="lipidos" control={control} render={({ field: { onChange, value } }) => (
+                                <TextField id="lipidos" label="Lipidos" type="number" onChange={onChange} value={value} helperText="Por porción" />
+                            )}
+                                rules={{
+                                    required: "El campo carbohidratos es obligatorio"
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={3}>
+                            <Controller name="carbohidratos" control={control} render={({ field: { onChange, value } }) => (
+                                <TextField id="carbohidratos" label="Carbohidratos" type="number" onChange={onChange} value={value} helperText="Por porción" />
+                            )}
+                                rules={{
+                                    required: "El campo carbohidratos es obligatorio"
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={3}>
+                            <Controller name="tamano" control={control} render={({ field: { onChange, value } }) => (
+                                <TextField id="tamano" label="Tamaño" type="number" onChange={onChange} value={value} helperText="de una porción" />
+                            )}
+                                rules={{
+                                    required: "El campo tamaño de porción es obligatorio"
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={3}>
+                            <Controller name="cantidad" control={control} render={({ field: { onChange, value } }) => (
+                                <TextField id="cantidad" label="Cantidad" type="number" onChange={onChange} value={value} helperText="Numero de porciones" />
+                            )}
+                                rules={{
+                                    required: "El campo cantidad de porciones es obligatorio"
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={3}>
+                            <Controller name="precio" control={control} render={({ field: { onChange, value } }) => (
+                                <TextField id="precio" label="Precio" type="number" onChange={onChange} value={value} helperText="Por empaque" />
+                            )}
+                                rules={{
+                                    required: "El campo precio es obligatorio"
+                                }}
+                            />
+                        </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
-            <Grid item>
-                <InterfazVariable tipoSuplemento={tipoSuplemento} omegasValue={omegas} omegasFunction={handleOmegas} />
-            </Grid>
-            <Grid item>
-                <Divider variant='fullWidth' />
-                <br />
-                <Stack direction="row" alignItems="center" justifyContent="space-evenly">
-                    <Button variant='contained' color="warning" startIcon={<DeleteForeverIcon />}>Eliminar</Button>
-                    <Button variant='contained' endIcon={<SaveIcon />}>Guardar</Button>
-                </Stack>
-            </Grid>
+                <Grid item>
+                    <InterfazVariable api={api} tipoSuplemento={switchTipo} control={control} watch={watch} />
+                </Grid>
+                <Grid item>
+                    <Divider variant='fullWidth' />
+                    <br />
+                    <Stack direction="row" alignItems="center" justifyContent="space-evenly">
+                        <Button variant='contained' onClick={handleDelete} color="warning" startIcon={<DeleteForeverIcon />}>Eliminar</Button>
+                        <Button type="submit" variant='contained' endIcon={<SaveIcon />}>Guardar</Button>
+                    </Stack>
+                </Grid>
 
-        </Grid>
+            </Grid>
+        </form>
     );
 
 }
 
 function InterfazVariable(props) {
 
-    const omegas = props.omegasValue;
-    const handleOmegas = (event, newOmegas) => props.omegasFunction(event, newOmegas);
+
     const { api, control, tipoSuplemento, watch } = props;
 
     const watchOmegas = watch("omegas");
@@ -302,7 +369,6 @@ function InterfazVariable(props) {
 
         axios.get(api.concat('acidos_grasos/read.php')).then((response) => {
             acido = response.data.records;
-            
         }).catch((error) => {
             console.error(error);
             acido = null;
@@ -315,35 +381,53 @@ function InterfazVariable(props) {
         });
 
         console.log(data);
-    },{});
-    const textfieldsAminos = aminoacidos.map((item) => <Grid item xs={12} md={6} lg={3}><TextField id={"aminos-" + item.id} label={item.nombre} type="number" helperText="Por porción" /></Grid>);
-    const botonesOmegas = listaOmegas.map((value) => <ToggleButton value={value.tipo} key={value.id}><Chip label={value.tipo.charAt(value.tipo.length - 1)} color={omegas.includes(value.tipo) ? "primary" : "secondary"} variant={omegas.includes(value.tipo) ? "filled" : "outlined"}></Chip></ToggleButton>);
-    const textfieldAcidosGrasos = acidosGrasos.map((item => <TextField id={"acidos-grasos-" + item.id} label={item.nombre} type="number" helperText="Por porción" disabled={omegas.includes(listaOmegas[0].tipo) ? false : true} />))
 
+    }, []);
 
-    switch (props.tipoSuplemento) {
-        case listaTiposSuplementos[0].id:
+    switch (tipoSuplemento) {
+
+        case '1':
             return (
                 <Grid item>
                     <Divider variant="fullWidth" />
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Perfil de aminoacidos</Typography>
                     <Grid container direction="row" justifyContent="center" alignItems="center">
-                        {textfieldsAminos}
+                        {console.log(data)}
+                        {
+                            (data.aminoacidos !== undefined && data.aminoacidos !== null) ?
+                                data.aminoacidos.map((item) => <Grid item xs={12} md={6} lg={3}><Controller name={"aminos-" + item.aminoID} control={control} render={({ field: { onChange, value } }) => (<TextField id={"aminos-" + item.aminoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} />)} rules={{}} /></Grid>)
+                                :
+                                <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los aminoacidos, intente más tarde.</Typography></Grid>
+                        }
                     </Grid>
                 </Grid>
             );
             break;
-        case listaTiposSuplementos[1].id:
+        case '2':
             return (
                 <Grid item >
                     <Divider variant="fullWidth" />
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Omegas</Typography>
-                    <ToggleButtonGroup value={omegas} onChange={handleOmegas}>
-                        {botonesOmegas}
-                    </ToggleButtonGroup>
+                    <Controller name="omegas" control={control} render={({ field: { onChange, value } }) => (
+                        <ToggleButtonGroup value={value} onChange={onChange}>
+                            {
+                                (data.omegas !== undefined && data.omegas !== null) ?
+                                    data.omegas.map((value) => <ToggleButton value={value.nombre} key={value.omegaID}><Chip label={value.nombre.charAt(value.nombre.length - 1)} color={watchOmegas.includes(value.nombre) ? "primary" : "secondary"} variant={watchOmegas.includes(value.nombre) ? "filled" : "outlined"}></Chip></ToggleButton>)
+                                    :
+                                    <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los omegas, intente más tarde.</Typography></Grid>
+                            }
+                        </ToggleButtonGroup>
+                    )}
+                        rules={{}}
+                    />
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Perfil de acidos grasos</Typography>
                     <Stack direction="row" spacing={3} alignItems="center" justifyContent="center">
-                        {textfieldAcidosGrasos}
+                        {
+                            (data.acidosGrasos !== undefined && data.acidosGrasos !== null) ?
+                                data.acidosGrasos.map((item) => <Controller name={"aminos-" + item.id} control={control} render={({ field: { onChange, value } }) => (<TextField id={"acidos-grasos-" + item.acidoGrasoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} disabled={watchOmegas.includes("Omega3") ? false : true} />)} rules={{}} />)
+                                :
+                                <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los acidos grasos, intente más tarde.</Typography></Grid>
+                        }
                     </Stack>
                 </Grid >
             );

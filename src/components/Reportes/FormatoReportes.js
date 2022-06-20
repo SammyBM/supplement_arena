@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Input, TextField } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import SendIcon from "@mui/icons-material/Send"
 import axios from 'axios';
+
 import Service from "../../Service";
 import ApiContext from '../../contexts/ApiContext';
 import UserContext from '../../contexts/UserContext';
@@ -10,6 +11,7 @@ import UserContext from '../../contexts/UserContext';
 export default function FormatoReportes(props) {
     const api = React.useContext(ApiContext);
     const usuario = React.useContext(UserContext);
+
     const propis = JSON.parse(sessionStorage.getItem("props"))
     var today = new Date(),
     date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -44,6 +46,9 @@ export default function FormatoReportes(props) {
             usuarioID: data.usuario
         }).catch((err) => {
             console.warn(err);
+        });
+        handleClose();
+    }
         }); */
         
     }
@@ -57,38 +62,43 @@ export default function FormatoReportes(props) {
           }
           handleClose();
     }
+
     const handleClose = () => {
         props.funcionCerrar();
+        reset();
     }
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form>
                 <Dialog open={props.abierto} onClose={handleClose}>
                     <DialogTitle>Crear un reporte.</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
                             Describa el motivo de su reporte en una linea de resumen.
                         </DialogContentText>
-                        <Controller name="resumen" const={control} render={({ }) => (
+                        <Controller name="resumen" control={control} render={({ field: { onChange, value } }) => (
                             <TextField
                                 autoFocus
                                 margin="dense"
-                                id="resumen"
                                 label="Resumen"
+                                onChange={onChange}
+                                value={value}
                                 fullWidth
                                 variant="standard"
                             />
-                        )} />
+                        )}
+                            rules={{ required: "Se debe llenar el campo resumen." }}
+                        />
                         <DialogContentText>
                             Ingrese los detalles de su reporte
                         </DialogContentText>
-                        <Controller name="texto" control={control} render={({ }) => (
+                        <Controller name="texto" control={control} render={({ field: { onChange, value } }) => (
                             <TextField
-                                autoFocus
                                 margin="dense"
-                                id="detalles"
                                 label="Detalles del reporte"
+                                onChange={onChange}
+                                value={value}
                                 fullWidth
                                 multiline
                             />
@@ -97,7 +107,7 @@ export default function FormatoReportes(props) {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose}>Cancelar</Button>
-                        <Button type="submit" onClick={handleClose} endIcon={<SendIcon />}>Enviar</Button>
+                        <Button type="submit" onClick={handleSubmit(submit)} endIcon={<SendIcon />} >Enviar</Button>
                     </DialogActions>
                 </Dialog>
             </form>

@@ -5,14 +5,12 @@ import { blue } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 
 import axios from 'axios';
-import { useForm } from 'react-hook-form';
+import ApiContext from '../../contexts/ApiContext';
 
 import EditIcon from '@mui/icons-material/Edit';
 import ImageIcon from '@mui/icons-material/Image';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-
-const api = "http://localhost/api/";
 
 
 const Input = styled('input')({
@@ -20,13 +18,11 @@ const Input = styled('input')({
 });
 
 function SimpleDialog(props) {
+    const api = React.useContext(ApiContext);
+
     const { onClose, open } = props;
 
-    const [selectedImage, setSelectedImage] = React.useState(null);
-
     const [imagenes, setImagenes] = React.useState([]);
-
-    const { register, handleSubmit } = useForm();
 
     const handleClose = () => {
         onClose();
@@ -44,21 +40,27 @@ function SimpleDialog(props) {
     };
 
     const handleImageSelect = (event) => {
-        setSelectedImage(event.target.files[0]);
-        console.log(selectedImage);
-        axios.post(api.concat('imagenes_carrousel/create.php'), {
-            nombre_foto: null
-        }).then((response) => { });
+        const formData = new FormData();
+        console.log(event.target.files[0]);
+        formData.append('fileToUpload', event.target.files[0]);
+
+        axios.post(api.concat('imagenes_carrousel/create.php'), formData)
+            .then((response) => {
+                console.log(response);
+            }).catch((error) => {
+                console.error(error);
+            }
+            );
     }
 
     const handleImagenes = () => {
         axios.get(api.concat('imagenes_carrousel/read.php')).then(res => {
             const data = res.data;
-            setImagenes(data.records);
+            data.records.length > 0 ? setImagenes(data.records) : setImagenes([]);
         });
     }
 
-    const desiplay = (data) => console.log("hey", data);
+    React.useEffect((() => handleImagenes()), []);
 
     return (
         <Dialog onClose={handleClose} open={open}>
@@ -80,7 +82,7 @@ function SimpleDialog(props) {
 
                 <label htmlFor="btn-subir-imagen">
                     <ListItem autoFocus button onClick={() => handleListItemClick('agregarImagen')}>
-                        <Input inputRef={register} onChange={handleImageSelect} accept="image/*" id="btn-subir-imagen" name="imagenSuplemento" type="file" />
+                        <Input onChange={handleImageSelect} accept="image/*" id="btn-subir-imagen" name="imagenSuplemento" type="file" />
                         <ListItemAvatar>
                             <AddPhotoAlternateIcon />
                         </ListItemAvatar>

@@ -23,6 +23,7 @@ if ($num > 0) {
 
         $reporte_item  = array(
             "reporteID" => $id,
+            "resumen" => $resumen,
             "texto" => $texto,
             "fechaCreacion" => $fechaCreacion,
             "articuloID" => $articuloID,

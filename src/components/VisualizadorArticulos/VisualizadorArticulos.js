@@ -4,15 +4,17 @@ import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 
 import axios from 'axios';
 
-import * as PlaceholderValues from "../PlaceholderValues";
+import ApiContext from '../../contexts/ApiContext';
 import Aminograma from './Graficas/Aminograma';
 import ComposicionOmegas from './Graficas/ComposicionOmegas';
+import Vitamina from './Graficas/Vitaminas';
 import FormatoReportes from '../Reportes/FormatoReportes';
 import Advertencia from '../Advertencia/Advertencia';
 
-const api = "http://localhost/api/";
 
 export default function VisualizadorArticulos(props) {
+    const api = React.useContext(ApiContext);
+
     const [articulo, setArticulo] = React.useState(
         {
             articuloID:"",
@@ -20,7 +22,7 @@ export default function VisualizadorArticulos(props) {
             etiquetas: [],
             tipoSuplemento: "",
             ingredientes: [],
-            ingActivo: "",
+            ingActivo: [],
             imagen: "",
             tamano: "",
             calorias: "",
@@ -29,8 +31,8 @@ export default function VisualizadorArticulos(props) {
             carbos: "",
             perfilAminos: [],
             perfilAG: [],
-            tiposOmegas: [], 
-            vitaminas: [], 
+            tiposOmegas: [],
+            vitaminas: [],
             advertencias: []
         }
     );
@@ -53,50 +55,58 @@ export default function VisualizadorArticulos(props) {
         const advertencias = [];
         const ingredientes = [];
 
+        function getActivos(ing) {
+            console.log("Ingrediente", ing);
+            if (parseInt(ing.ingActivo))
+                return ing;
+        }
+
         function executePromisesInRow(queue, index) {
             if (index >= queue.length) {
                 setArticulo({
                     articuloID:props.articulo.articuloID,
                     titulo: props.articulo.titulo,
                     etiquetas: props.articulo.etiquetas,
-                    tipoSuplemento: props.articulo.tipoSuplemento,
+                    tipoSuplemento: props.articulo.categoriaID,
                     ingredientes: ingredientes,
-                    ingActivo: props.articulo.ingActivo,
+                    ingActivo: ingredientes.filter(getActivos),
                     imagen: props.articulo.imagen,
-                    tamano: props.articulo.tamano,
+                    tamano: props.articulo.tamanoPorcion,
                     calorias: props.articulo.calorias,
                     proteina: props.articulo.proteina,
                     lipidos: props.articulo.lipidos,
-                    carbos: props.articulo.carbos,
+                    carbos: props.articulo.carbohidratos,
                     perfilAG: acidos,
                     perfilAminos: aminos,
+                    vitaminas: vitaminas,
                     tiposOmegas: omegas,
                     advertencias: advertencias
                 });
                 
                 return;
             }
-    
+
             axios.get(queue[index].route).then(
                 res => {
                     res.data.forEach(item => {
-                        queue[index].ref.push(item);    
+                        queue[index].ref.push(item);
                     })
-            }).catch(
-                err => {
-                    console.log(err);
-            }).finally(
-                () => {
-                    executePromisesInRow(queue, index+1);
-            })
+                }).catch(
+                    err => {
+                        console.log(err);
+                    }).finally(
+                        () => {
+                            executePromisesInRow(queue, index + 1);
+                        })
         }
 
         executePromisesInRow([
-            {route: api.concat("perfiles_aminos/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: aminos}, 
-            {route: api.concat("perfiles_acidos_grasos/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: acidos}, 
-            {route: api.concat("perfiles_omegas/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: omegas}, 
-            {route: api.concat("perfiles_vitaminas/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: vitaminas}, 
-            {route: api.concat("perfiles_advertencias/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: advertencias}
+            { route: api.concat("perfiles_advertencias/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: advertencias },
+            { route: api.concat("perfiles_aminos/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: aminos },
+            { route: api.concat("perfiles_acidos_grasos/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: acidos },
+            { route: api.concat("perfiles_ingredientes/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: ingredientes },
+            { route: api.concat("perfiles_omegas/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: omegas },
+            { route: api.concat("perfiles_vitaminas/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: vitaminas }
         ], 0);
 
     }, []
@@ -112,11 +122,11 @@ export default function VisualizadorArticulos(props) {
                         <Typography variant="h3" color="primary">{articulo.titulo}</Typography>
                         <Typography variant="subtitle2" color="secondary">{articulo.etiquetas}</Typography>
                         <Typography variant="h5" color="primary">Ingredientes</Typography>
-                        <Typography variant="body1" color="secondary">{articulo.ingredientes}</Typography>
+                        {articulo.ingredientes.map((item) => <Typography variant="body1" color={item.alergeno ? "warning.main" : "secondary"}>{item.nombre}</Typography>)}
                         <Typography variant="h5" color="primary">Ingrediente activo</Typography>
-                        <Typography variant="body1" color="secondary">{articulo.ingActivo}</Typography>
-                        <Typography variant="h5" color="primary">Advertencias</Typography>
-                        <Advertencia advertencia={1} />
+                        {articulo.ingActivo.map((item) => <Typography variant="body1" color="secondary">{item.nombre}</Typography>)}
+                        {articulo.advertencias.legth > 0 && <Typography variant="h5" color="primary">Advertencias</Typography>}
+                        {articulo.advertencias.map((item) => <Advertencia advertencia={item.texto} resumen={item.resumen} />)}
                         {articulo.tiposOmegas.length > 0 && <Stack direction="row" alignItems="center" justifyContent="center" spacing={1}>{articulo.tiposOmegas.map((item) => <Chip label={item.nombre} color="primary" />)}</Stack>}
                     </Stack>
                 </Grid>
@@ -135,7 +145,7 @@ export default function VisualizadorArticulos(props) {
                     <Stack direction="column" justifyContent="flex-start" alignItems="center">
                         <IconButton onClick={handleClickAbrir}><ReportProblemIcon /></IconButton>
                     </Stack>
-                    <FormatoReportes articulo={props.articulo} abierto={abrirReporte} funcionCerrar={handleClickCerrar} />
+                    <FormatoReportes articulo={articulo} abierto={abrirReporte} funcionCerrar={handleClickCerrar} />
                 </Grid>
                 <Grid item xs={12}>
                     <TablaNutrimental articulo={articulo} />
@@ -143,6 +153,11 @@ export default function VisualizadorArticulos(props) {
                 <Grid item xs={2}></Grid>
                 <Grid item xs={8}>
                     <Grafica articulo={articulo} />
+                </Grid>
+                <Grid item xs={2}></Grid>
+                <Grid item xs={2}></Grid>
+                <Grid item xs={8}>
+                    {articulo.vitaminas.legth > 0 && <Vitamina articulo={articulo} />}
                 </Grid>
                 <Grid item xs={2}></Grid>
             </Grid>
@@ -192,8 +207,9 @@ function TablaNutrimental(props) {
 
 function Grafica(props) {
     const articulo = props.articulo;
+    console.log(articulo);
 
-    switch (articulo.tipoSuplemento) {
+    switch (parseInt(articulo.tipoSuplemento)) {
         case 1:
             return <Aminograma articulo={articulo} />;
             break;

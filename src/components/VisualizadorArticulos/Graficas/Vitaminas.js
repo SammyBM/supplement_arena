@@ -1,14 +1,14 @@
 import * as React from 'react';
 import 'chart.js/auto';
-import { Radar } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 
-export default function Aminograma(props) {
-    const aminos = getLabels(props.articulo.perfilAminos);
-    const valores = getAminoData(props.articulo.perfilAminos);
+export default function Vitaminas(props) {
+    const vitaminas = getLabels(props.articulo.vitaminas);
+    const valores = getVitaminData(props.articulo.vitaminas);
 
     const data = {
         labels: [
-            ...aminos,
+            ...vitaminas,
         ],
         datasets: [
             {
@@ -25,23 +25,21 @@ export default function Aminograma(props) {
         ]
     };
 
+    return <Bar data={data} />;
 
-    return (
-        <Radar data={data} />
-    );
 }
 
-function getLabels(perfilAminos) {
+function getLabels(perfVitaminas) {
     let output = [];
-    perfilAminos.forEach((item) => {
+    perfVitaminas.forEach((item) => {
         output.push(item.nombre);
     });
     return output;
 }
 
-function getAminoData(perfilAminos) {
+function getVitaminData(perfVitaminas) {
     let output = [];
-    perfilAminos.forEach((item) => {
+    perfVitaminas.forEach((item) => {
         output.push(item.cantidad);
     });
     return output;

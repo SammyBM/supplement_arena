@@ -1,6 +1,6 @@
 <?php
 
-header('Access-Control-Allow-Origin');
+header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=UTF-8');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Max-Age:3600');
@@ -29,22 +29,29 @@ if (
 
     echo json_encode(array("message" => "Unable to create usuario. Data incomplete."));
 } else {
+    $contrasena_hash = password_hash($data->contrasena, PASSWORD_BCRYPT);
+
     $usuario->tipoUsuario = $data->tipoUsuario;
     $usuario->correo = $data->correo;
     $usuario->nombre = $data->nombre;
     $usuario->apellido = $data->apellido;
     $usuario->nombreUsuario = $data->nombreUsuario;
     $usuario->fechaNacimiento = $data->fechaNacimiento;
-    $usuario->contrasena = $data->contrasena;
+    $usuario->contrasena = $contrasena_hash;
 
-    if ($usuario->create()) {
+    if ($usuario->login() == null) {
 
-        http_response_code(201);
+        if ($usuario->create()) {
 
-        echo json_encode(array("success" => "usuario created"));
+            http_response_code(201);
+
+            echo json_encode(array("success" => "usuario created"));
+        } else {
+            http_response_code(503);
+
+            echo json_encode(array("message" => "Unable to create usuario."));
+        }
     } else {
-        http_response_code(503);
-
-        echo json_encode(array("message" => "Unable to create usuario."));
+        echo json_encode(array("message" => "User already exists"));
     }
 }

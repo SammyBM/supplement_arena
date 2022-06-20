@@ -6,6 +6,10 @@ import LocalFloristTwoToneIcon from '@mui/icons-material/LocalFloristTwoTone';
 import PhishingTwoToneIcon from '@mui/icons-material/PhishingTwoTone';
 
 import SelectorPredictivo from './SelectorPredictivo';
+import ApiContext from '../../contexts/ApiContext';
+
+import axios from 'axios';
+import { Controller, useForm, FormProvider, useFormContext } from 'react-hook-form';
 
 const descripcionActividad = "Esta herramienta te permite buscar suplementos a tráves de sus caracteristicas en lugar de por su nombre." + '\n' + "Esto resulta especialmente util para usuarios más expermentados o personas que tengan un conocimiento previo en temas de nutriologia o bioquimica."
 
@@ -301,6 +305,26 @@ function InterfazBusqueda(props) {
 }
 
 export default function BuscadorAvanzado() {
+    const api = React.useContext(ApiContext);
+
+    const { control, handleSubmit, reset, formState: { errors } } = useForm({
+        defaultValues: {
+            tipoSuplemento: 1,
+            ingredientes: "",
+            ingActivo: "",
+            imagen: "",
+            calorias: "",
+            proteina: "",
+            lipidos: "",
+            carbohidratos: "",
+            tamano: "",
+            precio: "",
+            perfilAminos: "",
+            perfilAG: "",
+            perfilOmegas: ""
+        }
+    });
+
     const [value, setValue] = React.useState('1');
 
     const handleChange = (event, newValue) => {
