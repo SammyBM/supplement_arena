@@ -7,10 +7,15 @@ export default function TarjetaArticulo(props) {
     const usuario = React.useContext(UserContext);
 
     const abrirArticulo = (articulo) => {
+        sessionStorage.removeItem("props");
         console.log(articulo);
+        sessionStorage.setItem("props",JSON.stringify(articulo) )
         props.funcionMenu("visualizador", articulo);
     }
-
+    const enviar = () => {
+        
+        props.funcionMenu("editor", props.articulo);
+    }
     return (
         <Card>
             <CardActionArea onClick={() => abrirArticulo(props.articulo)}>
@@ -24,7 +29,8 @@ export default function TarjetaArticulo(props) {
             {
                 usuario.tipoUsuarioID > 1 &&
                 <CardActions>
-                    <Button filled color=" primary" onClick={() => props.funcionMenu("editor", props.articulo)}>Editar</Button>
+
+                    <Button filled color=" primary" onClick={enviar()}>Editar</Button>
                 </CardActions>
             }
         </Card>

@@ -335,6 +335,7 @@ export default function EditorArticulos(props) {
 
 function InterfazVariable(props) {
 
+
     const { api, control, tipoSuplemento, watch } = props;
 
     const watchOmegas = watch("omegas");

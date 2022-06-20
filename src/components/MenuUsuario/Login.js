@@ -1,7 +1,10 @@
 import * as React from 'react';
+
+import Paper from "@mui/material/Paper";
+import { Grid, Container, Stack } from '@mui/material';
 import { Button, Container, Grid, IconButton, Input, InputAdornment, InputLabel, FormControl, Paper, Slide, Snackbar, Stack, Tooltip } from "@mui/material";
 import { useForm, Controller } from 'react-hook-form';
-
+import Service from "../../Service";
 
 
 import Visibility from '@mui/icons-material/Visibility';
@@ -20,6 +23,7 @@ export default function Login(props) {
     const api = React.useContext(ApiContext);
 
     const [showPassword, setShowPassword] = React.useState(false);
+
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -46,34 +50,41 @@ export default function Login(props) {
                 fechaNacimiento: usuario.fechaNacimiento
             }
         );
+
     };
 
     //Leer registro en BD, comparar contraseña, devolver datos de usuario y guardarlos en Contexto, 
     //sino regresar error (no registro o contraseña incorrecta)
     const submit = (data) => {
-        axios({
+        console.log(data);
+        Service.postData("usuarios/login", data).then((result) => {
+            this.updateLoginStatus(result);
+        });
+       /*  axios({
             method: 'POST',
             url: api.concat("usaurios/login.php"),
             data: data
         }).catch((error) => {
-            mostrarNotificacion("No encontramos una cuenta con esos datos");
+           mostrarNotificacion("No encontramos una cuenta con esos datos");
         }).finally(() => {
             reset();
-        })
+        }) */
+        
     }
-
+    const updateLoginStatus = (data) => {
+        if (data.status === "true") {
+            reset();
+          }else{
+            mostrarNotificacion("No encontramos una cuenta con esos datos");
+          }
+    }
     const onError = (err) => {
         handleErrores(err);
     }
-
     const handleErrores = (err) => {
         err.contrasena && mostrarNotificacion(err.contrasena.message, "warning");
         err.correo && mostrarNotificacion(err.correo.message, "warning");
     }
-
-    const cambiarPagina = (actividad) => {
-        props.funcionMenu(actividad)
-    };
 
     const [transition, setTransition] = React.useState(undefined);
     const [notificacion, setNotificacion] = React.useState({
@@ -81,6 +92,7 @@ export default function Login(props) {
         mensaje: "",
         severity: "",
     });
+
 
     const mostrarNotificacion = (msg, svty) => {
         setNotificacion({
@@ -179,7 +191,9 @@ export default function Login(props) {
                                     </FormControl>
                                     <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
                                         <Tooltip title='Crear una cuenta'>
-                                            <Button variant='outlined' color='primary' startIcon={<AccountCircleIcon />} onClick={() => cambiarPagina("registro")}>
+
+                                            <Button variant='outlined' color='primary' startIcon={<AccountCircleIcon />} onClick={() => Service.changePage("registro")}>
+
                                                 Registrate
                                             </Button>
                                         </Tooltip>
@@ -190,6 +204,7 @@ export default function Login(props) {
                     </Paper>
                 </Container >
             </form>
+
             <Snackbar
                 open={notificacion.mostrar}
                 onClose={cerrarNotificacion}

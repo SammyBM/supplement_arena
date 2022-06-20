@@ -31,6 +31,7 @@ function SimpleDialog(props) {
     const handleListItemClick = (value) => {
         if (value === "agregarImagen")
             return;
+            
         axios.get(api.concat('imagenes_carrousel/delete.php?id=', value.id)).then((response) => {
             console.log(response);
         }).catch((error) => {
