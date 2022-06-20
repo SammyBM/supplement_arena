@@ -58,23 +58,23 @@ export default function Login(props) {
         Service.postData("usuarios/login", data).then((result) => {
             this.updateLoginStatus(result);
         });
-       /*  axios({
-            method: 'POST',
-            url: api.concat("usaurios/login.php"),
-            data: data
-        }).catch((error) => {
-           mostrarNotificacion("No encontramos una cuenta con esos datos");
-        }).finally(() => {
-            reset();
-        }) */
-        
+        /*  axios({
+             method: 'POST',
+             url: api.concat("usaurios/login.php"),
+             data: data
+         }).catch((error) => {
+            mostrarNotificacion("No encontramos una cuenta con esos datos");
+         }).finally(() => {
+             reset();
+         }) */
+
     }
     const updateLoginStatus = (data) => {
         if (data.status === "true") {
             reset();
-          }else{
+        } else {
             mostrarNotificacion("No encontramos una cuenta con esos datos");
-          }
+        }
     }
     const onError = (err) => {
         handleErrores(err);
@@ -83,9 +83,7 @@ export default function Login(props) {
         err.contrasena && mostrarNotificacion(err.contrasena.message, "warning");
         err.correo && mostrarNotificacion(err.correo.message, "warning");
     }
-    const cambiarPagina = (actividad) => {
-        props.funcionMenu(actividad)
-    };
+
 
     const [transition, setTransition] = React.useState(undefined);
     const [notificacion, setNotificacion] = React.useState({

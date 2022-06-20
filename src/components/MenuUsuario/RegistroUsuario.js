@@ -11,6 +11,7 @@ import LoginIcon from '@mui/icons-material/Login'
 
 import ApiContext from "../../contexts/ApiContext";
 import UserContext from "../../contexts/UserContext";
+import Service from "../../Service";
 import axios from 'axios';
 
 export default function RegistroUsuario(props) {
@@ -76,7 +77,7 @@ export default function RegistroUsuario(props) {
     }
 
     const cambiarPagina = (actividad) => {
-        props.funcionMenu(actividad)
+        Service.changePage(actividad);
     };
 
     const [transition, setTransition] = React.useState(undefined);

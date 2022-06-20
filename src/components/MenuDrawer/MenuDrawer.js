@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import { Box, ButtonBase, CssBaseline, Divider, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Slide, Snackbar, Toolbar, Typography, Tooltip } from '@mui/material';
@@ -26,6 +26,8 @@ import BuscadorSimple from '../BuscadorSimple/BuscadorSimple';
 import VisualizadorArticulos from '../VisualizadorArticulos/VisualizadorArticulos';
 import ResultadosBusqueda from '../ResultadosBusqueda/ResultadosBusqueda';
 import Reporte from '../Reportes/Reporte';
+import Service from '../../Service';
+
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -129,7 +131,7 @@ export default function MenuDrawer(props) {
     const [resultados, setResultados] = React.useState(null);
 
     const cambiarPagina = (actividad, art = null, res = null) => {
-        setPagina(actividad)
+        Service.changePage(actividad);
         setArticulo(art)
         setResultados(res)
     };
@@ -197,7 +199,7 @@ export default function MenuDrawer(props) {
                                     >
                                         <MenuIcon />
                                     </IconButton>
-                                    <ButtonBase onClick={() => cambiarPagina("landing")}>
+                                    <ButtonBase onClick={() => cambiarPagina("")}>
                                         <Typography variant="h6" noWrap component="div">
                                             Supplement Arena
                                         </Typography>
@@ -272,22 +274,22 @@ export default function MenuDrawer(props) {
             </Drawer>
             <Grid component="main" alignItems="center" justifyContent="center" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
-                    <BrowserRouter> 
-                        <div>
-                            <Routes>
-                                <Route exact path="/"element={ <LandingPage/>}/>
-                                <Route path="/login"element={ <Login acceder={acceder} />}/>
-                                <Route path="/edart"element={ <EditorArticulos/>}/>
-                                <Route path="/novedades"element={ <CentroNovedades/>}/>
-                                <Route path="/registro"element={ <RegistroUsuario />}/>
-                                <Route path="/avanzado"element={ <BuscadorAvanzado/>}/>
-                                <Route path="/reportes"element={ <Reporte/>}/>
-                                <Route path="/simple"element={ <BuscadorSimple/>}/>
-                                <Route path="/visualizador"element={ <VisualizadorArticulos/>}/>
-                                <Route path="/resultados"element={ <ResultadosBusqueda/>}/>
-                                <Route path="*" component={NotFound} />
-                            </Routes>
-                        </div>
+                <BrowserRouter>
+                    <div>
+                        <Routes>
+                            <Route exact path="/" element={<LandingPage />} />
+                            <Route path="/login" element={<Login acceder={acceder} />} />
+                            <Route path="/editor" element={<EditorArticulos />} />
+                            <Route path="/novedades" element={<CentroNovedades />} />
+                            <Route path="/registro" element={<RegistroUsuario />} />
+                            <Route path="/buscadorAvanzado" element={<BuscadorAvanzado />} />
+                            <Route path="/reportes" element={<Reporte />} />
+                            <Route path="/buscadorSimple" element={<BuscadorSimple />} />
+                            <Route path="/visualizador" element={<VisualizadorArticulos />} />
+                            <Route path="/resultados" element={<ResultadosBusqueda />} />
+                            <Route path="*" component={NotFound} />
+                        </Routes>
+                    </div>
                 </BrowserRouter>
             </Grid>
 
@@ -295,7 +297,7 @@ export default function MenuDrawer(props) {
     );
 }
 function NotFound() {
-    return <>Ha llegado a una página que no existe</>;
-  }
+    return <><Typography variant="h2">Ha llegado a una página que no existe</Typography></>;
+}
 
-  
+
