@@ -5,7 +5,7 @@ class Articulo
     private $connection;
     private $table_nombre = "articulos";
 
-    public $id;
+    public $articuloID;
     public $titulo;
     public $etiquetas;
     public $imagen;

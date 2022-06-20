@@ -15,6 +15,15 @@ const api = "http://localhost/xampp/api_rest/";
 
 function App() {
 
+  const [user, setUser] = React.useState({
+    usuarioID: "",
+    tipoUsuarioID: 1,
+    nombre: "",
+    nombreUsuario: "",
+    fechaNacimiento: ""
+  });
+  const usuario = { user, setUser };
+
   const [loggedIn, setLoggedIn] = React.useState(true);
   const [user, setUser] = React.useState({
     usuarioID: "",
@@ -36,18 +45,18 @@ function App() {
     setLoggedIn = !loggedIn;
   };
 
+  let cors = require('cors')
+
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
         <ApiProvider value={api}>
-          <UserProvider value={usuario}>
+          <UserProvider value={usuario}
             <MenuDrawer  actividad="landing">
-              
             </MenuDrawer>
           </UserProvider>
         </ApiProvider>
       </ThemeProvider>
-
     </div>
   );
 }

@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { Grid, Pagination, Typography } from '@mui/material';
 import { SentimentVeryDissatisfied } from '@mui/icons-material';
-import TarjetaArticulo from './TarjetaArticulo';
-import * as PlaceholderValues from "../PlaceholderValues";
 
 import axios from 'axios';
 
-const resultadxs = PlaceholderValues.getResultadosFake();
-
-
+import ApiContext from '../../contexts/ApiContext';
+import TarjetaArticulo from './TarjetaArticulo';
 
 export default function ResultadosBusqueda(props) {
+    const api = React.useContext(ApiContext);
+
     const [resultados, setResultados] = React.useState([]);
 
     const [page, setPage] = React.useState(1);
@@ -40,7 +39,7 @@ export default function ResultadosBusqueda(props) {
     );
 
     React.useEffect(() => {
-        axios.get("http://localhost/api/articulos/read.php")
+        axios.get(api.concat("articulos/read.php"))
             .then(res => {
                 const data = res.data;
                 setResultados(data.records);

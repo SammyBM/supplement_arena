@@ -1,19 +1,18 @@
 import * as React from 'react';
 import Carousel from 'react-material-ui-carousel'
-import { Stack, CardContent, Typography } from '@mui/material'
-import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
+import { Card, CardMedia, Stack, CardContent, Typography } from '@mui/material'
 
 import axios from 'axios';
 
 import CarrouselEditor from "./CarrouselEditor"
+import ApiContext from '../../contexts/ApiContext';
 
-const api = "http://localhost/api/";
 
 const path = require("path-browserify");
 const imageResource = path.join(__dirname, "..", "..", "uploads", "carrousel");
 
 export default function LandingPage() {
+    const api = React.useContext(ApiContext);
     var items = [
         {
             id: 1,

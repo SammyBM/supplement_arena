@@ -5,7 +5,7 @@ import { Doughnut } from 'react-chartjs-2';
 import * as PlaceholderValues from "../../PlaceholderValues";
 
 export default function ComposisionOmegas(props) {
-    const etiquetas = getAGLabels();
+    const etiquetas = getAGLabels(props.articulo.perfilAG);
     const valores = getAGData(props.articulo.perfilAG);
 
     const data = {
@@ -26,17 +26,17 @@ export default function ComposisionOmegas(props) {
     return (<Doughnut data={data} />);
 }
 
-function getAGLabels() {
+function getAGLabels(perfilAG) {
     let output = [];
-    PlaceholderValues.getAcidosGrasos().map((item) => {
-        output.push(PlaceholderValues.getAcidoGrasoById(item.id).nombre)
+    perfilAG.map((item) => {
+        output.push(item.nombre)
     });
     return output;
 }
 
-function getAGData(id_perfil) {
+function getAGData(perfilAG) {
     let output = [];
-    PlaceholderValues.getPerfilAGById(id_perfil).map((item) => {
+    perfilAG.map((item) => {
         output.push(item.cantidad);
     });
     return output;

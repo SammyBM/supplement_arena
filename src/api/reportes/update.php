@@ -18,6 +18,7 @@ $data = json_decode(file_get_contents("php://input"));
 
 $reporte->id = $data->id;
 
+$reporte->resumen = $data->resumen;
 $reporte->texto = $data->texto;
 $reporte->fechaCreacion = $data->fechaCreacion;
 $reporte->articuloID = $data->articuloID;

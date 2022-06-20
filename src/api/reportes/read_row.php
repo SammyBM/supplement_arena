@@ -25,6 +25,7 @@ if ($reporte->texto != null) {
 
     $reporte_array = array(
         "reporteID" => $reporte->id,
+        "resumen" => $reporte->resumen,
         "texto" => $reporte->texto,
         "fechaCreacion" => $reporte->fechaCreacion,
         "reporteID" => $reporte->reporteID,

@@ -118,4 +118,22 @@ class Usuario
 
         return false;
     }
+
+    function login()
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE correo = ?";
+        $stmt = $this->connection->prepare($query);
+
+        $stmt->bindParam(1, $this->correo, PDO::PARAM_STR);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            if ($this->contrasena === $stmt->contrasena)
+                return $stmt;
+            else
+                return false;
+        }
+
+        return null;
+    }
 }

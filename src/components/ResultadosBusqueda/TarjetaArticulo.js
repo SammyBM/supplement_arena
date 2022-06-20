@@ -2,6 +2,8 @@ import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typo
 import * as React from 'react';
 import UserContext from '../../contexts/UserContext';
 
+import UserContext from '../../contexts/UserContext';
+
 export default function TarjetaArticulo(props) {
     const usuario = React.useContext(UserContext);
 
@@ -27,6 +29,7 @@ export default function TarjetaArticulo(props) {
             {
                 usuario.tipoUsuarioID > 1 &&
                 <CardActions>
+
                     <Button filled color=" primary" onClick={enviar()}>Editar</Button>
                 </CardActions>
             }

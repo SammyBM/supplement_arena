@@ -16,11 +16,11 @@ import UserContext from "../../contexts/UserContext";
 import axios from 'axios';
 
 export default function Login(props) {
-
     const { user, setUser } = React.useContext(UserContext);
     const api = React.useContext(ApiContext);
 
     const [showPassword, setShowPassword] = React.useState(false);
+
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -48,6 +48,7 @@ export default function Login(props) {
                 fechaNacimiento: usuario.fechaNacimiento
             }
         );
+
     };
 
     //Leer registro en BD, comparar contraseña, devolver datos de usuario y guardarlos en Contexto, 
@@ -92,6 +93,7 @@ export default function Login(props) {
         mensaje: "",
         severity: "",
     });
+
 
     const mostrarNotificacion = (msg, svty) => {
         setNotificacion({
@@ -190,7 +192,9 @@ export default function Login(props) {
                                     </FormControl>
                                     <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
                                         <Tooltip title='Crear una cuenta'>
+
                                             <Button variant='outlined' color='primary' startIcon={<AccountCircleIcon />} onClick={() => Service.changePage("registro")}>
+
                                                 Registrate
                                             </Button>
                                         </Tooltip>
@@ -201,6 +205,15 @@ export default function Login(props) {
                     </Paper>
                 </Container >
             </form>
+
+            <Snackbar
+                open={notificacion.mostrar}
+                onClose={cerrarNotificacion}
+                TransitionComponent={transition}
+                message={notificacion.mensaje}
+                severity={notificacion.severity}
+                key={"notificacion: " + notificacion.mensaje}
+            />
         </>
     );
 }
