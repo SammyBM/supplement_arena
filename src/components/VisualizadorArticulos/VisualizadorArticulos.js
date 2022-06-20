@@ -15,9 +15,11 @@ import Advertencia from '../Advertencia/Advertencia';
 export default function VisualizadorArticulos(props) {
     const api = React.useContext(ApiContext);
 
+    const prop = JSON.parse(sessionStorage.getItem("props"))
+
     const [articulo, setArticulo] = React.useState(
         {
-            articuloID:"",
+            articuloID: "",
             titulo: "",
             etiquetas: [],
             tipoSuplemento: "",
@@ -64,25 +66,25 @@ export default function VisualizadorArticulos(props) {
         function executePromisesInRow(queue, index) {
             if (index >= queue.length) {
                 setArticulo({
-                    articuloID:props.articulo.articuloID,
-                    titulo: props.articulo.titulo,
-                    etiquetas: props.articulo.etiquetas,
-                    tipoSuplemento: props.articulo.categoriaID,
+                    articuloID: prop.articuloID,
+                    titulo: prop.titulo,
+                    etiquetas: prop.etiquetas,
+                    tipoSuplemento: prop.categoriaID,
                     ingredientes: ingredientes,
                     ingActivo: ingredientes.filter(getActivos),
-                    imagen: props.articulo.imagen,
-                    tamano: props.articulo.tamanoPorcion,
-                    calorias: props.articulo.calorias,
-                    proteina: props.articulo.proteina,
-                    lipidos: props.articulo.lipidos,
-                    carbos: props.articulo.carbohidratos,
+                    imagen: prop.imagen,
+                    tamano: prop.tamanoPorcion,
+                    calorias: prop.calorias,
+                    proteina: prop.proteina,
+                    lipidos: prop.lipidos,
+                    carbos: prop.carbohidratos,
                     perfilAG: acidos,
                     perfilAminos: aminos,
                     vitaminas: vitaminas,
                     tiposOmegas: omegas,
                     advertencias: advertencias
                 });
-                
+
                 return;
             }
 
@@ -101,12 +103,12 @@ export default function VisualizadorArticulos(props) {
         }
 
         executePromisesInRow([
-            { route: api.concat("perfiles_advertencias/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: advertencias },
-            { route: api.concat("perfiles_aminos/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: aminos },
-            { route: api.concat("perfiles_acidos_grasos/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: acidos },
-            { route: api.concat("perfiles_ingredientes/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: ingredientes },
-            { route: api.concat("perfiles_omegas/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: omegas },
-            { route: api.concat("perfiles_vitaminas/read_by_articulo.php?id=", props.articulo.articuloID.toString()), ref: vitaminas }
+            { route: api.concat("perfiles_advertencias/read_by_articulo.php?id=", prop.articuloID.toString()), ref: advertencias },
+            { route: api.concat("perfiles_aminos/read_by_articulo.php?id=", prop.articuloID.toString()), ref: aminos },
+            { route: api.concat("perfiles_acidos_grasos/read_by_articulo.php?id=", prop.articuloID.toString()), ref: acidos },
+            { route: api.concat("perfiles_ingredientes/read_by_articulo.php?id=", prop.articuloID.toString()), ref: ingredientes },
+            { route: api.concat("perfiles_omegas/read_by_articulo.php?id=", prop.articuloID.toString()), ref: omegas },
+            { route: api.concat("perfiles_vitaminas/read_by_articulo.php?id=", prop.articuloID.toString()), ref: vitaminas }
         ], 0);
 
     }, []

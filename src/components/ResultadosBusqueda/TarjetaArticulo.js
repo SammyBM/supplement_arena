@@ -1,18 +1,19 @@
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import * as React from 'react';
 import UserContext from '../../contexts/UserContext';
+import Service from '../../Service';
 
 export default function TarjetaArticulo(props) {
     const usuario = React.useContext(UserContext);
 
     const abrirArticulo = (articulo) => {
         sessionStorage.removeItem("props");
-        sessionStorage.setItem("props",JSON.stringify(articulo) )
-        props.funcionMenu("visualizador", articulo);
+        sessionStorage.setItem("props", JSON.stringify(articulo))
+        Service.changePage("visualizador");
     }
     const enviar = () => {
-        
-        props.funcionMenu("editor", props.articulo);
+
+        Service.changePage("editor");
     }
     return (
         <Card>
@@ -28,7 +29,7 @@ export default function TarjetaArticulo(props) {
                 usuario.tipoUsuarioID > 1 &&
                 <CardActions>
 
-                    <Button filled color=" primary" onClick={enviar()}>Editar</Button>
+                    <Button filled color=" primary" onClick={enviar}>Editar</Button>
                 </CardActions>
             }
         </Card>
