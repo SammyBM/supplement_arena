@@ -56,7 +56,7 @@ export default function BuscadorSimple() {
                 <Card>
                     <Paper elevation={4} sx={{ backgroundColor: "beige" }}>
                         <CardContent>
-                            <Typography variant="h3" noWrap component="div" fontFamily="Lexend Deca">
+                            <Typography variant="h3" component="div" fontFamily="Lexend Deca">
                                 Buscador Simplificado
                             </Typography>
                             <Typography variant='p' component="div" color="GrayText">{descripcionActividad}</Typography>
@@ -65,15 +65,15 @@ export default function BuscadorSimple() {
                 </Card>
                 {/*https://mui.com/components/tabs/#basic-tabs*/}
 
-                <Container fixed sx={{
-                    width: 400,
-                    height: 400,
+                <Container sx={{
+                    maxWidth: 400,
+                    maxHeight: 400,
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
                     <Paper elevation={5} sx={{ width: "inherit", height: "inherit", backgroundColor: "#F75E25", justifyContent: "center", alignItems: "center" }}>
                         <Grid container direction="row" justifyContent="center" alignItems="center " sx={{ height: "inherit", width: "inherit" }}>
-                            <Paper elevation={1} sx={{ width: 350, height: 350, backgroundColor: "beige", justifyContent: "center", alignItems: "center" }}>
+                            <Paper elevation={1} sx={{ maxWidth: 350, maxHeight: 350, backgroundColor: "beige", justifyContent: "center", alignItems: "center" }}>
                                 <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ height: "inherit", width: "inherit" }}>
                                     <Grid item xs={1} md={2}>
                                         <Stack direction="column" justifyContent="center" alignItems="center">

@@ -50,7 +50,7 @@ export default function EditorArticulos(props) {
 
     const filter = createFilterOptions();
 
-    const radiosTipoSuplemento = listaTiposSuplementos.map((item) => <FormControlLabel value={item.id} control={<Radio />} label={item.tipo} />);
+    const radiosTipoSuplemento = listaTiposSuplementos.map((item) => <FormControlLabel value={item.id} key={"radio-" + item.id} control={<Radio />} label={item.tipo} />);
 
     const Input = styled('input')({
         display: 'none',
@@ -65,6 +65,7 @@ export default function EditorArticulos(props) {
         alert('deleting');
     }
 
+    watch();
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -73,7 +74,7 @@ export default function EditorArticulos(props) {
                     <Card>
                         <Paper elevation={4} sx={{ backgroundColor: "beige" }}>
                             <CardContent>
-                                <Typography variant="h3" noWrap component="div" fontFamily="Lexend Deca">
+                                <Typography variant="h3" component="div" fontFamily="Lexend Deca">
                                     Editor de articulos
                                 </Typography>
                                 <Typography variant='p' component="div" color="GrayText">{descripcionActividad}</Typography>
@@ -134,9 +135,8 @@ export default function EditorArticulos(props) {
                                 </FormControl>
                                 <FormControl sx={{ width: '25ch' }}>
                                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Ingredientes</Typography>
-                                    <Controller name="ingredientes" control={control} onChange={([, data]) => data} render={({ field: { onChange, value } }) => (
+                                    <Controller name="ingredientes" control={control} onChange={([, data]) => data} render={({ field: { onChange } }) => (
                                         <Autocomplete
-                                            value={value}
                                             onChange={(event, newValue) => {
                                                 onChange(newValue);
                                             }}
@@ -338,7 +338,7 @@ function InterfazVariable(props) {
 
     const { api, control, tipoSuplemento, watch } = props;
 
-    const watchOmegas = watch("omegas");
+    const watchOmegas = watch("omegas", []);
 
     const [data, setData] = React.useState({
         aminoacidos: [],
@@ -346,13 +346,21 @@ function InterfazVariable(props) {
         acidosGrasos: []
     });
 
+    const [omegas, setOmegas] = React.useState([]);
 
-    let amino, omega, acido;
+    const handleOmegas = (e, newOmegas) => {
+        setOmegas(newOmegas);
+    }
+
+
 
     React.useEffect(() => {
+        const amino = [];
+        const omega = [];
+        const acido = [];
 
         axios.get(api.concat('aminoacidos/read.php')).then((response) => {
-            amino = response.data.records;
+            response.data.records.forEach(record => amino.push(record));
             console.log(amino);
         }).catch((error) => {
             console.error(error);
@@ -360,7 +368,7 @@ function InterfazVariable(props) {
         });
 
         axios.get(api.concat('omegas/read.php')).then((response) => {
-            omega = response.data.records;
+            response.data.records.forEach(record => omega.push(record));
             console.log(omega);
         }).catch((error) => {
             console.error(error);
@@ -368,7 +376,7 @@ function InterfazVariable(props) {
         });
 
         axios.get(api.concat('acidos_grasos/read.php')).then((response) => {
-            acido = response.data.records;
+            response.data.records.forEach(record => acido.push(record));
         }).catch((error) => {
             console.error(error);
             acido = null;
@@ -380,7 +388,7 @@ function InterfazVariable(props) {
             acidosGrasos: acido
         });
 
-        console.log(data);
+        console.log(watchOmegas);
 
     }, []);
 
@@ -392,10 +400,9 @@ function InterfazVariable(props) {
                     <Divider variant="fullWidth" />
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Perfil de aminoacidos</Typography>
                     <Grid container direction="row" justifyContent="center" alignItems="center">
-                        {console.log(data)}
                         {
                             (data.aminoacidos !== undefined && data.aminoacidos !== null) ?
-                                data.aminoacidos.map((item) => <Grid item xs={12} md={6} lg={3}><Controller name={"aminos-" + item.aminoID} control={control} render={({ field: { onChange, value } }) => (<TextField id={"aminos-" + item.aminoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} />)} rules={{}} /></Grid>)
+                                data.aminoacidos.map((item) => <Grid item xs={12} md={6} lg={3}><Controller name={"aminos-" + item.aminoID} control={control} render={({ field: { onChange, value } }) => (<TextField key={"aminos-" + item.aminoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} />)} rules={{}} /></Grid>)
                                 :
                                 <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los aminoacidos, intente más tarde.</Typography></Grid>
                         }
@@ -408,11 +415,11 @@ function InterfazVariable(props) {
                 <Grid item >
                     <Divider variant="fullWidth" />
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Omegas</Typography>
-                    <Controller name="omegas" control={control} render={({ field: { onChange, value } }) => (
-                        <ToggleButtonGroup value={value} onChange={onChange}>
+                    <Controller name="omegas" control={control} render={() => (
+                        <ToggleButtonGroup value={omegas} onChange={handleOmegas}>
                             {
                                 (data.omegas !== undefined && data.omegas !== null) ?
-                                    data.omegas.map((value) => <ToggleButton value={value.nombre} key={value.omegaID}><Chip label={value.nombre.charAt(value.nombre.length - 1)} color={watchOmegas.includes(value.nombre) ? "primary" : "secondary"} variant={watchOmegas.includes(value.nombre) ? "filled" : "outlined"}></Chip></ToggleButton>)
+                                    data.omegas.map((value) => <ToggleButton value={value.nombre} key={value.omegaID}><Chip label={value.nombre.charAt(value.nombre.length - 1)} color={omegas.includes(value.nombre) ? "primary" : "secondary"} variant={omegas.includes(value.nombre) ? "filled" : "outlined"}></Chip></ToggleButton>)
                                     :
                                     <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los omegas, intente más tarde.</Typography></Grid>
                             }
@@ -424,7 +431,7 @@ function InterfazVariable(props) {
                     <Stack direction="row" spacing={3} alignItems="center" justifyContent="center">
                         {
                             (data.acidosGrasos !== undefined && data.acidosGrasos !== null) ?
-                                data.acidosGrasos.map((item) => <Controller name={"aminos-" + item.id} control={control} render={({ field: { onChange, value } }) => (<TextField id={"acidos-grasos-" + item.acidoGrasoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} disabled={watchOmegas.includes("Omega3") ? false : true} />)} rules={{}} />)
+                                data.acidosGrasos.map((item) => <Controller name={"aminos-" + item.id} control={control} render={({ field: { onChange, value } }) => (<TextField id={"acidos-grasos-" + item.acidoGrasoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} disabled={omegas.includes("Omega3") ? false : true} />)} rules={{}} />)
                                 :
                                 <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los acidos grasos, intente más tarde.</Typography></Grid>
                         }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button, Container, Grid, IconButton, Input, InputAdornment, InputLabel, FormControl, Paper, Slide, Snackbar, Tooltip } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
+import { spacing } from '@mui/system';
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -116,7 +117,7 @@ export default function RegistroUsuario(props) {
                 }}>
                     <Paper elevation={5} sx={{ width: "inherit", height: "inherit", backgroundColor: "#F75E25", justifyContent: "center", alignItems: "center" }}>
                         <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ height: "inherit", width: "inherit" }}>
-                            <Paper elevation={1} sx={{ width: 350, height: 550, backgroundColor: "beige", justifyContent: "center", alignItems: "center" }}>
+                            <Paper elevation={1} sx={{ width: 350, height: 550, m: 1, backgroundColor: "beige", justifyContent: "center", alignItems: "center" }}>
                                 <Grid container direction="column" justifyContent="center" alignContent="center" sx={{ height: "inherit", width: "inherit" }}>
                                     <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
                                         <InputLabel htmlFor="nombre">Nombre</InputLabel>

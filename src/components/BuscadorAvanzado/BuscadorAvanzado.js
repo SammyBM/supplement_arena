@@ -104,76 +104,86 @@ function CamposComunes() {
     return (
         <div>
             {/*Sliders*/}
-            <Stack spacing={5} direction="row" sx={{ mb: 1 }} alignItems="center" justifyContent="center">
-                <Box width={200}>
+            <Grid container direction="row" spacing={3} >
+                <Grid item xs={0} lg={1}>
+                </Grid>
+                <Grid item xs={12} lg={3}>
                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Tamaño de porción</Typography>
                     <Slider name="tamano" value={state.tamano} onChange={handleChange} valueLabelDisplay="auto" />
-                </Box>
-                <Box width={200}>
+                </Grid>
+                <Grid item xs={12} lg={3}>
                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Cantidad de porciones</Typography>
                     <Slider name="cantidad" value={state.cantidad} onChange={handleChange} valueLabelDisplay="auto" />
-                </Box>
-                <Box width={200}>
+                </Grid>
+                <Grid item xs={12} lg={3}>
                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Rango de precios</Typography>
                     <Slider name="precios" value={state.precios} onChange={handleChange} valueLabelDisplay="auto" />
-                </Box>
-            </Stack>
-            <Stack spacing={5} direction="row" sx={{ mb: 1 }} alignItems="center" justifyContent="center">
-                <Box width={200}>
+                </Grid>
+                <Grid item xs={0} lg={1}>
+                </Grid>
+                <Grid item xs={12} lg={3}>
                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Calorias por porcion</Typography>
                     <Slider name="calorias" value={state.calorias} onChange={handleChange} min={0} max={200} step={20} valueLabelDisplay="auto" />
-                </Box>
-                <Box width={200}>
+                </Grid>
+                <Grid item xs={12} lg={3}>
                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Gramos de proteina</Typography>
                     <Slider name="proteina" value={state.proteina} onChange={handleChange} min={0} max={Math.trunc((state.calorias) / 4)} valueLabelDisplay="auto" />
-                </Box>
-                <Box width={200}>
+                </Grid>
+                <Grid item xs={12} lg={3}>
                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Gramos de lipidos</Typography>
                     <Slider name="lipidos" value={state.lipidos} onChange={handleChange} min={0} max={Math.trunc((state.calorias) / 9)} valueLabelDisplay="auto" />
-                </Box>
-                <Box width={200}>
+                </Grid>
+                <Grid item xs={12} lg={3}>
                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Gramos de carbohidratos</Typography>
                     <Slider name="carbohidratos" value={state.carbohidratos} onChange={handleChange} min={0} max={Math.trunc((state.calorias) / 4)} valueLabelDisplay="auto" />
-                </Box>
-            </Stack>
+                </Grid>
+            </Grid>
             <Divider variant="middle" />
 
             {/*Checkboxes*/}
-            <Stack spacing={2} direction="row" sx={{ mb: 1 }} justifyContent="space-around">
-                <Stack direction="column" alignItems="flex-start">
-                    <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Alergenos</Typography>
-                    <Box>
-                        <FormGroup>
-                            {checkboxAlergenos}
-                        </FormGroup>
-                    </Box>
-                </Stack>
+            <Grid container spacing={2} direction="row" sx={{ mb: 1 }} justifyContent="space-around">
+                <Grid item xs={12} md={6} lg={3}>
+                    <Stack direction="column" alignItems="flex-start">
+                        <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Alergenos</Typography>
+                        <Box>
+                            <FormGroup>
+                                {checkboxAlergenos}
+                            </FormGroup>
+                        </Box>
+                    </Stack>
+                </Grid>
                 <Divider orientation='vertical' variant='middle' />
-                <Stack direction="column" alignItems="flex-start">
-                    <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Certificaciones</Typography>
-                    <Box>
-                        <FormGroup>
-                            {checkboxCertificaciones}
-                        </FormGroup>
-                    </Box>
-                </Stack>
+                <Grid item xs={12} md={6} lg={3}>
+                    <Stack direction="column" alignItems="flex-start">
+                        <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Certificaciones</Typography>
+                        <Box>
+                            <FormGroup>
+                                {checkboxCertificaciones}
+                            </FormGroup>
+                        </Box>
+                    </Stack>
+                </Grid>
                 <Divider orientation='vertical' variant='middle' />
-                <Stack direction="column" alignItems="flex-start">
-                    <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Ingredientes</Typography>
-                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2 }}>
-                        {checkboxIngredientes}
-                    </Grid>
-                </Stack>
+                <Grid item xs={12} md={6} lg={3}>
+                    <Stack direction="column" alignItems="flex-start">
+                        <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Ingredientes</Typography>
+                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2 }}>
+                            {checkboxIngredientes}
+                        </Grid>
+                    </Stack>
+                </Grid>
                 <Divider orientation='vertical' variant='middle' />
-                <Stack direction="column" alignItems="flex-start">
-                    <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Presentación</Typography>
-                    <Box>
-                        <FormGroup>
-                            {checkboxCertificaciones}
-                        </FormGroup>
-                    </Box>
-                </Stack>
-            </Stack>
+                <Grid item xs={12} md={6} lg={3}>
+                    <Stack direction="column" alignItems="flex-start">
+                        <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Presentación</Typography>
+                        <Box>
+                            <FormGroup>
+                                {checkboxCertificaciones}
+                            </FormGroup>
+                        </Box>
+                    </Stack>
+                </Grid>
+            </Grid>
             <Divider variant="midddle" />
         </div>
     )
@@ -226,15 +236,15 @@ function InterfazBusqueda(props) {
     </Grid>);
 
     const botonesOmegas = listaOmegas.map((value) => <ToggleButton value={value.tipo} key={value.id}><Chip label={value.numero} color={omegas.includes(value.tipo) ? "primary" : "secondary"} variant={omegas.includes(value.tipo) ? "filled" : "outlined"}></Chip></ToggleButton>);
-    const sliderOmegas = listaAcidosGrasos.map((item) => <Box width={200}>
+    const sliderOmegas = listaAcidosGrasos.map((item) => <Grid item xs={12} md={6}>
         <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">{item.nombre}</Typography>
         <Slider name={acidosGrasos.nombre} value={acidosGrasos.cantidad} onChange={handleAcidosGrasos} min={0} max={250} step={10} valueLabelDisplay="auto" disabled={omegas.includes("Omega3") ? false : true} />
-    </Box>);
+    </Grid>);
 
     switch (props.id) {
         case '1':
             return (
-                <div>
+                <>
                     <CamposComunes />
                     <Stack direction="column" justifyContent="center" alignItems="center">
                         <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Origen</Typography>
@@ -253,12 +263,12 @@ function InterfazBusqueda(props) {
                     <Grid container orientation="row" rowSpacing={2} columnSpacing={5}>
                         {sliderAminoacidos}
                     </Grid>
-                </div>
+                </>
             );
             break;
         case '2':
             return (
-                <div>
+                <>
                     <CamposComunes />
                     <Stack direction="column" justifyContent="center" alignItems="center">
                         <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Origen</Typography>
@@ -280,22 +290,22 @@ function InterfazBusqueda(props) {
                         </ToggleButtonGroup>
                     </Stack>
                     <Divider variant="middle" />
-                    <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Distribución de acidos grasos</Typography>
-                    <Stack spacing={5} direction="row" sx={{ mb: 1 }} alignItems="center" justifyContent="center">
+                    <Typography variant="h5" component="label" fontFamily="Lexend Deca" color="primary">Distribución de acidos grasos</Typography>
+                    <Grid container spacing={5} direction="row" sx={{ mb: 1 }} alignItems="center" justifyContent="center">
                         {sliderOmegas}
-                    </Stack>
-                </div>
+                    </Grid>
+                </>
             );
             break;
         case '3':
             return (
-                <div>
+                <>
                     <CamposComunes />
                     <Stack direction="column" justifyContent="center" alignItems="center">
                         <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Ingrdientes activos</Typography>
                         <SelectorPredictivo />
                     </Stack>
-                </div>
+                </>
             );
             break;
         default:
@@ -339,7 +349,7 @@ export default function BuscadorAvanzado() {
             <Card>
                 <Paper elevation={4} sx={{ backgroundColor: "beige" }}>
                     <CardContent>
-                        <Typography variant="h3" noWrap component="div" fontFamily="Lexend Deca">
+                        <Typography variant="h3" component="div" fontFamily="Lexend Deca">
                             Buscador Avanzado
                         </Typography>
                         <Typography variant='p' component="div" color="GrayText">{descripcionActividad}</Typography>
@@ -349,7 +359,7 @@ export default function BuscadorAvanzado() {
 
             {/*https://mui.com/components/tabs/#basic-tabs*/}
 
-            <Box sx={{ width: '100%' }}>
+            <Box>
                 <TabContext value={value}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <TabList onChange={handleChange} textColor="secondary" indicatorColor="secondary" aria-label="lab API tabs example">
