@@ -10,12 +10,22 @@ import ComposicionOmegas from './Graficas/ComposicionOmegas';
 import Vitamina from './Graficas/Vitaminas';
 import FormatoReportes from '../Reportes/FormatoReportes';
 import Advertencia from '../Advertencia/Advertencia';
+import Service from '../../Service';
+import { get } from 'react-hook-form';
 
 
 export default function VisualizadorArticulos(props) {
     const api = React.useContext(ApiContext);
 
-    const prop = JSON.parse(sessionStorage.getItem("props"))
+    const getArticulo = () => {
+        if (sessionStorage.getItem("props") != null)
+            return JSON.parse(sessionStorage.getItem("props"));
+        else {
+            return JSON.parse(Service.getDataQuery("articulos/read", "id=", JSON.parse(sessionStorage.getItem("articuloID"))));
+        }
+    };
+
+    const prop = getArticulo();
 
     const [articulo, setArticulo] = React.useState(
         {

@@ -12,13 +12,14 @@ import ApiContext from '../../contexts/ApiContext';
 
 
 import * as PlaceholderValues from "../PlaceholderValues";
+import Service from '../../Service';
 
 
 const listaEtiquetas = PlaceholderValues.getEtiquetas();
 
 const listaTiposSuplementos = PlaceholderValues.getTiposSuplementos();
 
-const listaIngredientes = PlaceholderValues.getIngredientes();
+const listaIngredientes = [];
 
 const descripcionActividad = "Herramienta para la creación y edicion de nuevos articulos de suplementos."
 
@@ -26,7 +27,7 @@ const descripcionActividad = "Herramienta para la creación y edicion de nuevos 
 export default function EditorArticulos(props) {
     const api = React.useContext(ApiContext);
 
-    const { control, handleSubmit, reset, watch, formState: { errors } } = useForm({
+    const { control, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm({
         defaultValues: {
             titulo: "",
             etiquetas: "",
@@ -39,14 +40,11 @@ export default function EditorArticulos(props) {
             lipidos: "",
             carbohidratos: "",
             tamano: "",
-            precio: "",
-            perfilAminos: "",
-            perfilAG: "",
-            perfilOmegas: ""
+            precio: ""
         }
     });
 
-    const switchTipo = watch("tipoSuplemento", 1);
+    const switchTipo = watch("tipoSuplemento");
 
     const filter = createFilterOptions();
 
@@ -59,13 +57,122 @@ export default function EditorArticulos(props) {
     const onSubmit = (data) => {
         alert("submit");
         console.log(data);
+        let dataAminos = [
+            data.amino1,
+            data.amino2,
+            data.amino3,
+            data.amino4,
+            data.amino5,
+            data.amino6,
+            data.amino7,
+            data.amino8,
+            data.amino9,
+            data.amino10,
+            data.amino11,
+            data.amino12,
+            data.amino13,
+            data.amino14,
+            data.amino15,
+            data.amino16,
+            data.amino17,
+            data.amino18,
+            data.amino19,
+            data.amino20,
+            data.amino21
+        ]
+        let articulo = {
+            titulo: data.titulo,
+            etiquetas: data.etiquetas,
+            tipoSuplemento: data.tipoSuplemento,
+            ingredientes: data.ingredientes,
+            ingActivo: data.ingAct,
+            imagen: data.imagen,
+            calorias: data.calorias,
+            proteina: data.proteina,
+            lipidos: data.lipidos,
+            carbohidratos: data.carbohidratos,
+            tamano: data.tamano,
+            precio: data.precio
+        }
+
+        const articuloID = JSON.parse(sessionStorage.getItem("articuloID"))
+        if (articuloID == null)
+            createArticulo(data, articulo, dataAminos);
+        else
+            updateArticulo(data, articulo, articuloID, dataAminos);
+
+        Service.changePage("visualizador");
     }
 
-    const handleDelete = (data) => {
-        alert('deleting');
+    const createArticulo = (data, articulo, dataAminos) => {
+        let perfilAminos = [];
+        let perfilOmegas = [];
+
+        Service.postData("articulos/create.php", articulo);
+        //get ID por atributos
+        let ID;
+
+        for (let i = 0; i < 20; i++) {
+            perfilAminos.push({ articuloID: ID, aminoID: i + 1, cantidad: dataAminos[i] })
+        }
+        data.omegas.forEach((item) => perfilOmegas.push({ articuloID: ID, omegaID: item }));
+        let perfilAG = [
+            { articuloID: ID, acidosGrasoID: 1, cantidad: data.DHA },
+            { articuloID: ID, acidosGrasoID: 2, cantidad: data.EPA }
+        ];
+
+        Service.postData("perfiles_aminoacidos/create.php", perfilAminos);
+        Service.postData("perfiles_omegas/create.php", perfilOmegas);
+        Service.postData("perfiles_acidos_grasos/create.php", perfilAG);
+
+        sessionStorage.setItem("articuloID", ID);
     }
 
-    watch();
+    const updateArticulo = (data, articulo, articuloID, dataAminos) => {
+        let perfilAminos = [];
+        let perfilOmegas = [];
+        for (let i = 0; i < 20; i++) {
+            perfilAminos.push({ articuloID: articuloID, aminoID: i + 1, cantidad: dataAminos[i] })
+        }
+        data.omegas.forEach((item) => perfilOmegas.push({ articuloID: articuloID, omegaID: item }));
+        let perfilAG = [
+            { articuloID: articuloID, acidosGrasoID: 1, cantidad: data.DHA },
+            { articuloID: articuloID, acidosGrasoID: 2, cantidad: data.EPA }
+        ];
+
+        Service.postData("articulos/update.php", articulo);
+        axios.get(api.concat("perfiles_aminoacidos/delete.php"), articuloID).catch((error) => console.error(error));
+        Service.postData("perfiles_aminoacidos/create.php", perfilAminos);
+        axios.get(api.concat("perfiles_omegas/delete.php"), articuloID).catch((error) => console.error(error));
+        Service.postData("perfiles_omegas/create.php", perfilOmegas);
+        axios.get(api.concat("perfiles_acidos_grasos/delete.php"), articuloID).catch((error) => console.error(error));
+        Service.postData("perfiles_acidos_grasos/create.php", perfilAG);
+    }
+
+    const handleDelete = () => {
+        const articuloID = JSON.parse(sessionStorage.getItem("articuloID"));
+        if (articuloID == null)
+            alert("No es posible eliminar el articulo en estos momentos");
+        else {
+            axios.get(api.concat("perfiles_aminoacidos/delete.php"), articuloID).catch((error) => console.error(error));
+            axios.get(api.concat("perfiles_omegas/delete.php"), articuloID).catch((error) => console.error(error));
+            axios.get(api.concat("perfiles_acidos_grasos/delete.php"), articuloID).catch((error) => console.error(error));
+            axios.get(api.concat("articulos/delete.php"), articuloID).catch((error) => console.error(error)).finally(() => {
+                alert("Articulo eliminado exitosamente");
+                sessionStorage.removeItem("articuloID");
+                Service.changePage("");
+            });
+        }
+    }
+
+    React.useEffect(() => {
+        axios.get(api.concat('ingredientes/read.php')).then((response) => {
+            response.data.records.forEach((record) => {
+                listaIngredientes.push(record);
+            })
+        }).catch((err) => console.error(err));
+
+    }, []);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -114,7 +221,9 @@ export default function EditorArticulos(props) {
                                             )}
                                         />
                                     )}
-                                        rules={{}}
+                                        rules={{
+                                            required: "Ingrese al menos una etiqueta"
+                                        }}
                                     />
                                 </FormControl>
                                 <FormControl component={"fieldset"}>
@@ -123,7 +232,6 @@ export default function EditorArticulos(props) {
                                         <RadioGroup
                                             value={value}
                                             onChange={onChange}
-                                            defaultValue={1}
                                         >
                                             {radiosTipoSuplemento}
                                         </RadioGroup>
@@ -316,7 +424,7 @@ export default function EditorArticulos(props) {
                     </Grid>
                 </Grid>
                 <Grid item>
-                    <InterfazVariable api={api} tipoSuplemento={switchTipo} control={control} watch={watch} />
+                    <InterfazVariable api={api} tipoSuplemento={switchTipo} control={control} watch={watch} setValue={setValue} />
                 </Grid>
                 <Grid item>
                     <Divider variant='fullWidth' />
@@ -336,7 +444,7 @@ export default function EditorArticulos(props) {
 function InterfazVariable(props) {
 
 
-    const { api, control, tipoSuplemento, watch } = props;
+    const { api, control, tipoSuplemento, watch, setValue } = props;
 
     const watchOmegas = watch("omegas", []);
 
@@ -349,7 +457,10 @@ function InterfazVariable(props) {
     const [omegas, setOmegas] = React.useState([]);
 
     const handleOmegas = (e, newOmegas) => {
+        console.log(omegas);
         setOmegas(newOmegas);
+        setValue("omegas", omegas);
+        console.log(omegas);
     }
 
 
@@ -388,7 +499,7 @@ function InterfazVariable(props) {
             acidosGrasos: acido
         });
 
-        console.log(watchOmegas);
+        console.log(data);
 
     }, []);
 
@@ -401,8 +512,8 @@ function InterfazVariable(props) {
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Perfil de aminoacidos</Typography>
                     <Grid container direction="row" justifyContent="center" alignItems="center">
                         {
-                            (data.aminoacidos !== undefined && data.aminoacidos !== null) ?
-                                data.aminoacidos.map((item) => <Grid item xs={12} md={6} lg={3}><Controller name={"aminos-" + item.aminoID} control={control} render={({ field: { onChange, value } }) => (<TextField key={"aminos-" + item.aminoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} />)} rules={{}} /></Grid>)
+                            (data.aminoacidos !== undefined && data.aminoacidos !== null && data.aminoacidos.length > 0) ?
+                                data.aminoacidos.map((item) => <Grid item xs={12} md={6} lg={3}><Controller name={"aminos" + item.aminoID} control={control} render={({ field: { onChange, value } }) => (<TextField key={"aminos-" + item.aminoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} />)} rules={{}} /></Grid>)
                                 :
                                 <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los aminoacidos, intente más tarde.</Typography></Grid>
                         }
@@ -415,11 +526,13 @@ function InterfazVariable(props) {
                 <Grid item >
                     <Divider variant="fullWidth" />
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Omegas</Typography>
-                    <Controller name="omegas" control={control} render={() => (
-                        <ToggleButtonGroup value={omegas} onChange={handleOmegas}>
+                    <Controller name="omegas" control={control} defaultValue={[""]} render={() => (
+                        <ToggleButtonGroup value={omegas} onChange={(e, newOmegas) => {
+                            handleOmegas(e, newOmegas)
+                        }}>
                             {
-                                (data.omegas !== undefined && data.omegas !== null) ?
-                                    data.omegas.map((value) => <ToggleButton value={value.nombre} key={value.omegaID}><Chip label={value.nombre.charAt(value.nombre.length - 1)} color={omegas.includes(value.nombre) ? "primary" : "secondary"} variant={omegas.includes(value.nombre) ? "filled" : "outlined"}></Chip></ToggleButton>)
+                                (data.omegas !== undefined && data.omegas !== null && data.omegas.length > 0) ?
+                                    data.omegas.map((item) => <ToggleButton value={item.omegaID} key={item.nombre}><Chip label={item.nombre.charAt(item.nombre.length - 1)} color={omegas.includes(item.omegaID) ? "primary" : "secondary"} variant={omegas.includes(item.omegaID) ? "filled" : "outlined"}></Chip></ToggleButton>)
                                     :
                                     <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los omegas, intente más tarde.</Typography></Grid>
                             }
@@ -430,8 +543,8 @@ function InterfazVariable(props) {
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Perfil de acidos grasos</Typography>
                     <Stack direction="row" spacing={3} alignItems="center" justifyContent="center">
                         {
-                            (data.acidosGrasos !== undefined && data.acidosGrasos !== null) ?
-                                data.acidosGrasos.map((item) => <Controller name={"aminos-" + item.id} control={control} render={({ field: { onChange, value } }) => (<TextField id={"acidos-grasos-" + item.acidoGrasoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} disabled={omegas.includes("Omega3") ? false : true} />)} rules={{}} />)
+                            (data.acidosGrasos !== undefined && data.acidosGrasos !== null && data.acidosGrasos.length > 0) ?
+                                data.acidosGrasos.map((item) => <Controller name={item.nombre} control={control} render={({ field: { onChange, value } }) => (<TextField label={item.nombre} type="number" helperText="Por porción" onChange={onChange} disabled={omegas.includes(1) ? false : true} />)} rules={{}} />)
                                 :
                                 <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los acidos grasos, intente más tarde.</Typography></Grid>
                         }
