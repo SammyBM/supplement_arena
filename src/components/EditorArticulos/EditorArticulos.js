@@ -457,10 +457,8 @@ function InterfazVariable(props) {
     const [omegas, setOmegas] = React.useState([]);
 
     const handleOmegas = (e, newOmegas) => {
-        console.log(omegas);
         setOmegas(newOmegas);
-        setValue("omegas", omegas);
-        console.log(omegas);
+        setValue("omegas", newOmegas);
     }
 
 
