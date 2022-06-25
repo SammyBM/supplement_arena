@@ -4,6 +4,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import EggAltTwoToneIcon from '@mui/icons-material/EggAltTwoTone';
 import LocalFloristTwoToneIcon from '@mui/icons-material/LocalFloristTwoTone';
 import PhishingTwoToneIcon from '@mui/icons-material/PhishingTwoTone';
+import SearchIcon from '@mui/icons-material/Search';
 
 import SelectorPredictivo from './SelectorPredictivo';
 import ApiContext from '../../contexts/ApiContext';
@@ -76,7 +77,10 @@ const listaAcidosGrasos = [
     { id: 2, nombre: "EPA" }
 ];
 
-function CamposComunes() {
+function CamposComunes(props) {
+
+    const { control } = props;
+
     const [state, setState] = React.useState(
         {
             tamano: 30,
@@ -102,40 +106,84 @@ function CamposComunes() {
     const checkboxIngredientes = listaIngredientes.map((value) => <Grid item xs={3} key={value.id}><FormControlLabel control={<Checkbox />} label={value.nombre}></FormControlLabel></Grid>);
 
     return (
-        <div>
+        <>
             {/*Sliders*/}
             <Grid container direction="row" spacing={3} >
-                <Grid item xs={0} lg={1}>
+                <Grid item xs={0} md={3} lg={1}>
                 </Grid>
-                <Grid item xs={12} lg={3}>
+                <Grid item xs={12} md={6} lg={3}>
                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Tamaño de porción</Typography>
-                    <Slider name="tamano" value={state.tamano} onChange={handleChange} valueLabelDisplay="auto" />
+                    <Controller name='tamano' control={control} render={({ field: { onChange, value } }) => (
+                        <Slider key="tamano" value={value} onChange={onChange} valueLabelDisplay="auto" />
+                    )}
+                        rules={{
+                            required: true
+                        }}
+                    />
                 </Grid>
-                <Grid item xs={12} lg={3}>
+                <Grid item xs={12} md={6} lg={3}>
                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Cantidad de porciones</Typography>
-                    <Slider name="cantidad" value={state.cantidad} onChange={handleChange} valueLabelDisplay="auto" />
+                    <Controller name='cantidad' control={control} render={({ field: { onChange, value } }) => (
+                        <Slider key="cantidad" value={value} onChange={onChange} valueLabelDisplay="auto" />
+                    )}
+                        rules={{
+                            required: true
+                        }}
+                    />
                 </Grid>
-                <Grid item xs={12} lg={3}>
-                    <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Rango de precios</Typography>
-                    <Slider name="precios" value={state.precios} onChange={handleChange} valueLabelDisplay="auto" />
+                <Grid item xs={12} md={6} lg={3}>
+                    <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Precio máximo</Typography>
+                    <Controller name='precios' control={control} render={({ field: { onChange, value } }) => (
+                        <Slider key="precios" value={value} onChange={onChange} valueLabelDisplay="auto" />
+                    )}
+                        rules={{
+                            required: true
+                        }}
+                    />
                 </Grid>
                 <Grid item xs={0} lg={1}>
                 </Grid>
-                <Grid item xs={12} lg={3}>
+            </Grid>
+            <Grid container direction="row" spacing={3} >
+                <Grid item xs={12} md={6} lg={3}>
                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Calorias por porcion</Typography>
-                    <Slider name="calorias" value={state.calorias} onChange={handleChange} min={0} max={200} step={20} valueLabelDisplay="auto" />
+                    <Controller name='calorias' control={control} render={({ field: { onChange, value } }) => (
+                        <Slider key="calorias" value={value} onChange={onChange} min={0} max={200} step={20} valueLabelDisplay="auto" />
+                    )}
+                        rules={{
+                            required: true
+                        }}
+                    />
                 </Grid>
-                <Grid item xs={12} lg={3}>
+                <Grid item xs={12} md={6} lg={3}>
                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Gramos de proteina</Typography>
-                    <Slider name="proteina" value={state.proteina} onChange={handleChange} min={0} max={Math.trunc((state.calorias) / 4)} valueLabelDisplay="auto" />
+                    <Controller name='proteina' control={control} render={({ field: { onChange, value } }) => (
+                        <Slider key="proteina" value={value} onChange={onChange} min={0} max={Math.trunc((state.calorias) / 4)} valueLabelDisplay="auto" />
+                    )}
+                        rules={{
+                            required: true
+                        }}
+                    />
                 </Grid>
-                <Grid item xs={12} lg={3}>
+                <Grid item xs={12} md={6} lg={3}>
                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Gramos de lipidos</Typography>
-                    <Slider name="lipidos" value={state.lipidos} onChange={handleChange} min={0} max={Math.trunc((state.calorias) / 9)} valueLabelDisplay="auto" />
+                    <Controller name='lipidos' control={control} render={({ field: { onChange, value } }) => (
+                        <Slider key="lipidos" value={value} onChange={onChange} min={0} max={Math.trunc((state.calorias) / 9)} valueLabelDisplay="auto" />
+                    )}
+                        rules={{
+                            required: true
+                        }}
+                    />
                 </Grid>
-                <Grid item xs={12} lg={3}>
+                <Grid item xs={12} md={6} lg={3}>
                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">Gramos de carbohidratos</Typography>
-                    <Slider name="carbohidratos" value={state.carbohidratos} onChange={handleChange} min={0} max={Math.trunc((state.calorias) / 4)} valueLabelDisplay="auto" />
+                    <Controller name='carbohidratos' control={control} render={({ field: { onChange, value } }) => (
+                        <Slider key="carbos" value={value} onChange={onChange} min={0} max={Math.trunc((state.calorias) / 4)} valueLabelDisplay="auto" />
+                    )}
+                        rules={{
+                            required: true
+                        }}
+                    />
                 </Grid>
             </Grid>
             <Divider variant="middle" />
@@ -146,9 +194,15 @@ function CamposComunes() {
                     <Stack direction="column" alignItems="flex-start">
                         <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Alergenos</Typography>
                         <Box>
-                            <FormGroup>
-                                {checkboxAlergenos}
-                            </FormGroup>
+                            <Controller name='alergenos' control={control} render={({ field: { onChange, value } }) => (
+                                <FormGroup
+                                    value={value}
+                                    onChange={onChange}
+                                >
+                                    {checkboxAlergenos}
+                                </FormGroup>
+                            )}
+                            />
                         </Box>
                     </Stack>
                 </Grid>
@@ -157,9 +211,15 @@ function CamposComunes() {
                     <Stack direction="column" alignItems="flex-start">
                         <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Certificaciones</Typography>
                         <Box>
-                            <FormGroup>
-                                {checkboxCertificaciones}
-                            </FormGroup>
+                            <Controller name='certificaciones' control={control} render={({ field: { onChange, value } }) => (
+                                <FormGroup
+                                    value={value}
+                                    onChange={onChange}
+                                >
+                                    {checkboxCertificaciones}
+                                </FormGroup>
+                            )}
+                            />
                         </Box>
                     </Stack>
                 </Grid>
@@ -185,11 +245,14 @@ function CamposComunes() {
                 </Grid>
             </Grid>
             <Divider variant="midddle" />
-        </div>
+        </>
     )
 }
 
 function InterfazBusqueda(props) {
+
+    const { control, id } = props;
+
     const [checked, setChecked] = React.useState(true);
     const [protein, setProtein] = React.useState(
         {
@@ -230,22 +293,27 @@ function InterfazBusqueda(props) {
     };
 
     //Check name, is it really refering to hook?
-    const sliderAminoacidos = listaAminoacidos.map((value) => <Grid item xs={12} sm={6} md={3} key={value.id}>
-        <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">{value.nombre}</Typography>
-        <Slider name={value.id} value={protein.cantidad} onChange={handleProtein} min={0} max={25} valueLabelDisplay="auto" />
+    const sliderAminoacidos = listaAminoacidos.map((item) => <Grid item xs={12} sm={6} md={3} key={item.id}>
+        <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">{item.nombre}</Typography>
+        <Controller name={"amino" + item.id} control={control} render={({ field: { onChange, value } }) => (
+            <Slider key={"amino" + item.id} value={value} onChange={onChange} min={0} max={25} valueLabelDisplay="auto" />
+        )}
+        />
     </Grid>);
 
-    const botonesOmegas = listaOmegas.map((value) => <ToggleButton value={value.tipo} key={value.id}><Chip label={value.numero} color={omegas.includes(value.tipo) ? "primary" : "secondary"} variant={omegas.includes(value.tipo) ? "filled" : "outlined"}></Chip></ToggleButton>);
+    const botonesOmegas = listaOmegas.map((item) => <ToggleButton value={item.tipo} key={item.id}><Chip label={item.numero} color={omegas.includes(item.tipo) ? "primary" : "secondary"} variant={omegas.includes(item.tipo) ? "filled" : "outlined"}></Chip></ToggleButton>);
     const sliderOmegas = listaAcidosGrasos.map((item) => <Grid item xs={12} md={6}>
         <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">{item.nombre}</Typography>
-        <Slider name={acidosGrasos.nombre} value={acidosGrasos.cantidad} onChange={handleAcidosGrasos} min={0} max={250} step={10} valueLabelDisplay="auto" disabled={omegas.includes("Omega3") ? false : true} />
+        <Controller name={acidosGrasos.nombre} control={control} render={({ field: { onChange, value } }) => (
+            <Slider key={acidosGrasos.nombre} value={value} onChange={onChange} min={0} max={250} step={10} valueLabelDisplay="auto" disabled={omegas.includes("Omega3") ? false : true} />
+        )}
+        />
     </Grid>);
 
-    switch (props.id) {
+    switch (id) {
         case '1':
             return (
                 <>
-                    <CamposComunes />
                     <Stack direction="column" justifyContent="center" alignItems="center">
                         <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Origen</Typography>
                         <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={1}>
@@ -269,7 +337,6 @@ function InterfazBusqueda(props) {
         case '2':
             return (
                 <>
-                    <CamposComunes />
                     <Stack direction="column" justifyContent="center" alignItems="center">
                         <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Origen</Typography>
                         <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={1}>
@@ -300,7 +367,6 @@ function InterfazBusqueda(props) {
         case '3':
             return (
                 <>
-                    <CamposComunes />
                     <Stack direction="column" justifyContent="center" alignItems="center">
                         <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Ingrdientes activos</Typography>
                         <SelectorPredictivo />
@@ -342,10 +408,10 @@ export default function BuscadorAvanzado() {
     };
 
     const pestanasSuplementos = tiposSuplemento.map((item) => <Tab value={item.id} label={item.tipo}></Tab>);
-    const panelesSuplementos = tiposSuplemento.map((item) => <TabPanel value={item.id}><InterfazBusqueda id={item.id} /></TabPanel>)
+    const panelesSuplementos = tiposSuplemento.map((item) => <TabPanel value={item.id}><InterfazBusqueda id={item.id} control={control} /></TabPanel>)
 
     return (
-        <div>
+        <>
             <Card>
                 <Paper elevation={4} sx={{ backgroundColor: "beige" }}>
                     <CardContent>
@@ -356,10 +422,9 @@ export default function BuscadorAvanzado() {
                     </CardContent>
                 </Paper>
             </Card>
-
-            {/*https://mui.com/components/tabs/#basic-tabs*/}
-
-            <Box>
+            <br />
+            <Box spacing={2}>
+                <CamposComunes control={control} />
                 <TabContext value={value}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <TabList onChange={handleChange} textColor="secondary" indicatorColor="secondary" aria-label="lab API tabs example">
@@ -368,7 +433,10 @@ export default function BuscadorAvanzado() {
                     </Box>
                     {panelesSuplementos}
                 </TabContext>
+                <Divider variant="middle" />
             </Box>
-        </div>
+            <br />
+            <Button type="submit" variant='contained' endIcon={<SearchIcon />}>Buscar</Button>
+        </>
     );
 }
