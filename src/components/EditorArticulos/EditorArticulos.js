@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Autocomplete, Box, Button, Card, CardContent, Checkbox, Chip, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid, Paper, Radio, RadioGroup, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography, FormHelperText, FormGroup } from "@mui/material";
+import { Autocomplete, Box, Button, Card, CardContent, Checkbox, Chip, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid, Paper, Radio, RadioGroup, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography, FormHelperText, FormGroup, Skeleton } from "@mui/material";
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { styled } from '@mui/material/styles';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
@@ -443,16 +443,13 @@ export default function EditorArticulos(props) {
 
 function InterfazVariable(props) {
 
+    const amino = [];
+    const omega = [];
+    const acido = [];
 
     const { api, control, tipoSuplemento, watch, setValue } = props;
 
-    const watchOmegas = watch("omegas", []);
-
-    const [data, setData] = React.useState({
-        aminoacidos: [],
-        omegas: [],
-        acidosGrasos: []
-    });
+    const [loading, setLoading] = React.useState(true);
 
     const [omegas, setOmegas] = React.useState([]);
 
@@ -464,40 +461,34 @@ function InterfazVariable(props) {
 
 
     React.useEffect(() => {
-        const amino = [];
-        const omega = [];
-        const acido = [];
 
-        axios.get(api.concat('aminoacidos/read.php')).then((response) => {
-            response.data.records.forEach(record => amino.push(record));
-            console.log(amino);
-        }).catch((error) => {
-            console.error(error);
-            amino = null;
-        });
+        setTimeout(async () => {
+            await axios.get(api.concat('aminoacidos/read.php')).then((response) => {
+                response.data.records.forEach(record => amino.push(record));
+                console.log(amino);
+            }).catch((error) => {
+                console.error(error);
+                amino = null;
+            });
 
-        axios.get(api.concat('omegas/read.php')).then((response) => {
-            response.data.records.forEach(record => omega.push(record));
-            console.log(omega);
-        }).catch((error) => {
-            console.error(error);
-            omega = null;
-        });
+            await axios.get(api.concat('omegas/read.php')).then((response) => {
+                response.data.records.forEach(record => omega.push(record));
+                console.log(omega);
+            }).catch((error) => {
+                console.error(error);
+                omega = null;
+            });
 
-        axios.get(api.concat('acidos_grasos/read.php')).then((response) => {
-            response.data.records.forEach(record => acido.push(record));
-        }).catch((error) => {
-            console.error(error);
-            acido = null;
-        });
+            await axios.get(api.concat('acidos_grasos/read.php')).then((response) => {
+                response.data.records.forEach(record => acido.push(record));
+            }).catch((error) => {
+                console.error(error);
+                acido = null;
+            });
 
-        setData({
-            aminoacidos: amino,
-            omegas: omega,
-            acidosGrasos: acido
-        });
-
-        console.log(data);
+            setLoading(false);
+            console.log("coso");
+        }, 1500)
 
     }, []);
 
@@ -510,10 +501,13 @@ function InterfazVariable(props) {
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Perfil de aminoacidos</Typography>
                     <Grid container direction="row" justifyContent="center" alignItems="center">
                         {
-                            (data.aminoacidos !== undefined && data.aminoacidos !== null && data.aminoacidos.length > 0) ?
-                                data.aminoacidos.map((item) => <Grid item xs={12} md={6} lg={3}><Controller name={"aminos" + item.aminoID} control={control} render={({ field: { onChange, value } }) => (<TextField key={"aminos-" + item.aminoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} />)} rules={{}} /></Grid>)
+                            loading ?
+                                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22].map((n) => <Grid item xs={12} md={6}><Skeleton key={n} sx={{ bgcolor: 'grey.400' }} width={150}><Typography>.</Typography></Skeleton></Grid>)
                                 :
-                                <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los aminoacidos, intente más tarde.</Typography></Grid>
+                                ((amino !== undefined && amino !== null && amino.length > 0) ?
+                                    amino.map((item) => <Grid item xs={12} md={6} lg={3}><Controller name={"aminos" + item.aminoID} control={control} render={({ field: { onChange, value } }) => (<TextField key={"aminos-" + item.aminoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} />)} rules={{}} /></Grid>)
+                                    :
+                                    <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los aminoacidos, intente más tarde.</Typography></Grid>)
                         }
                     </Grid>
                 </Grid>
@@ -529,10 +523,13 @@ function InterfazVariable(props) {
                             handleOmegas(e, newOmegas)
                         }}>
                             {
-                                (data.omegas !== undefined && data.omegas !== null && data.omegas.length > 0) ?
-                                    data.omegas.map((item) => <ToggleButton value={item.omegaID} key={item.nombre}><Chip label={item.nombre.charAt(item.nombre.length - 1)} color={omegas.includes(item.omegaID) ? "primary" : "secondary"} variant={omegas.includes(item.omegaID) ? "filled" : "outlined"}></Chip></ToggleButton>)
+                                loading ?
+                                    [1, 2, 3].map((n) => <Grid item xs={12} md={6}><Skeleton sx={{ bgcolor: 'grey.400' }} variant="rectangular" width={150} height={50} /></Grid>)
                                     :
-                                    <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los omegas, intente más tarde.</Typography></Grid>
+                                    ((omega !== undefined && omega !== null && omega.length > 0) ?
+                                        omega.map((item) => <ToggleButton value={item.omegaID} key={item.nombre}><Chip label={item.nombre.charAt(item.nombre.length - 1)} color={omegas.includes(item.omegaID) ? "primary" : "secondary"} variant={omegas.includes(item.omegaID) ? "filled" : "outlined"}></Chip></ToggleButton>)
+                                        :
+                                        <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los omegas, intente más tarde.</Typography></Grid>)
                             }
                         </ToggleButtonGroup>
                     )}
@@ -541,8 +538,8 @@ function InterfazVariable(props) {
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Perfil de acidos grasos</Typography>
                     <Stack direction="row" spacing={3} alignItems="center" justifyContent="center">
                         {
-                            (data.acidosGrasos !== undefined && data.acidosGrasos !== null && data.acidosGrasos.length > 0) ?
-                                data.acidosGrasos.map((item) => <Controller name={item.nombre} control={control} render={({ field: { onChange, value } }) => (<TextField label={item.nombre} type="number" helperText="Por porción" onChange={onChange} disabled={omegas.includes(1) ? false : true} />)} rules={{}} />)
+                            (acido !== undefined && acido !== null && acido.length > 0) ?
+                                acido.map((item) => <Controller name={item.nombre} control={control} render={({ field: { onChange, value } }) => (<TextField label={item.nombre} type="number" helperText="Por porción" onChange={onChange} disabled={omegas.includes(1) ? false : true} />)} rules={{}} />)
                                 :
                                 <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los acidos grasos, intente más tarde.</Typography></Grid>
                         }
