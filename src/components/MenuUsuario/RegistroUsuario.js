@@ -53,14 +53,19 @@ export default function RegistroUsuario(props) {
 
 
     const submit = (data) => {
-        axios({
-            method: 'POST',
-            url: api.concat("usaurios/create.php"),
-            data: data
-        }).catch((error) => {
-            mostrarNotificacion("No encontramos una cuenta con esos datos");
-        })
-        alert("coso");
+        let exists = false;
+
+        Service.getDataQuery("usuarios/read_row", "correo", data.correo).then((res) => {
+            res.length > 0 && (exists = true);
+        }).catch((err) => console.error(err)).finally(() => {
+            if (!exists) {
+                Service.postData("usuarios/create", data).then((res) => {
+                    sessionStorage.setItem("usuarioID", res)
+                    alert("¡Usuario registrado con exito!")
+                    Service.changePage("")
+                }).catch((error) => console.error(error))
+            }
+        });
     }
 
     const onError = (err) => {

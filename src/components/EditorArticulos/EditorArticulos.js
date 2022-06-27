@@ -34,7 +34,7 @@ export default function EditorArticulos(props) {
             tipoSuplemento: 3,
             ingredientes: "",
             ingActivo: "",
-            imagen: "",
+            imagen: {},
             calorias: "",
             proteina: "",
             lipidos: "",
@@ -94,10 +94,10 @@ export default function EditorArticulos(props) {
             tamano: data.tamano,
             precio: data.precio
         }
-        const articuloID=null;
-        try{
+        const articuloID = null;
+        try {
             articuloID = JSON.parse(sessionStorage.getItem("articuloID"))
-        }catch(e){
+        } catch (e) {
             console.log(e)
         }
         if (articuloID == null)
@@ -114,11 +114,11 @@ export default function EditorArticulos(props) {
 
         let ID;
         Service.postData("articulos/create", articulo).then((result) => {
-            ID=result;
+            ID = result;
         });
         console.log(ID);
         //get ID por atributos
-        
+
 
         for (let i = 0; i < 20; i++) {
             perfilAminos.push({ articuloID: ID, aminoID: i + 1, cantidad: dataAminos[i] })
@@ -347,7 +347,7 @@ export default function EditorArticulos(props) {
                                     </Box>
                                     <label htmlFor="btn-subir-imagen">
                                         <Controller name="imagenSuplemento" control={control} render={({ field: { onChange, value } }) => (
-                                            <Input accept="image/*" id="btn-subir-imagen" onChange={onChange} value={value} name="imagenSuplemento" type="file" />
+                                            <Input accept="image/*" id="btn-subir-imagen" onChange={(e) => onChange(e.target.files[0])} name="imagenSuplemento" type="file" />
                                         )}
                                             rules={{
 
@@ -495,7 +495,7 @@ function InterfazVariable(props) {
             });
 
             setLoading(false);
-            console.log("coso");
+            console.log(omega);
         }, 1500)
 
     }, []);
@@ -509,13 +509,10 @@ function InterfazVariable(props) {
                     <Typography variant='h5' component="div" fontFamily="Lexend Deca" color="primary">Perfil de aminoacidos</Typography>
                     <Grid container direction="row" justifyContent="center" alignItems="center">
                         {
-                            loading ?
-                                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22].map((n) => <Grid item xs={12} md={6}><Skeleton key={n} sx={{ bgcolor: 'grey.400' }} width={150}><Typography>.</Typography></Skeleton></Grid>)
+                            (amino !== undefined && amino !== null && amino.length > 0) ?
+                                amino.map((item) => <Grid item xs={12} md={6} lg={3}><Controller name={"aminos" + item.aminoID} control={control} render={({ field: { onChange, value } }) => (<TextField key={"aminos-" + item.aminoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} />)} rules={{}} /></Grid>)
                                 :
-                                ((amino !== undefined && amino !== null && amino.length > 0) ?
-                                    amino.map((item) => <Grid item xs={12} md={6} lg={3}><Controller name={"aminos" + item.aminoID} control={control} render={({ field: { onChange, value } }) => (<TextField key={"aminos-" + item.aminoID} label={item.nombre} type="number" helperText="Por porción" onChange={onChange} value={value} />)} rules={{}} /></Grid>)
-                                    :
-                                    <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los aminoacidos, intente más tarde.</Typography></Grid>)
+                                <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los aminoacidos, intente más tarde.</Typography></Grid>
                         }
                     </Grid>
                 </Grid>
@@ -531,13 +528,10 @@ function InterfazVariable(props) {
                             handleOmegas(e, newOmegas)
                         }}>
                             {
-                                loading ?
-                                    [1, 2, 3].map((n) => <Grid item xs={12} md={6}><Skeleton sx={{ bgcolor: 'grey.400' }} variant="rectangular" width={150} height={50} /></Grid>)
+                                (omega !== undefined && omega !== null && omega.length > 0) ?
+                                    omega.map((item) => <ToggleButton value={item.omegaID} key={item.nombre}><Chip label={item.nombre.charAt(item.nombre.length - 1)} color={omegas.includes(item.omegaID) ? "primary" : "secondary"} variant={omegas.includes(item.omegaID) ? "filled" : "outlined"}></Chip></ToggleButton>)
                                     :
-                                    ((omega !== undefined && omega !== null && omega.length > 0) ?
-                                        omega.map((item) => <ToggleButton value={item.omegaID} key={item.nombre}><Chip label={item.nombre.charAt(item.nombre.length - 1)} color={omegas.includes(item.omegaID) ? "primary" : "secondary"} variant={omegas.includes(item.omegaID) ? "filled" : "outlined"}></Chip></ToggleButton>)
-                                        :
-                                        <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los omegas, intente más tarde.</Typography></Grid>)
+                                    <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los omegas, intente más tarde.</Typography></Grid>
                             }
                         </ToggleButtonGroup>
                     )}

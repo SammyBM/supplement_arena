@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import MenuDrawer from './components/MenuDrawer/MenuDrawer';
@@ -7,10 +7,11 @@ import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@mui/material';
 import { ApiProvider } from './contexts/ApiContext';
 import { UserProvider } from './contexts/UserContext';
+import { ROUTES } from './constantes';
 
 const theme = createTheme(themeOptions);
 
-const api = "http://localhost/xampp/api_rest/";
+const api = ROUTES.API_ROUTE;
 //const api = "http://localhost/api/";
 
 function App() {

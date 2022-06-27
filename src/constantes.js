@@ -1,1 +1,1 @@
-export const ROUTES = {"API_ROUTE":"http://localhost/xampp/api_rest/","LOCAL_ROUTE":"http://localhost:3000/"};
+export const ROUTES = { "API_ROUTE": "http://localhost/supplement_api/", "LOCAL_ROUTE": "http://localhost:3000/" };
