@@ -94,23 +94,31 @@ export default function EditorArticulos(props) {
             tamano: data.tamano,
             precio: data.precio
         }
-
-        const articuloID = JSON.parse(sessionStorage.getItem("articuloID"))
+        const articuloID=null;
+        try{
+            articuloID = JSON.parse(sessionStorage.getItem("articuloID"))
+        }catch(e){
+            console.log(e)
+        }
         if (articuloID == null)
             createArticulo(data, articulo, dataAminos);
         else
             updateArticulo(data, articulo, articuloID, dataAminos);
 
-        Service.changePage("visualizador");
+        /* Service.changePage("visualizador"); */
     }
 
     const createArticulo = (data, articulo, dataAminos) => {
         let perfilAminos = [];
         let perfilOmegas = [];
 
-        Service.postData("articulos/create.php", articulo);
-        //get ID por atributos
         let ID;
+        Service.postData("articulos/create", articulo).then((result) => {
+            ID=result;
+        });
+        console.log(ID);
+        //get ID por atributos
+        
 
         for (let i = 0; i < 20; i++) {
             perfilAminos.push({ articuloID: ID, aminoID: i + 1, cantidad: dataAminos[i] })
@@ -121,9 +129,9 @@ export default function EditorArticulos(props) {
             { articuloID: ID, acidosGrasoID: 2, cantidad: data.EPA }
         ];
 
-        Service.postData("perfiles_aminoacidos/create.php", perfilAminos);
-        Service.postData("perfiles_omegas/create.php", perfilOmegas);
-        Service.postData("perfiles_acidos_grasos/create.php", perfilAG);
+        Service.postData("perfiles_aminos/create", perfilAminos);
+        Service.postData("perfiles_omegas/create", perfilOmegas);
+        Service.postData("perfiles_acidos_grasos/create", perfilAG);
 
         sessionStorage.setItem("articuloID", ID);
     }
@@ -140,13 +148,13 @@ export default function EditorArticulos(props) {
             { articuloID: articuloID, acidosGrasoID: 2, cantidad: data.EPA }
         ];
 
-        Service.postData("articulos/update.php", articulo);
-        axios.get(api.concat("perfiles_aminoacidos/delete.php"), articuloID).catch((error) => console.error(error));
-        Service.postData("perfiles_aminoacidos/create.php", perfilAminos);
-        axios.get(api.concat("perfiles_omegas/delete.php"), articuloID).catch((error) => console.error(error));
-        Service.postData("perfiles_omegas/create.php", perfilOmegas);
-        axios.get(api.concat("perfiles_acidos_grasos/delete.php"), articuloID).catch((error) => console.error(error));
-        Service.postData("perfiles_acidos_grasos/create.php", perfilAG);
+        Service.postData("articulos/update", articulo);
+        axios.get(api.concat("perfiles_aminoacidos/delete"), articuloID).catch((error) => console.error(error));
+        Service.postData("perfiles_aminoacidos/create", perfilAminos);
+        axios.get(api.concat("perfiles_omegas/delete"), articuloID).catch((error) => console.error(error));
+        Service.postData("perfiles_omegas/create", perfilOmegas);
+        axios.get(api.concat("perfiles_acidos_grasos/delete"), articuloID).catch((error) => console.error(error));
+        Service.postData("perfiles_acidos_grasos/create", perfilAG);
     }
 
     const handleDelete = () => {
