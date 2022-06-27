@@ -22,6 +22,8 @@ export default function MenuAdmin(props) {
     //Access parents methods: https://stackoverflow.com/questions/26176519/reactjs-call-parent-method
     //Access childs state: https://stackoverflow.com/questions/27864951/how-to-access-a-childs-state-in-r
 
+    const show = props.show > 1 ? "block" : "none";
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const openDrawer = props.open;
@@ -79,6 +81,7 @@ export default function MenuAdmin(props) {
                     minHeight: 48,
                     justifyContent: openDrawer ? 'initial' : 'center',
                     px: 2.5,
+                    display: { xs: show }
                 }}>
                 <ListItemIcon
                     sx={{

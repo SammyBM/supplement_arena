@@ -57,13 +57,19 @@ export default function RegistroUsuario(props) {
 
         Service.getDataQuery("usuarios/read_row", "correo", data.correo).then((res) => {
             res.length > 0 && (exists = true);
-        }).catch((err) => console.error(err)).finally(() => {
+        }).catch((err) => {
+            console.error(err)
+            exists = true;
+        }).finally(() => {
             if (!exists) {
                 Service.postData("usuarios/create", data).then((res) => {
                     sessionStorage.setItem("usuarioID", res)
-                    alert("¡Usuario registrado con exito!")
+                    mostrarNotificacion("¡Usuario registrado con exito!", "warning");
                     Service.changePage("")
                 }).catch((error) => console.error(error))
+            }
+            else {
+                mostrarNotificacion("Hubo un error creando la cuenta.")
             }
         });
     }

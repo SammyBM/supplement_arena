@@ -157,7 +157,7 @@ function CamposComunes(props) {
 
             {/*Checkboxes*/}
             <Grid container spacing={1} direction="row" justifyContent="space-around">
-                <Grid item xs={12} md={6} lg={3}>
+                <Grid item xs={12} md={6}>
                     <Stack direction="column" alignItems="flex-start">
                         <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Alergenos</Typography>
                         <Box>
@@ -180,7 +180,7 @@ function CamposComunes(props) {
                     </Stack>
                 </Grid>
                 <Divider orientation='vertical' variant='middle' />
-                <Grid item xs={12} md={6} lg={3}>
+                {/* <Grid item xs={12} md={6} lg={3}>
                     <Stack direction="column" alignItems="flex-start">
                         <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Certificaciones</Typography>
                         <Box>
@@ -199,9 +199,9 @@ function CamposComunes(props) {
                             />
                         </Box>
                     </Stack>
-                </Grid>
+                </Grid> */}
                 <Divider orientation='vertical' variant='middle' />
-                <Grid item xs={12} md={6} lg={3}>
+                <Grid item xs={12} md={6}>
                     <Stack direction="column" alignItems="flex-start">
                         <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Ingredientes</Typography>
                         <Controller name='ingredientes' control={control} render={({ field: { onChange, value } }) => (
@@ -279,8 +279,8 @@ function InterfazBusqueda(props) {
                                 listaAminoacidos.map((item) =>
                                     <Grid item xs={12} sm={6} md={3} key={item.id}>
                                         <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">{item.nombre}</Typography>
-                                        <Controller name={"amino" + item.aminoID} control={control} defaultValue={0} render={({ field: { onChange, value } }) => (
-                                            <Slider key={"amino" + item.aminoID} value={value} onChange={onChange} min={0} max={25} valueLabelDisplay="auto" />
+                                        <Controller key={"amino" + item.aminoID} name={"amino" + item.aminoID} control={control} defaultValue={0} render={({ field: { onChange, value } }) => (
+                                            <Slider value={value} onChange={onChange} min={0} max={25} valueLabelDisplay="auto" />
                                         )}
                                         />
                                     </Grid>
@@ -301,7 +301,7 @@ function InterfazBusqueda(props) {
                             (listaOmegas !== undefined && listaOmegas !== null && listaOmegas.length > 0) ?
                                 <>
                                     <Typography variant="h5" noWrap component="label" fontFamily="Lexend Deca" color="primary">Tipos de omegas</Typography>
-                                    <Controller name="omegas" control={control} defaultValue={[""]} render={() => (
+                                    <Controller name="omegas" control={control} render={() => (
                                         <ToggleButtonGroup value={omegas} onChange={(e, newOmegas) => {
                                             handleOmegas(e, newOmegas)
                                         }}>
@@ -324,7 +324,7 @@ function InterfazBusqueda(props) {
                                 listaAcidosGrasos.map((item) => <Grid item xs={12} md={6}>
                                     <Typography variant="p" noWrap component="div" fontFamily="Lexend Deca">{item.nombre}</Typography>
                                     <Controller name={item.nombre} key={item.nombre} control={control} render={({ field: { onChange, value } }) => (
-                                        <Slider key={item.nombre} value={value} onChange={onChange} min={0} max={250} step={10} valueLabelDisplay="auto" disabled={omegas.includes(1) ? false : true} />
+                                        <Slider key={item.nombre} value={value} onChange={onChange} defaultValue={0} min={0} max={250} step={10} valueLabelDisplay="auto" disabled={omegas.includes(1) ? false : true} />
                                     )}
                                     />
                                 </Grid>)
@@ -354,19 +354,20 @@ function InterfazBusqueda(props) {
 export default function BuscadorAvanzado() {
     const api = React.useContext(ApiContext);
 
-    const { control, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm({
+    const { control, getValues, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm({
         defaultValues: {
             tipoSuplemento: 1,
-            ingredientes: "",
+            ingredientes: [],
+            alergenos: [],
             ingActivo: "",
-            imagen: "",
             calorias: 0,
             proteina: 0,
             lipidos: 0,
             carbohidratos: 0,
             tamano: 0,
             cantidad: 0,
-            precios: [0, 1000]
+            precios: [0, 1000],
+            omegas: []
         }
     });
 
@@ -374,10 +375,12 @@ export default function BuscadorAvanzado() {
 
     const handleChange = (event, newValue) => {
         setTipoSup(newValue);
+        setValue("tipoSuplemento", newValue);
     };
 
-    const onSubmit = (data) => {
+    const submit = () => {
         alert("sumit")
+        const data = getValues();
         console.log(data);
     }
 
@@ -385,7 +388,7 @@ export default function BuscadorAvanzado() {
     const panelesSuplementos = tiposSuplemento.map((item) => <TabPanel key={item.id} value={item.id}><InterfazBusqueda id={item.id} control={control} setValue={setValue} /></TabPanel>)
 
     return (
-        <form onSumbit={handleSubmit(onSubmit)}>
+        <form >
             <Card>
                 <Paper elevation={4} sx={{ backgroundColor: "beige" }}>
                     <CardContent>
@@ -396,8 +399,7 @@ export default function BuscadorAvanzado() {
                     </CardContent>
                 </Paper>
             </Card>
-            <br />
-            <Box spacing={2}>
+            <Box spacing={2} sx={{ my: 2 }}>
                 <CamposComunes control={control} watch={watch} />
                 <TabContext value={tipoSup}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -409,8 +411,7 @@ export default function BuscadorAvanzado() {
                 </TabContext>
                 <Divider variant="middle" />
             </Box>
-            <br />
-            <Button type="submit" variant='contained' endIcon={<SearchIcon />}>Buscar</Button>
+            <Button onClick={submit} variant='contained' endIcon={<SearchIcon />}>Buscar</Button>
         </form>
     );
 }

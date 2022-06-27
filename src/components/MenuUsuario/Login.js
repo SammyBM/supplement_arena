@@ -16,7 +16,6 @@ import UserContext from "../../contexts/UserContext";
 import axios from 'axios';
 
 export default function Login(props) {
-    const { user, setUser } = React.useContext(UserContext);
     const api = React.useContext(ApiContext);
 
     const [showPassword, setShowPassword] = React.useState(false);
@@ -38,17 +37,9 @@ export default function Login(props) {
         }
     });
 
-    const handleChange = (usuario) => {
-        setUser(
-            {
-                usuarioID: usuario.usuarioID,
-                tipoUsuarioID: usuario.tipoUsuarioID,
-                nombre: usuario.nombre,
-                nombreUsuario: usuario.nombreUsuario,
-                fechaNacimiento: usuario.fechaNacimiento
-            }
-        );
-
+    const handleUser = (usuario) => {
+        sessionStorage.setItem("usuario", usuario)
+        Service.changePage("")
     };
 
     //Leer registro en BD, comparar contraseña, devolver datos de usuario y guardarlos en Contexto, 
@@ -56,8 +47,15 @@ export default function Login(props) {
     const submit = (data) => {
         console.log(data);
         Service.postData("usuarios/login", data).then((result) => {
-            this.updateLoginStatus(result);
-        });
+            if (result.status === "true")
+                handleUser(result);
+            else
+                mostrarNotificacion("No encontramos una cuenta con esos datos");
+        }).catch((err) => {
+            console.error(err);
+            mostrarNotificacion("Hubo un problema iniciado sesión. Intente más tarde.");
+        }).finally(() => reset());
+
         /*  axios({
              method: 'POST',
              url: api.concat("usaurios/login.php"),
@@ -67,18 +65,13 @@ export default function Login(props) {
          }).finally(() => {
              reset();
          }) */
+    }
 
-    }
-    const updateLoginStatus = (data) => {
-        if (data.status === "true") {
-            reset();
-        } else {
-            mostrarNotificacion("No encontramos una cuenta con esos datos");
-        }
-    }
+
     const onError = (err) => {
         handleErrores(err);
     }
+
     const handleErrores = (err) => {
         err.contrasena && mostrarNotificacion(err.contrasena.message, "warning");
         err.correo && mostrarNotificacion(err.correo.message, "warning");

@@ -109,7 +109,14 @@ const drawerStyles = {
     }
 };
 
+const actividadesUsuarios = (tipoUsuario) => {
+    if (tipoUsuario < 3)
+        return menuActividades.slice(0, 2);
+    else
+        return menuActividades;
+}
 
+//borrar acceso a resultados y visualizador
 const menuActividades = [
     { actividad: "Buscador avanzado", id: "buscadorAvanzado" },
     { actividad: "Buscador simplificado", id: "buscadorSimple" },
@@ -121,11 +128,8 @@ const menuActividades = [
 ];
 
 export default function MenuDrawer(props) {
-    const [conectado, setConectado] = useState(false);
+    const tipoUsuario = sessionStorage.getItem("usuario") == null ? 1 : sessionStorage.getItem("usuario").tipoUsuarioID;
 
-    const acceder = (estado) => {
-        setConectado(estado);
-    };
     const [pagina, setPagina] = React.useState(props.actividad);
     const [articulo, setArticulo] = React.useState(null);
     const [resultados, setResultados] = React.useState(null);
@@ -241,7 +245,7 @@ export default function MenuDrawer(props) {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {menuActividades.map((item) => (
+                    {actividadesUsuarios(tipoUsuario).map((item) => (
                         <Tooltip key={item.actividad} title={item.actividad} placement="right">
                             <ListItem key={item.actividad} disablePadding>
                                 <ListItemButton
@@ -267,8 +271,8 @@ export default function MenuDrawer(props) {
                             </ListItem>
                         </Tooltip>
                     ))}
-                    <Tooltip key="menu-admin" title="Funciones admin" placement="right">
-                        <MenuAdmin open={open} />
+                    <Tooltip sx={{ display: { xs: tipoUsuario == 4 ? 'none' : 'block' } }} key="menu-admin" title="Funciones admin" placement="right">
+                        <MenuAdmin show={tipoUsuario} open={open} />
                     </Tooltip>
                 </List>
             </Drawer>
@@ -278,7 +282,7 @@ export default function MenuDrawer(props) {
                     <div>
                         <Routes>
                             <Route exact path="/" element={<LandingPage />} />
-                            <Route path="/login" element={<Login acceder={acceder} />} />
+                            <Route path="/login" element={<Login />} />
                             <Route path="/editor" element={<EditorArticulos />} />
                             <Route path="/novedades" element={<CentroNovedades />} />
                             <Route path="/registro" element={<RegistroUsuario />} />
