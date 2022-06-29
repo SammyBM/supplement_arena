@@ -38,7 +38,7 @@ export default function Login(props) {
     });
 
     const handleUser = (usuario) => {
-        sessionStorage.setItem("usuario", usuario)
+        sessionStorage.setItem("usuario", JSON.stringify(usuario))
         Service.changePage("")
     };
 
@@ -185,8 +185,14 @@ export default function Login(props) {
                                         <Tooltip title='Crear una cuenta'>
 
                                             <Button variant='outlined' color='primary' startIcon={<AccountCircleIcon />} onClick={() => Service.changePage("registro")}>
-
                                                 Registrate
+                                            </Button>
+                                        </Tooltip>
+                                    </FormControl>
+                                    <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
+                                        <Tooltip title='Recupera tu contraseña'>
+                                            <Button variant='text' color='primary' noWrap onClick={() => Service.changePage("recuperar")}>
+                                                ¿Olvidaste tu contraseña?
                                             </Button>
                                         </Tooltip>
                                     </FormControl>
