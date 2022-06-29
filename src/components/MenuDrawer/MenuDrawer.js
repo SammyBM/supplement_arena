@@ -25,8 +25,9 @@ import CentroReportes from '../Reportes/CentroReportes';
 import BuscadorSimple from '../BuscadorSimple/BuscadorSimple';
 import VisualizadorArticulos from '../VisualizadorArticulos/VisualizadorArticulos';
 import ResultadosBusqueda from '../ResultadosBusqueda/ResultadosBusqueda';
-import Reporte from '../Reportes/Reporte';
+import RecuperacionContrasena from '../MenuUsuario/RecuperacionContrasena';
 import Service from '../../Service';
+import { INVITADO } from '../../constantes';
 
 const drawerWidth = 240;
 
@@ -128,7 +129,8 @@ const menuActividades = [
 ];
 
 export default function MenuDrawer(props) {
-    const tipoUsuario = sessionStorage.getItem("usuario") == null ? 1 : sessionStorage.getItem("usuario").tipoUsuarioID;
+    const usuario = sessionStorage.getItem("usuario") == null ? INVITADO : JSON.parse(sessionStorage.getItem("usuario"));
+    const tipoUsuario = usuario.tipoUsuarioID
 
     const [pagina, setPagina] = React.useState(props.actividad);
     const [articulo, setArticulo] = React.useState(null);
@@ -178,9 +180,6 @@ export default function MenuDrawer(props) {
             severity: ""
         })
     }
-
-
-
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -283,14 +282,15 @@ export default function MenuDrawer(props) {
                         <Routes>
                             <Route exact path="/" element={<LandingPage />} />
                             <Route path="/login" element={<Login />} />
-                            <Route path="/editor" element={<EditorArticulos />} />
-                            <Route path="/novedades" element={<CentroNovedades />} />
                             <Route path="/registro" element={<RegistroUsuario />} />
+                            <Route path="/recuperar" element={<RecuperacionContrasena />} />
+                            <Route path="/editor" element={<EditorArticulos />} />
                             <Route path="/buscadorAvanzado" element={<BuscadorAvanzado />} />
-                            <Route path="/reportes" element={<Reporte />} />
                             <Route path="/buscadorSimple" element={<BuscadorSimple />} />
-                            <Route path="/visualizador" element={<VisualizadorArticulos />} />
                             <Route path="/resultados" element={<ResultadosBusqueda />} />
+                            <Route path="/visualizador" element={<VisualizadorArticulos />} />
+                            <Route path="/novedades" element={<CentroNovedades />} />
+                            <Route path="/reportes" element={<CentroReportes />} />
                             <Route path="*" component={NotFound} />
                         </Routes>
                     </div>

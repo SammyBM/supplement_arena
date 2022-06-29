@@ -6,6 +6,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
+import LoginIcon from '@mui/icons-material/Login';
 import Logout from '@mui/icons-material/Logout';
 import { Tooltip } from '@mui/material';
 import { IconButton } from '@mui/material';
@@ -20,7 +21,7 @@ export default function AvatarMenu(props) {
     //Access parents methods: https://stackoverflow.com/questions/26176519/reactjs-call-parent-method
     //Access childs state: https://stackoverflow.com/questions/27864951/how-to-access-a-childs-state-in-r
 
-    const usuario = sessionStorage.getItem("usuario") == null ? INVITADO : sessionStorage.getItem("usuario")
+    const usuario = sessionStorage.getItem("usuario") == null ? INVITADO : JSON.parse(sessionStorage.getItem("usuario"))
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -36,7 +37,7 @@ export default function AvatarMenu(props) {
         Service.changePage(actividad);
     };
 
-    //{usuario.nombre.charAt(0).toUpperCase()}
+    //
 
     return (
         <>
@@ -48,7 +49,8 @@ export default function AvatarMenu(props) {
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
                 >
-                    <Avatar sx={{ width: 32, height: 32 }}>S</Avatar>
+                    <Avatar sx={{ width: 32, height: 32, display: { xs: usuario.tipoUsuarioID != 1 ? "block" : "none" } }}>{usuario.nombre.charAt(0).toUpperCase()}</Avatar>
+                    <Avatar sx={{ width: 32, height: 32, display: { xs: usuario.tipoUsuarioID == 1 ? "block" : "none" } }} />
                 </IconButton>
             </Tooltip>
             <Menu
@@ -87,9 +89,11 @@ export default function AvatarMenu(props) {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 <MenuItem sx={{ display: { xs: usuario.tipoUsuarioID > 1 ? 'none' : 'block' } }} onClick={() => cambiarPagina("login")}>
-                    <Avatar /> Iniciar sesión
+                    <ListItemIcon>
+                        <LoginIcon fontSize="small" />
+                    </ListItemIcon>
+                    Iniciar sesión
                 </MenuItem>
-                <Divider sx={{ display: { xs: usuario.tipoUsuarioID <= 1 ? 'none' : 'block' } }} />
                 <MenuItem sx={{ display: { xs: usuario.tipoUsuarioID <= 1 ? 'none' : 'block' } }} onClick={() => {
                     sessionStorage.removeItem("usuario")
                     Service.changePage("")
