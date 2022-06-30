@@ -16,18 +16,16 @@ import Service from "../../Service";
 import axios from 'axios';
 
 export default function RegistroUsuario(props) {
-    const { user, setUser } = React.useContext(UserContext);
     const api = React.useContext(ApiContext);
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
             nombre: '',
             apellido: '',
-            edad: '',
             contrasena: '',
             correo: '',
-            usuario: '',
-            fechaNacimiento: ''
+            tipoUsuarioID: 2,
+            fechaNacimiento: '2017 - 05 - 24'
         }
     });
 
@@ -39,27 +37,18 @@ export default function RegistroUsuario(props) {
         event.preventDefault();
     };
 
-    const handleChange = (usuario) => {
-        setUser(
-            {
-                usuarioID: usuario.usuarioID,
-                tipoUsuarioID: usuario.tipoUsuarioID,
-                nombre: usuario.nombre,
-                nombreUsuario: usuario.nombreUsuario,
-                fechaNacimiento: usuario.fechaNacimiento
-            }
-        );
-    };
-
 
     const submit = (data) => {
         let exists = false;
+        console.log(data);
 
         Service.getDataQuery("usuarios/read_row", "correo", data.correo).then((res) => {
             res.length > 0 && (exists = true);
         }).catch((err) => {
-            console.error(err)
-            exists = true;
+            if (err.status != 404) {
+                console.error(err)
+                exists = true;
+            }
         }).finally(() => {
             if (!exists) {
                 Service.postData("usuarios/create", data).then((res) => {
@@ -189,9 +178,8 @@ export default function RegistroUsuario(props) {
                                             <Input
                                                 label="Fecha de nacimiento"
                                                 type="date"
-                                                defaultValue="2017-05-24"
-                                                onChange={onChange}
                                                 value={value}
+                                                onChange={onChange}
                                                 sx={{ width: 220 }}
                                                 InputLabelProps={{
                                                     shrink: true,
