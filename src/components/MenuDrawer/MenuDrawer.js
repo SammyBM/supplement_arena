@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
-import { Box, ButtonBase, CssBaseline, Divider, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Slide, Snackbar, Toolbar, Typography, Tooltip } from '@mui/material';
+import { Box, ButtonBase, CssBaseline, Divider, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, Tooltip } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 
 import MenuIcon from '@mui/icons-material/Menu';
@@ -14,7 +14,7 @@ import AvatarMenu from '../MenuUsuario/AvatarMenu';
 import BusquedaPredictiva from '../BuscadorPredictivo/BusquedaPredictiva';
 import MenuAdmin from '../MenuAdmin/MenuAdmin';
 
-import { BrowserRouter, Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "../LandingPage/LandingPage";
 import Login from '../MenuUsuario/Login';
 import EditorArticulos from '../EditorArticulos/EditorArticulos';
@@ -132,14 +132,8 @@ export default function MenuDrawer(props) {
     const usuario = sessionStorage.getItem("usuario") == null ? INVITADO : JSON.parse(sessionStorage.getItem("usuario"));
     const tipoUsuario = usuario.tipoUsuarioID
 
-    const [pagina, setPagina] = React.useState(props.actividad);
-    const [articulo, setArticulo] = React.useState(null);
-    const [resultados, setResultados] = React.useState(null);
-
     const cambiarPagina = (actividad, art = null, res = null) => {
         Service.changePage(actividad);
-        setArticulo(art)
-        setResultados(res)
     };
 
     const theme = useTheme();
@@ -158,28 +152,6 @@ export default function MenuDrawer(props) {
     const handleBarDrawer = (value) => {
         setOpenBar(value);
     };
-
-    const [notificacion, setNotificacion] = React.useState({
-        mostrar: false,
-        mensaje: "",
-        severity: "",
-    });
-
-    const mostrarNotificacion = ({ msg, svty }) => {
-        setNotificacion({
-            mostrar: true,
-            mensaje: msg,
-            severity: svty
-        });
-    }
-
-    const cerrarNotificacion = () => {
-        setNotificacion({
-            mostrar: false,
-            mensaje: "",
-            severity: ""
-        })
-    }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -270,7 +242,7 @@ export default function MenuDrawer(props) {
                             </ListItem>
                         </Tooltip>
                     ))}
-                    <Tooltip sx={{ display: { xs: tipoUsuario == 4 ? 'none' : 'block' } }} key="menu-admin" title="Funciones admin" placement="right">
+                    <Tooltip sx={{ display: { xs: tipoUsuario === 4 ? 'none' : 'block' } }} key="menu-admin" title="Funciones admin" placement="right">
                         <MenuAdmin show={tipoUsuario} open={open} />
                     </Tooltip>
                 </List>
@@ -278,7 +250,7 @@ export default function MenuDrawer(props) {
             <Grid component="main" alignItems="center" justifyContent="center" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
                 <BrowserRouter>
-                    <div>
+                    <>
                         <Routes>
                             <Route exact path="/" element={<LandingPage />} />
                             <Route path="/login" element={<Login />} />
@@ -293,10 +265,9 @@ export default function MenuDrawer(props) {
                             <Route path="/reportes" element={<CentroReportes />} />
                             <Route path="*" component={NotFound} />
                         </Routes>
-                    </div>
+                    </>
                 </BrowserRouter>
             </Grid>
-
         </Box >
     );
 }

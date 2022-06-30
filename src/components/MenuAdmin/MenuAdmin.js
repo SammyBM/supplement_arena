@@ -22,7 +22,7 @@ export default function MenuAdmin(props) {
     //Access parents methods: https://stackoverflow.com/questions/26176519/reactjs-call-parent-method
     //Access childs state: https://stackoverflow.com/questions/27864951/how-to-access-a-childs-state-in-r
 
-    const show = props.show > 1 ? "block" : "none";
+    const show = props.show === 4 ? "block" : "none";
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -34,10 +34,6 @@ export default function MenuAdmin(props) {
 
     const handleClose = () => {
         setAnchorEl(null);
-    };
-
-    const cambiarPagina = (actividad) => {
-        props.funcionMenu(actividad)
     };
 
     const [notificacion, setNotificacion] = React.useState({

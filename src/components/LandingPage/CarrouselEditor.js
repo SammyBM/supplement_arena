@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles';
 
 import axios from 'axios';
 import ApiContext from '../../contexts/ApiContext';
+import { INVITADO } from '../../constantes';
 
 import EditIcon from '@mui/icons-material/Edit';
 import ImageIcon from '@mui/icons-material/Image';
@@ -31,7 +32,7 @@ function SimpleDialog(props) {
     const handleListItemClick = (value) => {
         if (value === "agregarImagen")
             return;
-            
+
         axios.get(api.concat('imagenes_carrousel/delete.php?id=', value.id)).then((response) => {
             console.log(response);
         }).catch((error) => {
@@ -101,6 +102,9 @@ SimpleDialog.propTypes = {
 };
 
 export default function SimpleDialogDemo() {
+    const usuario = sessionStorage.getItem("usuario") == null ? INVITADO : JSON.parse(sessionStorage.getItem("usuario"));
+    const tipoUsuario = usuario.tipoUsuarioID
+
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -114,7 +118,7 @@ export default function SimpleDialogDemo() {
 
     return (
         <>
-            <IconButton variant="outlined" onClick={handleClickOpen}>
+            <IconButton sx={{ display: { xs: tipoUsuario > 2 ? "block" : "none" } }} variant="outlined" onClick={handleClickOpen}>
                 <EditIcon />
             </IconButton>
             <SimpleDialog

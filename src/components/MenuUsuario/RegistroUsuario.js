@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Button, Container, Grid, IconButton, Input, InputAdornment, InputLabel, FormControl, Paper, Slide, Snackbar, Tooltip } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import { spacing } from '@mui/system';
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -10,13 +9,9 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import SendIcon from '@mui/icons-material/Send';
 import LoginIcon from '@mui/icons-material/Login'
 
-import ApiContext from "../../contexts/ApiContext";
-import UserContext from "../../contexts/UserContext";
 import Service from "../../Service";
-import axios from 'axios';
 
 export default function RegistroUsuario(props) {
-    const api = React.useContext(ApiContext);
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
@@ -45,7 +40,7 @@ export default function RegistroUsuario(props) {
         Service.getDataQuery("usuarios/read_row", "correo", data.correo).then((res) => {
             res.length > 0 && (exists = true);
         }).catch((err) => {
-            if (err.status != 404) {
+            if (err.status !== 404) {
                 console.error(err)
                 exists = true;
             }
@@ -54,6 +49,7 @@ export default function RegistroUsuario(props) {
                 Service.postData("usuarios/create", data).then((res) => {
                     sessionStorage.setItem("usuarioID", res)
                     mostrarNotificacion("¡Usuario registrado con exito!", "warning");
+                    reset();
                     Service.changePage("")
                 }).catch((error) => console.error(error))
             }
