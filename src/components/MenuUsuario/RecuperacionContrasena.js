@@ -12,7 +12,6 @@ import { height } from '@mui/system';
 import ApiContext from "../../contexts/ApiContext";
 
 export default function RecuperacionContrasena(props) {
-    const api = React.useContext(ApiContext);
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
@@ -151,7 +150,7 @@ export default function RecuperacionContrasena(props) {
                                         <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
                                             <Tooltip title='Iniciar sesión'>
                                                 <Button type="submit" onClick={handleSubmit(submit, onError)} variant='contained' color='primary' endIcon={<LoginIcon />}>
-                                                    Ingresar
+                                                    Iniciar
                                                 </Button>
                                             </Tooltip>
                                         </FormControl>

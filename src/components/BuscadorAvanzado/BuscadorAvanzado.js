@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { Box, Card, CardContent, Checkbox, Divider, FormGroup, FormControlLabel, Grid, Paper, Slider, Stack, Switch, Typography, Tab, FormLabel, Tooltip, ToggleButtonGroup, ToggleButton, Button, Badge, Chip, Skeleton } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import EggAltTwoToneIcon from '@mui/icons-material/EggAltTwoTone';
-import LocalFloristTwoToneIcon from '@mui/icons-material/LocalFloristTwoTone';
-import PhishingTwoToneIcon from '@mui/icons-material/PhishingTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 
 import SelectorPredictivo from './SelectorPredictivo';
@@ -242,12 +239,13 @@ function InterfazBusqueda(props) {
 
     const { control, id, setValue } = props;
 
-    const [protein, setProtein] = React.useState(
+    /* const [protein, setProtein] = React.useState(
         {
             isVegetal: false,
             1: 2,
         }
-    );
+    ); */
+
     const [omegas, setOmegas] = React.useState([""]);
 
     const handleOmegas = (event, newOmegas) => {
@@ -381,7 +379,37 @@ export default function BuscadorAvanzado() {
     const submit = () => {
         alert("sumit")
         const data = getValues();
-        console.log(data);
+        const dataAminos = [
+            data.amino1,
+            data.amino2,
+            data.amino3,
+            data.amino4,
+            data.amino5,
+            data.amino6,
+            data.amino7,
+            data.amino8,
+            data.amino9,
+            data.amino10,
+            data.amino11,
+            data.amino12,
+            data.amino13,
+            data.amino14,
+            data.amino15,
+            data.amino16,
+            data.amino17,
+            data.amino18,
+            data.amino19,
+            data.amino20,
+            data.amino21
+        ]
+        const articulo = {
+            categoriaID: data.tipoSuplemento,
+            calorias: data.calorias,
+            proteina: data.proteina,
+            lipidos: data.lipidos,
+            carbohidratos: data.carbohidratos
+        }
+
     }
 
     const pestanasSuplementos = tiposSuplemento.map((item) => <Tab key={item.id} value={item.id} label={item.tipo}></Tab>);
