@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { ListItemButton, ListItemText, Slide, Snackbar } from '@mui/material';
 import { styled } from '@mui/material/styles';
-
+import Service from "../../Service";
 import BackupIcon from '@mui/icons-material/Backup';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
@@ -61,10 +61,21 @@ export default function MenuAdmin(props) {
             severity: ""
         })
     }
-
+    
     const mensaje = "Descargando...";
     const severity = "error";
-
+    const needBackup = () => {
+        Service.postData("backup/backup",null).then((result) => {
+            console.log(result.status);
+            if (result.status == true)
+                mostrarNotificacion("Respaldo descargado correctamente","warning");
+            else
+                mostrarNotificacion("Hubo un problema descargando información. Intente más tarde.","warning");
+        }).catch((err) => {
+            console.error(err);
+            mostrarNotificacion("Hubo un problema descargando información. Intente más tarde.","warning");
+        }).finally(mostrarNotificacion(mensaje, severity));
+    }
 
 
     return (
@@ -123,7 +134,7 @@ export default function MenuAdmin(props) {
                         Carga masiva
                     </MenuItem>
                 </label>
-                <MenuItem onClick={() => mostrarNotificacion(mensaje, severity)}>
+                <MenuItem onClick={() => needBackup()}>
                     <ListItemIcon>
                         <DownloadForOfflineIcon />
                     </ListItemIcon>
