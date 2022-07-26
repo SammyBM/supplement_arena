@@ -185,9 +185,9 @@ export function perfilesSimple(respuestas) {
                 if (resp.respuesta === 1)
                     perf_art.precios = [0, 1000]
                 if (resp.respuesta === 2)
-                    perf_art.precios === [0, 2000]
+                    perf_art.precios = [0, 2000]
                 if (resp.respuesta === 3)
-                    perf_art.precios === [0, 100000]
+                    perf_art.precios = [0, 100000]
                 break;
             case 7: {
                 switch (resp.respuesta) {
