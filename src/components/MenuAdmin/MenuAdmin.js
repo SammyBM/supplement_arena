@@ -27,7 +27,7 @@ export default function MenuAdmin(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const openDrawer = props.open;
-
+    const [link, setlink] = React.useState(null);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -67,9 +67,11 @@ export default function MenuAdmin(props) {
     const needBackup = () => {
         Service.postData("backup/backup",null).then((result) => {
             console.log(result.status);
-            if (result.status == true)
+            if (result.status == true){
                 mostrarNotificacion("Respaldo descargado correctamente","warning");
-            else
+                let url=window.URL.createObjectURL(new Blob([result.path]));
+                setlink(url)
+            }else
                 mostrarNotificacion("Hubo un problema descargando información. Intente más tarde.","warning");
         }).catch((err) => {
             console.error(err);
@@ -134,7 +136,7 @@ export default function MenuAdmin(props) {
                         Carga masiva
                     </MenuItem>
                 </label>
-                <MenuItem onClick={() => needBackup()}>
+                <MenuItem onClick={() => needBackup()} href={link}>
                     <ListItemIcon>
                         <DownloadForOfflineIcon />
                     </ListItemIcon>
