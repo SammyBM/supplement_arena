@@ -405,7 +405,7 @@ export default function BuscadorAvanzado() {
             data.amino21
         ]
         const omegas = data.omegas;
-        const acidos = [{ acidoGradsoID: 1, cantidad: data.DHA }, { acidoGradsoID: 2, cantidad: data.EPA }];
+        const acidos = [{ acidoGrasoID: 1, cantidad: data.DHA }, { acidoGrasoID: 2, cantidad: data.EPA }];
         const articulo = {
             categoriaID: data.tipoSuplemento,
             calorias: data.calorias,
