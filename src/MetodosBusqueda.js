@@ -70,7 +70,7 @@ export function busquedaPerfiles(articulo, omegas = null, aminos = null, acidosG
             });
         }
         if (acidosGrasos != null) {
-            Service.getDataQuery("/perfiles_acidos_grasos/read_by_props", "perfil_busqueda", acidos).then((res) => {
+            Service.getDataQuery("/perfiles_acidos_grasos/read_by_props", "perfil_busqueda", acidosGrasos).then((res) => {
                 // Sacar registros con caracteristicas y filtrar por IDs en comunun
                 ac = res.records;
             }).catch((err) => console.error(err)).finally(() => {
@@ -227,6 +227,7 @@ export function perfilesSimple(respuestas) {
                 break;
         }
     })
+    const perfiles = Array(perf_art, perf_alergias);
     return perfiles;
 }
 
@@ -258,7 +259,7 @@ function getPreguntas(respuestas) {
         });
     }
 
-    for (p of preguntas) {
+    for (let p of preguntas) {
         if (p.preguntaID === 3 && skip_alergias)
             continue;
         if (p.preguntaID === 5 && skip_enfermedades)
