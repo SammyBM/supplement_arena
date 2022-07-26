@@ -39,11 +39,8 @@ export default function ResultadosBusqueda(props) {
     );
 
     React.useEffect(() => {
-        axios.get(api.concat("articulos/read.php"))
-            .then(res => {
-                const data = res.data;
-                setResultados(data.records);
-            })
+        setResultados(sessionStorage.getItem("resultados"));
+        console.log(resultados);
     });
 
     return (

@@ -118,9 +118,8 @@ export function preguntasDinamicas(respuestas, ID = null) {
                 return preg;
         })
 
-    respuestas.forEach((resp) => {
+    else
         return Cuestionario[respuestas.length - 1]
-    })
 }
 
 /**
@@ -128,7 +127,7 @@ export function preguntasDinamicas(respuestas, ID = null) {
  * @param {number} preguntaID preguntaID para identificar con cuestionario
  * @param {number} respuestaID indice de respuesta segun objeto Preguntas.json
  * @param {Object} respuestas Objeto con arreglo de preguntas anteriores.
- * @returns Objeto JSON que representa un arreglo de respuestas con su respectivo preguntaID
+ * @returns Objeto que representa un arreglo de respuestas con su respectivo preguntaID
  */
 export function setRespuestasSimple(preguntaID, respuestaID, respuestas = null) {
     if (respuestas === null)
@@ -149,8 +148,9 @@ export function setRespuestasSimple(preguntaID, respuestaID, respuestas = null) 
  * @returns arreglo de perfiles de busqueda para usar con busquedaPerfiles
 */
 export function perfilesSimple(respuestas) {
-    const resps = JSON.parse(respuestas);
-    let perf_alergias;
+    const resps = respuestas;
+    let perf_alergias = [];
+    let perf_ingredientes = [];
     let perf_art = {
         categoriaID: null,
         calorias: null,
@@ -165,7 +165,7 @@ export function perfilesSimple(respuestas) {
                 break;
             case 2:
                 if (resp.respuesta !== 1)
-                    perf_alergias = null;
+                    perf_alergias = [];
                 break;
             case 3:
                 perf_alergias = resp.respuesta;
@@ -173,12 +173,13 @@ export function perfilesSimple(respuestas) {
             case 4:
                 break;
             case 5:// enfermedades cronicas
-                if (resp.respuesta === 2) {
+                if (resp.respuesta <= 2) {
                     perf_art.categoriaID = 3;
                     perf_art.proteina = 0;
                     perf_art.carbohidratos = 0;
                     perf_art.lipidos = 0;
                     perf_art.calorias = 0;
+                    perf_alergias.push({ ingredienteID: 19 })
                 }
                 break;
             case 6:
@@ -205,12 +206,29 @@ export function perfilesSimple(respuestas) {
                         perf_art.lipidos = 2;
                         perf_art.calorias = 624;
                         break;
+                    case 3: // deporte
+                        perf_art.categoriaID = 3;
+                        perf_art.proteina = 0;
+                        perf_art.carbohidratos = 0;
+                        perf_art.lipidos = 0;
+                        perf_art.calorias = 0;
+                        perf_ingredientes.push({ ingredienteID: 19 });
+                        perf_ingredientes.push({ ingredienteID: 20 });
+                        break;
                     case 6: // Salud cardiaca
                         perf_art.categoriaID = 2;
                         perf_art.proteina = 0;
                         perf_art.carbohidratos = 0;
                         perf_art.lipidos = 2;
                         perf_art.calorias = 18;
+                        break;
+                    case 9:
+                        perf_art.categoriaID = 3;
+                        perf_art.proteina = 0;
+                        perf_art.carbohidratos = 0;
+                        perf_art.lipidos = 0;
+                        perf_art.calorias = 0;
+                        perf_ingredientes.push({ ingredienteID: 19 });
                         break;
                     default:
                         perf_art.categoriaID = 3;
@@ -219,15 +237,13 @@ export function perfilesSimple(respuestas) {
                         perf_art.lipidos = 0;
                         perf_art.calorias = 0;
                         break;
-                    //caso 9 y 2 cafeina
-                    //caso 2 creatina
                 }
             }
             default:
                 break;
         }
     })
-    const perfiles = Array(perf_art, perf_alergias);
+    const perfiles = Array(perf_art, perf_alergias, perf_ingredientes);
     return perfiles;
 }
 
@@ -237,7 +253,7 @@ export function perfilesSimple(respuestas) {
  * @returns cuestionario con preguntas adaptadas segun las respuestas proporcionadas
  */
 function getPreguntas(respuestas) {
-    const preguntas = JSON.parse(Preguntas).preguntas;
+    const preguntas = (Preguntas).preguntas;
     let cuestionario = [];
     let ob_general;
     let skip_alergias = false, skip_enfermedades = false;

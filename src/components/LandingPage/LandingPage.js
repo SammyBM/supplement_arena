@@ -14,26 +14,6 @@ const imageResource = path.join(__dirname, "..", "..", "uploads", "carrousel");
 
 export default function LandingPage() {
     const api = React.useContext(ApiContext);
-    var items = [
-        {
-            id: 1,
-            name: "Random Name #1",
-            description: "Probably the most random thing you have ever seen!",
-            picture: <img src="https://parade.com/wp-content/uploads/2018/09/colorful-vegetables-in-bowl-FTR.jpg" />
-        },
-        {
-            id: 2,
-            name: "Random Name #2",
-            description: "Hello World!",
-            picture: <img src="https://i0.wp.com/post.healthline.com/wp-content/uploads/2021/03/pills-vitamins-pill-1296x728-header.jpg?w=1155&h=1528" />
-        },
-        {
-            id: 3,
-            name: "Proteina",
-            description: "Proteina en polvo mamalona",
-            picture: <img src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/chocolate-whey-protein-powder-with-a-filled-scoop-royalty-free-image-1626898564.jpg?crop=1.00xw:0.753xh;0,0.110xh&resize=1200:*" />
-        }
-    ]
 
     const [imagenes, setImagenes] = React.useState([]);
     var imgs = new Array();

@@ -63,7 +63,7 @@ export default class Service {
     });
   }
   static changePage(newpage) {
-    window.location=ROUTES.LOCAL_ROUTE+newpage;
+    window.location = ROUTES.LOCAL_ROUTE + newpage;
   }
   static getSQL(type) {
     const options = {

@@ -428,6 +428,7 @@ export default function BuscadorAvanzado() {
         }
 
         sessionStorage.setItem('resultados', JSON.stringify(resultados));
+        Service.changePage("resultados");
 
     }
 

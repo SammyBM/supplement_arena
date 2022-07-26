@@ -121,7 +121,7 @@ export default function EditorArticulos(props) {
             tamanoPorcion: data.tamano,
             precio: data.precio
         }
-        const articuloID = null;
+        let articuloID = null;
         try {
             articuloID = JSON.parse(sessionStorage.getItem("articuloID"))
         } catch (e) {
