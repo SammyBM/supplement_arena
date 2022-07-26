@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Carousel from 'react-material-ui-carousel'
 import { Card, CardMedia, Stack, CardContent, Typography } from '@mui/material'
-
+import Service from "../../Service";
 import axios from 'axios';
-
+import { Buffer } from 'buffer'
 import CarrouselEditor from "./CarrouselEditor"
 import ApiContext from '../../contexts/ApiContext';
 import TarjetaTYC from '../TerminosYCondiciones/TarjetaTYC';
@@ -42,13 +42,23 @@ export default function LandingPage() {
     }
 
     React.useEffect((() => {
-        axios.get(api.concat('imagenes_carrousel/read.php')).then(
+        Service.postData("imagenes/imagenes_carrousel/read",null).then((result) => {
+            for(let i=0; i< 10;i++){
+                imgs.push( "data:image/png;base64,"+result.records[i].bitmap );
+                
+            }
+            setImagenes(imgs);
+            console.log(imgs)
+        }).catch((err) => {
+            console.log(err)
+        });
+        /* axios.get(api.concat('imagenes_carrousel/read.php')).then(
             (response) => {
                 imgs = response.data;
                 imgs.forEach(imageArray);
                 setImagenes(imgs);
             }
-        ).catch((error) => { console.error(error) })
+        ).catch((error) => { console.error(error) }) */
     }
     ), []);
 
@@ -69,12 +79,12 @@ export default function LandingPage() {
 
 function Item(props) {
     return (
-        <Card>
+        <Card sx={{ maxWidth: 345 }}>
             <CardMedia
                 component="img"
                 width="500"
                 height="400"
-                src={props.item.nombre_foto}
+                src={props.item}
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">{props.item.name}</Typography>

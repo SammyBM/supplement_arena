@@ -65,4 +65,24 @@ export default class Service {
   static changePage(newpage) {
     window.location=ROUTES.LOCAL_ROUTE+newpage;
   }
+  static getSQL(type) {
+    const options = {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
+
+    return new Promise((resolve, reject) => {
+      fetch(ROUTES.API_ROUTE + type + ".sql?")
+        .then((response) => response.json())
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
 }
