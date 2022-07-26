@@ -151,7 +151,7 @@ export function setRespuestasSimple(preguntaID, respuestaID, respuestas = null) 
 export function perfilesSimple(respuestas) {
     const resps = JSON.parse(respuestas);
     let perf_alergias;
-    perf_art = {
+    let perf_art = {
         categoriaID: null,
         calorias: null,
         proteina: null,
