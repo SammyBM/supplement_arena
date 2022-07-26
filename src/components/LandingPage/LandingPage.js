@@ -42,10 +42,10 @@ export default function LandingPage() {
     }
 
     React.useEffect((() => {
-        Service.postData("imagenes/imagenes_carrousel/read",null).then((result) => {
-            for(let i=0; i< 10;i++){
-                imgs.push( "data:image/png;base64,"+result.records[i].bitmap );
-                
+        Service.postData("imagenes/imagenes_carrousel/read", null).then((result) => {
+            for (let i = 0; i < 10; i++) {
+                imgs.push("data:image/png;base64," + result.records[i].bitmap);
+
             }
             setImagenes(imgs);
             console.log(imgs)
@@ -65,11 +65,17 @@ export default function LandingPage() {
     return (
         <>
             <TarjetaTYC />
-            <Carousel>
-                {
-                    imagenes.map((item, i) => <Item key={i} item={item} />)
-                }
-            </Carousel>
+            <Grid container direction="row">
+                <Grid item xs={0} md={1} lg={2}></Grid>
+                <Grid item xs={12} md={10} lg={8}>
+                    <Carousel>
+                        {
+                            imagenes.map((item, i) => <Item key={i} item={item} />)
+                        }
+                    </Carousel>
+                </Grid>
+                <Grid item xs={0} md={1} lg={2}></Grid>
+            </Grid>
             <Stack direction="row" alignItems="center" justifyContent="end">
                 <CarrouselEditor key="editor-carrusel" />
             </Stack>
@@ -79,11 +85,9 @@ export default function LandingPage() {
 
 function Item(props) {
     return (
-        <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ maxWidth: 500, maxHeight: 400 }}>
             <CardMedia
                 component="img"
-                width="500"
-                height="400"
                 src={props.item}
             />
             <CardContent>
