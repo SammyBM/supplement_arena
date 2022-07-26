@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import CarrouselEditor from "./CarrouselEditor"
 import ApiContext from '../../contexts/ApiContext';
+import TarjetaTYC from '../TerminosYCondiciones/TarjetaTYC';
 
 
 const path = require("path-browserify");
@@ -53,6 +54,7 @@ export default function LandingPage() {
 
     return (
         <>
+            <TarjetaTYC />
             <Carousel>
                 {
                     imagenes.map((item, i) => <Item key={i} item={item} />)

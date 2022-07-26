@@ -5,6 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import SelectorPredictivo from './SelectorPredictivo';
 import ApiContext from '../../contexts/ApiContext';
+import { busquedaPerfiles } from '../../MetodosBusqueda';
 import Service from '../../Service';
 
 import { Controller, useForm, FormProvider, useFormContext } from 'react-hook-form';
@@ -325,7 +326,8 @@ function InterfazBusqueda(props) {
                                         <Slider key={item.nombre} value={value} onChange={onChange} defaultValue={0} min={0} max={250} step={10} valueLabelDisplay="auto" disabled={omegas.includes(1) ? false : true} />
                                     )}
                                     />
-                                </Grid>)
+                                </Grid>
+                                )
                                 :
                                 <Grid item xs={12}><Typography variant="h3" color="secondary">Hubo un error cargando los omegas, intente más tarde.</Typography></Grid>
                         }
@@ -402,6 +404,8 @@ export default function BuscadorAvanzado() {
             data.amino20,
             data.amino21
         ]
+        const omegas = data.omegas;
+        const acidos = [{ acidoGradsoID: 1, cantidad: data.DHA }, { acidoGradsoID: 2, cantidad: data.EPA }];
         const articulo = {
             categoriaID: data.tipoSuplemento,
             calorias: data.calorias,
@@ -409,6 +413,21 @@ export default function BuscadorAvanzado() {
             lipidos: data.lipidos,
             carbohidratos: data.carbohidratos
         }
+        let resultados;
+
+        switch (data.tipoSuplemento) {
+            case 1:
+                resultados = busquedaPerfiles(articulo, null, dataAminos);
+                break;
+            case 2:
+                resultados = busquedaPerfiles(articulo, omegas, null, acidos);
+                break;
+            case 3:
+                resultados = busquedaPerfiles(articulo);
+                break;
+        }
+
+        sessionStorage.setItem('resultados', JSON.stringify(resultados));
 
     }
 

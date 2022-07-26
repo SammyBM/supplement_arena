@@ -1,0 +1,221 @@
+{
+    "preguntas": [
+        {
+            "preguntaID": "1",
+            "pregunta": "¿Cual consideras que sería tu enfoque principal?",
+            "respuestas": {
+                "versiones": [
+                    {
+                        "1": [
+                            {
+                                "respuestaID": "1",
+                                "texto": "Estetica o  deporte",
+                                "value": "1"
+                            },
+                            {
+                                "respuestaID": "2",
+                                "texto": "Salud y nutrición",
+                                "value": "2"
+                            },
+                            {
+                                "respuestaID": "3",
+                                "texto": "Belleza, piel y cualidades especificas",
+                                "value": "3"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "preguntaID": "2",
+            "pregunta": "¿Tienes alguna alergia?",
+            "respuestas": {
+                "versiones": [
+                    {
+                        "1": [
+                            {
+                                "respuestaID": "1",
+                                "texto": "Si",
+                                "value": "1"
+                            },
+                            {
+                                "respuestaID": "2",
+                                "texto": "No",
+                                "value": "2"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "preguntaID": "3",
+            "pregunta": "Por favor selecciona tu alergia",
+            "respuestas": {
+                "versiones": [
+                    {
+                        "1": [
+                            {
+                                "respuestaID": "1",
+                                "texto": "r1",
+                                "value": "1"
+                            },
+                            {
+                                "respuestaID": "2",
+                                "texto": "r2",
+                                "value": "2"
+                            },
+                            {
+                                "respuestaID": "3",
+                                "texto": "r3",
+                                "value": "3"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "preguntaID": "4",
+            "pregunta": "¿Padeces alguna enfermedad crónica?",
+            "respuestas": {
+                "versiones": [
+                    {
+                        "1": [
+                            {
+                                "respuestaID": "1",
+                                "texto": "Si",
+                                "value": "1"
+                            },
+                            {
+                                "respuestaID": "2",
+                                "texto": "No",
+                                "value": "2"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "preguntaID": "5",
+            "pregunta": "Por favor selecciona las enfermedades que padezcas",
+            "respuestas": {
+                "versiones": [
+                    {
+                        "1": [
+                            {
+                                "respuestaID": "1",
+                                "texto": "Diabetes",
+                                "value": "1"
+                            },
+                            {
+                                "respuestaID": "2",
+                                "texto": "Hipertensión",
+                                "value": "2"
+                            },
+                            {
+                                "respuestaID": "3",
+                                "texto": "Otra",
+                                "value": "3"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "preguntaID": "6",
+            "pregunta": "Selecciona el rango de precios que más te acomode",
+            "respuestas": {
+                "versiones": [
+                    {
+                        "1": [
+                            {
+                                "respuestaID": "1",
+                                "texto": "Hasta $1000",
+                                "value": "1"
+                            },
+                            {
+                                "respuestaID": "2",
+                                "texto": "Hasta $2000",
+                                "value": "2"
+                            },
+                            {
+                                "respuestaID": "3",
+                                "texto": "Sin limite de precio",
+                                "value": "3"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "preguntaID": "7",
+            "pregunta": "¿Para qué quieres tu suplemento?",
+            "respuestas": {
+                "versiones": [
+                    {
+                        "1": [
+                            {
+                                "respuestaID": "1",
+                                "texto": "Para ganar masa muscular",
+                                "value": "1"
+                            },
+                            {
+                                "respuestaID": "2",
+                                "texto": "Para subir de peso",
+                                "value": "2"
+                            },
+                            {
+                                "respuestaID": "3",
+                                "texto": "Para mejorar mi rendimiento deportivo",
+                                "value": "3"
+                            }
+                        ]
+                    },
+                    {
+                        "2": [
+                            {
+                                "respuestaID": "4",
+                                "texto": "Para una deficiencia especifica",
+                                "value": "1"
+                            },
+                            {
+                                "respuestaID": "5",
+                                "texto": "Para asegurarme de tener todos mis nutrientes",
+                                "value": "2"
+                            },
+                            {
+                                "respuestaID": "6",
+                                "texto": "Para ayudar con mi salud cardiaca",
+                                "value": "3"
+                            }
+                        ]
+                    },
+                    {
+                        "3": [
+                            {
+                                "respuestaID": "7",
+                                "texto": "Para intentar verme más joven",
+                                "value": "1"
+                            },
+                            {
+                                "respuestaID": "8",
+                                "texto": "Para dormir mejor",
+                                "value": "2"
+                            },
+                            {
+                                "respuestaID": "9",
+                                "texto": "Para mejorar mi rendimiento cognitivo",
+                                "value": "3"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}
