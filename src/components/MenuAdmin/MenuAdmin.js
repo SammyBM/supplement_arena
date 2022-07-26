@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from "react-router-dom";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -61,7 +62,6 @@ export default function MenuAdmin(props) {
             severity: ""
         })
     }
-    
     const mensaje = "Descargando...";
     const severity = "error";
     const needBackup = () => {
@@ -71,12 +71,14 @@ export default function MenuAdmin(props) {
                 mostrarNotificacion("Respaldo descargado correctamente","warning");
                 let url=window.URL.createObjectURL(new Blob([result.path]));
                 setlink(url)
+                window.open(result.path, '_blank', 'toolbar=0,location=0,menubar=0');
             }else
                 mostrarNotificacion("Hubo un problema descargando información. Intente más tarde.","warning");
         }).catch((err) => {
             console.error(err);
             mostrarNotificacion("Hubo un problema descargando información. Intente más tarde.","warning");
         }).finally(mostrarNotificacion(mensaje, severity));
+        
     }
 
 
@@ -127,15 +129,6 @@ export default function MenuAdmin(props) {
                 transformOrigin={{ horizontal: 'left', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'left', vertical: 'center' }}
             >
-                <label htmlFor="subir-csv">
-                    <MenuItem onClick={() => mostrarNotificacion(mensaje, severity)}>
-                        <Input accept=".csv" id="subir-csv" type="file" />
-                        <ListItemIcon>
-                            <BackupIcon />
-                        </ListItemIcon>
-                        Carga masiva
-                    </MenuItem>
-                </label>
                 <MenuItem onClick={() => needBackup()} href={link}>
                     <ListItemIcon>
                         <DownloadForOfflineIcon />
