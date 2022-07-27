@@ -1,6 +1,9 @@
 import { ROUTES } from "./constantes";
+var Twitter = require('twitter');
 
 export default class Service {
+
+
   static getData(type) {
     const options = {
       method: "GET",
@@ -85,4 +88,36 @@ export default class Service {
         });
     });
   }
+
+  // static async getTweets() {
+  //   return new Promise((resolve, reject)=>{
+  //     const client = new Twitter({
+  //       consumer_key: '6rlUvwKDyp1KNjIW5OWuYQcTk', 
+  //       consumer_secret: 'swBqTxvDnGiW3M0OOR48Lryd4mHCKZscebM0fy69ii0C4iJnek', 
+  //       access_token_key: '1154076600-91WCVwYBbqtcH5ziVQNrURy8eeYy4fbUvlft9ud', 
+  //       access_token_secret: 'gymzbp8J5ZHAyawroL8sQQ4tmodqPaqM65GvX7pNmajRF'
+  //     })
+
+  //     client.get("trends/place.json", {
+  //       id:1
+  //     })
+  //     .then((response) => response.json())
+  //     .then((res) => {
+  //       resolve(res)
+  //     })
+  //     .catch((error)=>{
+  //       reject(error)
+  //     })
+
+  //     // fetch("url")
+  //     // .then((response) => response.json())
+  //     // .then((res)=> {
+  //     //   resolve(res);
+  //     // })
+  //     // .catch((error)=>{
+  //     //   reject(error)
+  //     // })
+  //   })
+  // }
+
 }
