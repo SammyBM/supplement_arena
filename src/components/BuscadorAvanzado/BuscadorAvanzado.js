@@ -167,9 +167,9 @@ function CamposComunes(props) {
                                     <Grid container spacing={1} direction="row">
                                         {
                                             loading ?
-                                                [1, 2, 3, 4, 5, 6].map((n) => <Grid item xs={12} md={6}><Skeleton key={n} sx={{ bgcolor: 'grey.400' }} width={150}><Typography>.</Typography></Skeleton></Grid>)
+                                                [1, 2, 3, 4, 5, 6].map((n) => <Grid item key={n} xs={12} md={6}><Skeleton key={n} sx={{ bgcolor: 'grey.400' }} width={150}><Typography>.</Typography></Skeleton></Grid>)
                                                 :
-                                                listaAlergenos.map((item) => <Grid item xs={12} md={6}><FormControlLabel key={item.ingredienteID} control={<Checkbox />} label={item.nombre}></FormControlLabel></Grid>)}
+                                                listaAlergenos.map((item) => <Grid item key={item.ingredienteID + "-checkbox"} xs={12} md={6}><FormControlLabel key={item.ingredienteID} control={<Checkbox />} label={item.nombre}></FormControlLabel></Grid>)}
                                     </Grid>
                                 </FormGroup>
                             )}
@@ -210,9 +210,9 @@ function CamposComunes(props) {
                                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2 }}>
                                     {
                                         loading ?
-                                            [1, 2, 3, 4, 5, 6].map((n) => <Grid item xs={12} md={6}><Skeleton key={n} sx={{ bgcolor: 'grey.400' }} width={150}><Typography>.</Typography></Skeleton></Grid>)
+                                            [1, 2, 3, 4, 5, 6].map((n) => <Grid item key={n} xs={12} md={6}><Skeleton key={n} sx={{ bgcolor: 'grey.400' }} width={150}><Typography>.</Typography></Skeleton></Grid>)
                                             :
-                                            listaIngredientes.map((value) => <Grid item xs={12} md={6}><FormControlLabel key={value.ingredienteID} control={<Checkbox />} label={value.nombre}></FormControlLabel></Grid>)}
+                                            listaIngredientes.map((value) => <Grid item key={value.ingredienteID + "-checkbox"} xs={12} md={6}><FormControlLabel key={value.ingredienteID} control={<Checkbox />} label={value.nombre}></FormControlLabel></Grid>)}
                                 </Grid>
                             </FormGroup>
                         )}
@@ -427,6 +427,7 @@ export default function BuscadorAvanzado() {
                 break;
         }
 
+        console.log(resultados);
         sessionStorage.setItem('resultados', JSON.stringify(resultados));
         Service.changePage("resultados");
 

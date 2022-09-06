@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Card, CardContent, Container, Grid, IconButton, Paper, Stack, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader, Container, Grid, IconButton, Paper, Stack, Typography } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useForm, Controller } from 'react-hook-form';
@@ -16,20 +16,31 @@ export default function BuscadorSimple() {
 
     const handleClick = (e) => {
         // TODO: Setear respuestas y cambiar preguntas 
-        setRespuestas(setRespuestasSimple(pregunta.preguntaID, e.target.id, respuestas));
+        if (pregunta.pregunta.preguntaID === 1)
+            setRespuestas(setRespuestasSimple(pregunta.preguntaID, e.target.id));
+        else
+            setRespuestas(setRespuestasSimple(pregunta.preguntaID, e.target.id, respuestas));
+        console.log(pregunta.preguntaID);
     }
 
     const desplazamiento = (e) => {
-        if (e.target.id === "right")
+        console.log(e.target.id);
+        if (e.target.id === "right") {
+            console.log("right");
             setPregunta(preguntasDinamicas(respuestas, pregunta.preguntaID + 1))
-        if (e.target.id === "left")
+        }
+        if (e.target.id === "left") {
+            console.log("left");
             setPregunta(preguntasDinamicas(respuestas, pregunta.preguntaID - 1))
+
+        }
     }
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm();
 
     React.useEffect(() => {
-    }, []);
+        console.log(pregunta);
+    }, [pregunta]);
 
     return (
         <>
@@ -52,46 +63,31 @@ export default function BuscadorSimple() {
 
                 {/*https://mui.com/components/tabs/#basic-tabs*/}
 
-                <Container sx={{
-                    maxWidth: 400,
-                    maxHeight: 400,
-                    justifyContent: "center",
-                    alignItems: "center"
+                <Card sx={{
+                    display: {
+                        backgroundColor: "beige"
+                    }
                 }}>
-                    <Paper elevation={5} sx={{ width: "inherit", height: "inherit", backgroundColor: "#F75E25", justifyContent: "center", alignItems: "center" }}>
-                        <Grid container direction="column" justifyContent="center" alignItems="center " sx={{ height: "inherit", width: "inherit" }}>
-                            <Grid item xs={1}></Grid>
-                            <Grid item xs={10}>
-                                <Paper elevation={1} sx={{ p: 1, py: 2, maxWidth: 350, maxHeight: 350, backgroundColor: "beige", justifyContent: "center", alignItems: "center" }}>
-                                    <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ height: "inherit", width: "inherit" }}>
-                                        <Grid item xs={1} md={2}>
-                                            <Stack direction="column" justifyContent="center" alignItems="center">
-                                                <IconButton sx={{ display: { xs: pregunta.preguntaID === 1 ? "none" : "block" } }} id="left" onClick={desplazamiento}><ChevronLeftIcon /></IconButton>
-                                            </Stack>
-                                        </Grid>
-                                        <Grid item xs={10} md={8}>
-                                            <Grid container direction="column" spacing={2} justifyContent="space-around" alignItems="center">
-                                                <Grid item xs={8}>
-                                                    <Typography variant='body2' component="div" fontFamily="Lexend Deca" color="secondary">{pregunta.pregunta}</Typography>
-                                                </Grid>
-                                                <Grid item xs={4}>
-                                                    <Stack direction="column" justifyContent="center" alignItems="center">
-                                                        {pregunta.respuestas.map((resp) => <Button sx={{ m: 1 }} variant="contained" id={resp.respuestaID} onClick={handleClick}>{resp.texto}</Button>)}
-                                                    </Stack>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item xs={1} md={2}>
-                                            <Stack direction="column" justifyContent="center" alignItems="center"></Stack>
-                                            <IconButton sx={{ display: { xs: pregunta.preguntaID === 7 ? "none" : "block" } }} id="right" onClick={desplazamiento}><ChevronRightIcon /></IconButton>
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={1}></Grid>
-                        </Grid>
-                    </Paper>
-                </Container >
+                    <CardHeader title={pregunta.pregunta} titleTypographyProps={{ fontFamily: "Lexend Deca", color: "white" }}
+                        sx={{
+                            display: {
+                                backgroundColor: "#F75E25"
+                            }
+                        }} />
+                    <CardContent>
+                        <Stack direction="column" justifyContent="center" alignItems="center">
+                            {pregunta.respuestas.map((resp) => <Button sx={{ m: 1 }} variant="contained" id={resp.respuestaID} onClick={handleClick}>{resp.texto}</Button>)}
+                        </Stack>
+                    </CardContent>
+                    <CardActions sx={{
+                        display: {
+                            backgroundColor: "#F75E25"
+                        }
+                    }} >
+                        <IconButton sx={{ display: { xs: pregunta.preguntaID === 1 ? "none" : "block" } }} id="left" onClick={desplazamiento}><ChevronLeftIcon /></IconButton>
+                        <IconButton sx={{ display: { xs: pregunta.preguntaID === 7 ? "none" : "block" } }} id="right" onClick={desplazamiento}><ChevronRightIcon /></IconButton>
+                    </CardActions>
+                </Card>
             </Stack>
         </>
     );

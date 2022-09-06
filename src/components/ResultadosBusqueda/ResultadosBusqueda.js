@@ -39,7 +39,13 @@ export default function ResultadosBusqueda(props) {
     );
 
     React.useEffect(() => {
-        setResultados(sessionStorage.getItem("resultados"));
+        let resp = sessionStorage.getItem("resultados");
+        if (resp !== null && resp !== undefined && resp !== "undefined") {
+            resp = JSON.parse(resp);
+            for (let res of resp) {
+                resultados.push(res);
+            }
+        }
         console.log(resultados);
     });
 
@@ -47,17 +53,20 @@ export default function ResultadosBusqueda(props) {
         <>
             <Grid container direction="row" alignItems="center" justifyContent="center" spacing={1}>
 
-                {(!resultados || resultados.length === 0) ? <Grid container direction="column" alignItems="center" justifyContent="center">
-                    <br />
-                    <Grid item xs={12}>
-                        <Typography variant="h1" color="#6c6960" size=""><SentimentVeryDissatisfied sx={{ fontSize: 100 }} /></Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Typography variant="h2" color="#6c6960">No encontramos resultados.</Typography>
-                    </Grid>
-                </Grid>
+                {(resultados === undefined || resultados.length === 0) ?
+                    (
+                        <Grid container direction="column" alignItems="center" justifyContent="center">
+                            <br />
+                            <Grid item xs={12}>
+                                <Typography variant="h1" color="#6c6960" size=""><SentimentVeryDissatisfied sx={{ fontSize: 100 }} /></Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="h2" color="#6c6960">No encontramos resultados.</Typography>
+                            </Grid>
+                        </Grid>
+                    )
                     :
-                    resultados.slice(limites.min, limites.max).map((item) => <Grid item key={item.articuloID} xs={12} md={6} lg={3}><TarjetaArticulo articulo={item} /></Grid>)
+                    (resultados.slice(limites.min, limites.max).map((item) => <Grid item key={item.articuloID} xs={12} md={6} lg={3}><TarjetaArticulo articulo={item} /></Grid>))
 
                 }
             </Grid>

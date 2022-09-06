@@ -108,7 +108,7 @@ export function busquedaPerfiles(articulo, omegas = null, aminos = null, acidosG
 export function preguntasDinamicas(respuestas, ID = null) {
     const Cuestionario = getPreguntas(respuestas);
 
-    if (respuestas === null) {
+    if (respuestas === null || respuestas.length === 0) {
         return Cuestionario[0];
     }
 
@@ -118,19 +118,19 @@ export function preguntasDinamicas(respuestas, ID = null) {
                 return preg;
         })
 
-    else
-        return Cuestionario[respuestas.length - 1]
+    return Cuestionario[respuestas.length - 1]
 }
 
 /**
  * @description Llena el arreglo de respuestas.
  * @param {number} preguntaID preguntaID para identificar con cuestionario
  * @param {number} respuestaID indice de respuesta segun objeto Preguntas.json
- * @param {Object} respuestas Objeto con arreglo de preguntas anteriores.
+ * @param {Array<Object>} respuestas Objeto con arreglo de preguntas anteriores.
  * @returns Objeto que representa un arreglo de respuestas con su respectivo preguntaID
  */
 export function setRespuestasSimple(preguntaID, respuestaID, respuestas = null) {
-    if (respuestas === null)
+    console.log(preguntaID, respuestaID, respuestas);
+    if (respuestas === null || respuestas.length === 0)
         return Array({ preguntaID: preguntaID, respuesta: respuestaID })
     else {
         let i = respuestas.length - 1;

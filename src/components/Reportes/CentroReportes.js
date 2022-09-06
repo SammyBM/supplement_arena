@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, CardContent, Grid, Paper, Typography } from "@mui/material";
+import { Card, CardContent, Grid, Paper, Skeleton, Typography } from "@mui/material";
 import axios from 'axios';
 
 import Reporte from './Reporte';
@@ -11,15 +11,18 @@ export default function CentroReportes() {
     const api = React.useContext(ApiContext);
 
     const [reportes, setReportes] = React.useState([]);
+    const [loading, setLoading] = React.useState(true);
 
-    const tarjetasReportes = reportes.map((item) => <Grid item xs={12} md={8}><Reporte reporte={item} /></Grid>);
+    const skeletons = [1, 2, 3, 4, 5].map((n) => <Grid item xs={12} md={8}><Skeleton variant="rectangular" width={210} height={118} /></Grid>);
 
     React.useEffect(() => {
-        axios.get(api.concat("reportes/read.php"))
-            .then((res) => {
-                setReportes(res.data.records);
-        })
-    }, []);
+        setTimeout(async () => {
+            await axios.get(api.concat("reportes/read.php"))
+                .then((res) => {
+                    setReportes(res.data.records);
+                }).catch((err) => console.error(err)).finally(() => setLoading(false));
+        }, []);
+    }, 1000)
 
     return (
         <Card>
@@ -31,7 +34,10 @@ export default function CentroReportes() {
                     <Typography variant='p' component="div" color="GrayText">{descripcionActividad}</Typography>
                 </CardContent>
                 <Grid container direction="column" alignItems="center" spacing={1} >
-                    {tarjetasReportes}
+                    {loading ?
+                        skeletons :
+                        reportes.map((item) => <Grid item xs={12} md={8}><Reporte reporte={item} /></Grid>)
+                    }
                 </Grid>
             </Paper>
         </Card>

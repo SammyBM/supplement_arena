@@ -15,6 +15,14 @@ const Input = styled('input')({
     display: 'none',
 });
 
+/**
+ * 
+ * @param {any[]} props array of properties
+ * @param {Integer} show property to authorize user by their user type
+ * @param {Boolean} open property to show or hide component
+ * @returns 
+ */
+
 export default function MenuAdmin(props) {
 
     //Tomar username para avatar
@@ -65,20 +73,20 @@ export default function MenuAdmin(props) {
     const mensaje = "Descargando...";
     const severity = "error";
     const needBackup = () => {
-        Service.postData("backup/backup",null).then((result) => {
+        Service.postData("backup/backup", null).then((result) => {
             console.log(result.status);
-            if (result.status == true){
-                mostrarNotificacion("Respaldo descargado correctamente","warning");
-                let url=window.URL.createObjectURL(new Blob([result.path]));
+            if (result.status == true) {
+                mostrarNotificacion("Respaldo descargado correctamente", "warning");
+                let url = window.URL.createObjectURL(new Blob([result.file]));
                 setlink(url)
-                window.open(result.path, '_blank', 'toolbar=0,location=0,menubar=0');
-            }else
-                mostrarNotificacion("Hubo un problema descargando información. Intente más tarde.","warning");
+                window.open(url, '_blank', 'toolbar=0,location=0,menubar=0');
+            } else
+                mostrarNotificacion("Hubo un problema descargando información. Intente más tarde.", "warning");
         }).catch((err) => {
             console.error(err);
-            mostrarNotificacion("Hubo un problema descargando información. Intente más tarde.","warning");
+            mostrarNotificacion("Hubo un problema descargando información. Intente más tarde.", "warning");
         }).finally(mostrarNotificacion(mensaje, severity));
-        
+
     }
 
 

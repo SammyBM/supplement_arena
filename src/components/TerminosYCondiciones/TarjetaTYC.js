@@ -1,14 +1,14 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import * as React from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 
-export default function TarjetaTYC() {
+export default function TarjetaTYC(props) {
+    const [consent, setConsent] = useState(props.accepted);
 
-    const [consent, setConsent] = useState(JSON.parse(sessionStorage.getItem('consent')));
-
-    const saveConsent = () => {
-        setConsent(true)
-        sessionStorage.setItem('consent', JSON.stringify(consent));
+    function saveConsent() {
+        setConsent(true);
+        sessionStorage.setItem("consent", JSON.stringify(true));
     }
 
     return (

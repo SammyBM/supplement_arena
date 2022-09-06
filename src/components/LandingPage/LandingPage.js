@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Carousel from 'react-material-ui-carousel'
-import { Card, CardMedia, Stack, CardContent, Typography, Grid } from '@mui/material'
+import { Card, CardMedia, Stack, CardContent, Typography, Grid, colors } from '@mui/material'
 import Service from "../../Service";
 import axios from 'axios';
 import { Buffer } from 'buffer'
@@ -13,6 +13,8 @@ const path = require("path-browserify");
 const imageResource = path.join(__dirname, "..", "..", "uploads", "carrousel");
 
 export default function LandingPage() {
+    let consent = sessionStorage.getItem("consent");
+
     const api = React.useContext(ApiContext);
 
     const [imagenes, setImagenes] = React.useState([]);
@@ -32,19 +34,13 @@ export default function LandingPage() {
         }).catch((err) => {
             console.log(err)
         });
-        /* axios.get(api.concat('imagenes_carrousel/read.php')).then(
-            (response) => {
-                imgs = response.data;
-                imgs.forEach(imageArray);
-                setImagenes(imgs);
-            }
-        ).catch((error) => { console.error(error) }) */
-    }
-    ), []);
+
+        console.log(consent);
+    }), []);
 
     return (
         <>
-            <TarjetaTYC />
+            <TarjetaTYC accepted={consent !== null ? JSON.parse(consent) : false} />
             <Grid container direction="row">
                 <Grid item xs={0} md={1} lg={2}></Grid>
                 <Grid item xs={12} md={10} lg={8}>
