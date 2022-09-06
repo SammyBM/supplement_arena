@@ -4,7 +4,8 @@ import { Box, height } from '@mui/system';
 
 import * as PlaceholderValues from '../PlaceholderValues';
 import Tweet from './Tweet';
-
+import { useState } from 'react';
+import Service from '../../Service';
 
 const descripcionActividad = "En esta herramienta encontrarás una selección de información que se considera relevante sobre el mercado actual de suplementos." + '\n' + "La información mostrada aquí es adquirida a través de las herramientas para desarrrolladores de Twitter.";
 
@@ -13,6 +14,13 @@ const tweets = PlaceholderValues.getTweetsFake();
 
 export default function CentroNovedades() {
     const tweetCards = tweets.map((item) => <Grid item xs={12} md={8}> <Tweet tweet={item} /></Grid >);
+    const [trends, setTrends] = React.useState([]);
+    
+    Service.getTweets().then((res) => {
+        setTrends(res);
+        console.log(res)
+    })
+
     return (
         <>
             <Card>
