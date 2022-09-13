@@ -28,6 +28,7 @@ import ResultadosBusqueda from '../ResultadosBusqueda/ResultadosBusqueda';
 import RecuperacionContrasena from '../MenuUsuario/RecuperacionContrasena';
 import Service from '../../Service';
 import { INVITADO } from '../../constantes';
+import PanelUsuarios from '../MenuAdmin/PanelUsuarios';
 
 const drawerWidth = 240;
 
@@ -124,8 +125,6 @@ const menuActividades = [
     { actividad: "Editor de articulos", id: "editor" },
     { actividad: "Centro de novedades", id: "novedades" },
     { actividad: "Centro de reportes", id: "reportes" },
-    { actividad: "Visualizador", id: "visualizador" },
-    { actividad: "Resultados", id: "resultados" }
 ];
 
 export default function MenuDrawer(props) {
@@ -263,6 +262,7 @@ export default function MenuDrawer(props) {
                             <Route path="/visualizador" element={<VisualizadorArticulos />} />
                             <Route path="/novedades" element={<CentroNovedades />} />
                             <Route path="/reportes" element={<CentroReportes />} />
+                            <Route path="/PanelUsuarios" element={<PanelUsuarios />} />
                             <Route path="*" component={NotFound} />
                         </Routes>
                     </>

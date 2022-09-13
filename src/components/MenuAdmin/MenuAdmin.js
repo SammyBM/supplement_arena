@@ -6,7 +6,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import { ListItemButton, ListItemText, Slide, Snackbar } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Service from "../../Service";
-import BackupIcon from '@mui/icons-material/Backup';
+import PeopleIcon from '@mui/icons-material/People';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
@@ -70,22 +70,26 @@ export default function MenuAdmin(props) {
             severity: ""
         })
     }
-    const mensaje = "Descargando...";
-    const severity = "error";
+    const MENSAJE = "Descargando...";
+    const SEVERITY = "error";
+
     const needBackup = () => {
         Service.postData("backup/backup", null).then((result) => {
             console.log(result.status);
             if (result.status == true) {
                 mostrarNotificacion("Respaldo descargado correctamente", "warning");
                 let url = window.URL.createObjectURL(new Blob([result.file]));
-                setlink(url)
-                window.open(url, '_blank', 'toolbar=0,location=0,menubar=0');
+                const element = document.createElement("a");
+                element.href = url;
+                document.body.appendChild(element);
+                element.click();
+                element.parentNode.removeChild(element);
             } else
                 mostrarNotificacion("Hubo un problema descargando información. Intente más tarde.", "warning");
         }).catch((err) => {
             console.error(err);
             mostrarNotificacion("Hubo un problema descargando información. Intente más tarde.", "warning");
-        }).finally(mostrarNotificacion(mensaje, severity));
+        }).finally(mostrarNotificacion(MENSAJE, SEVERITY));
 
     }
 
@@ -137,11 +141,17 @@ export default function MenuAdmin(props) {
                 transformOrigin={{ horizontal: 'left', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'left', vertical: 'center' }}
             >
-                <MenuItem onClick={() => needBackup()} href={link}>
+                <MenuItem onClick={() => needBackup()}>
                     <ListItemIcon>
                         <DownloadForOfflineIcon />
                     </ListItemIcon>
                     Descargar respaldo
+                </MenuItem>
+                <MenuItem onClick={() => Service.changePage("PanelUsuarios")}>
+                    <ListItemIcon>
+                        <PeopleIcon />
+                    </ListItemIcon>
+                    Panel de usaurios
                 </MenuItem>
             </Menu>
             <Snackbar

@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import ApiContext from '../../contexts/ApiContext';
 import TarjetaArticulo from './TarjetaArticulo';
+import SinResultados from '../Errores/SinResultados';
 
 export default function ResultadosBusqueda(props) {
     const api = React.useContext(ApiContext);
@@ -55,15 +56,7 @@ export default function ResultadosBusqueda(props) {
 
                 {(resultados === undefined || resultados.length === 0) ?
                     (
-                        <Grid container direction="column" alignItems="center" justifyContent="center">
-                            <br />
-                            <Grid item xs={12}>
-                                <Typography variant="h1" color="#6c6960" size=""><SentimentVeryDissatisfied sx={{ fontSize: 100 }} /></Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography variant="h2" color="#6c6960">No encontramos resultados.</Typography>
-                            </Grid>
-                        </Grid>
+                        <SinResultados />
                     )
                     :
                     (resultados.slice(limites.min, limites.max).map((item) => <Grid item key={item.articuloID} xs={12} md={6} lg={3}><TarjetaArticulo articulo={item} /></Grid>))

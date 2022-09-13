@@ -1,5 +1,5 @@
 import { ROUTES } from "./constantes";
-var Twitter = require('twitter');
+//var Twitter = require('twitter');
 
 export default class Service {
 
