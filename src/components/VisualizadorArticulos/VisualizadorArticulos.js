@@ -148,7 +148,7 @@ export default function VisualizadorArticulos(props) {
                             <CardMedia
                                 component="img"
                                 height="inherit"
-                                image={articulo.imagen}
+                                image={api + "/imagenes/imagenes_articulos/" + articulo.imagen}
                             />
                         </Card>
                     </Box>
