@@ -415,22 +415,26 @@ export default function BuscadorAvanzado() {
         }
         let resultados;
 
-        switch (data.tipoSuplemento) {
-            case 1:
-                resultados = busquedaPerfiles(articulo, null, dataAminos);
-                break;
-            case 2:
-                resultados = busquedaPerfiles(articulo, omegas, null, acidos);
-                break;
-            case 3:
-                resultados = busquedaPerfiles(articulo);
-                break;
-        }
-
-        console.log(resultados);
-        sessionStorage.setItem('resultados', JSON.stringify(resultados));
-        Service.changePage("resultados");
-
+        console.log(articulo, data.tipoSuplemento, dataAminos);
+        setTimeout(async () => {
+            switch (parseInt(data.tipoSuplemento)) {
+                case 1:
+                    console.log("CASE_1");
+                    resultados = busquedaPerfiles(articulo, null, dataAminos);
+                    break;
+                case 2:
+                    console.log("CASE_2");
+                    resultados = busquedaPerfiles(articulo, omegas, null, acidos);
+                    break;
+                case 3:
+                    console.log("CASE_3");
+                    resultados = busquedaPerfiles(articulo);
+                    break;
+            }
+            console.log(resultados);
+            sessionStorage.setItem('resultados', JSON.stringify(resultados));
+            Service.changePage("resultados");
+        }, 2000);
     }
 
     const pestanasSuplementos = tiposSuplemento.map((item) => <Tab key={item.id} value={item.id} label={item.tipo}></Tab>);

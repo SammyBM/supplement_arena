@@ -49,7 +49,7 @@ export default function LandingPage() {
                             <CircularProgress />
                             :
                             <Carousel>
-                                {imagenes.map((imagen, i) => <img src={API_ROUTE + "imagenes/imagenes_carrousel/" + imagen.nombre_foto + ".png"} />
+                                {imagenes.map((imagen, i) => <img src={API_ROUTE + "imagenes/imagenes_carrousel/" + imagen.nombre_foto} />
                                 )}
                             </Carousel>
                     }
@@ -63,7 +63,7 @@ export default function LandingPage() {
     );
 }
 
-{//<img src={"http://localhost:80/supplement_api/imagenes/imagenes_carrousel/" + imagen.nombre_foto + ".png"} />
+{//<img src={"http://localhost:80/supplement_api/imagenes/imagenes_carrousel/" + imagen.nombre_foto} />
 }
 
 function Item(props) {
@@ -82,7 +82,7 @@ function Item(props) {
             <Card sx={{ maxWidth: 500, maxHeight: 400 }}>
                 <CardMedia
                     component="img"
-                    src={"http://localhost:80/supplement_api/imagenes/imagenes_carrousel/" + item.nombre_foto + ".png"}
+                    src={"http://localhost:80/supplement_api/imagenes/imagenes_carrousel/" + item.nombre_foto}
                 />
                 <img src={item.bitmap} />
                 <CardContent>

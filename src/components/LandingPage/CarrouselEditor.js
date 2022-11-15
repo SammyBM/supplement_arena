@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Avatar, Dialog, DialogTitle, IconButton, List, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
+import { Avatar, Dialog, DialogTitle, IconButton, List, ListItem, ListItemAvatar, ListItemText, Skeleton } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 
@@ -23,45 +23,50 @@ function SimpleDialog(props) {
 
     const { onClose, open } = props;
 
-    const [imagenes, setImagenes] = React.useState([]);
+    let imagenes = props.imagenes;
 
     const handleClose = () => {
         onClose();
     };
 
     const handleListItemClick = (value) => {
-        if (value === "agregarImagen")
-            return;
+        console.log(value);
 
-        axios.get(api.concat('imagenes_carrousel/delete.php?id=', value.id)).then((response) => {
-            console.log(response);
-        }).catch((error) => {
-            console.warn(error);
-        });
+        if (value === "agregarImagen") {
+            /* axios.get(api.concat('imagenes_carrousel/create.php', value.fotoID)).then((response) => {
+                console.log(response);
+            }).catch((error) => {
+                console.warn(error);
+            }); */
+            return;
+        }
+        else
+            axios.get(api.concat('imagenes_carrousel/delete.php?id=', value.fotoID)).then((response) => {
+                console.log(response);
+            }).catch((error) => {
+                console.warn(error);
+            });
     };
 
     const handleImageSelect = (event) => {
         const formData = new FormData();
-        console.log(event.target.files[0]);
         formData.append('fileToUpload', event.target.files[0]);
 
-        axios.post(api.concat('imagenes_carrousel/create.php'), formData)
-            .then((response) => {
+        setTimeout(async () => {
+            await axios({
+                method: 'POST',
+                url: api.concat('imagenes/imagenes_carrousel/create2.php'),
+                data: { file: event.target.files[0] },
+                headers: { 'Content-Type': 'multipart/form-data' }
+            }).then((response) => {
                 console.log(response);
             }).catch((error) => {
                 console.error(error);
             }
             );
-    }
 
-    const handleImagenes = () => {
-        axios.get(api.concat('imagenes_carrousel/read.php')).then(res => {
-            const data = res.data;
-            data.records.length > 0 ? setImagenes(data.records) : setImagenes([]);
-        });
+        }, 1000)
     }
-
-    React.useEffect((() => handleImagenes()), []);
 
     return (
         <Dialog onClose={handleClose} open={open}>
@@ -74,7 +79,7 @@ function SimpleDialog(props) {
                                 <ImageIcon />
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary={imagen} />
+                        <ListItemText primary={imagen.nombre_foto} />
                         <IconButton onClick={() => handleListItemClick(imagen)} key={imagen}>
                             <RemoveCircleIcon />
                         </IconButton>
@@ -102,10 +107,14 @@ SimpleDialog.propTypes = {
 };
 
 export default function SimpleDialogDemo() {
+    const api = React.useContext(ApiContext);
+
     const usuario = sessionStorage.getItem("usuario") == null ? INVITADO : JSON.parse(sessionStorage.getItem("usuario"));
     const tipoUsuario = usuario.tipoUsuarioID
 
     const [open, setOpen] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
+    const [imagenes, setImagenes] = React.useState([]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -116,15 +125,41 @@ export default function SimpleDialogDemo() {
 
     };
 
-    return (
-        <>
-            <IconButton sx={{ display: { xs: tipoUsuario > 2 ? "block" : "none" } }} variant="outlined" onClick={handleClickOpen}>
-                <EditIcon />
-            </IconButton>
-            <SimpleDialog
-                open={open}
-                onClose={handleClose}
-            />
-        </>
-    );
+    const handleImagenes = async () => {
+        await axios.get(api.concat('imagenes/imagenes_carrousel/read.php')).then(res => {
+            const data = res.data;
+            data.records.length > 0 ? setImagenes(data.records) : setImagenes([]);
+        });
+    }
+
+    React.useEffect((() => {
+        setTimeout(async () => {
+            handleImagenes();
+            console.log(imagenes);
+            setLoading(false);
+        }, 5000);
+    }), []);
+
+    if (loading)
+        return (
+            <Skeleton variant="circular">
+                <IconButton>
+                    <EditIcon />
+                </IconButton>
+            </Skeleton>
+        )
+
+    else
+        return (
+            <>
+                <IconButton sx={{ display: { xs: tipoUsuario > 2 ? "block" : "none" } }} variant="outlined" onClick={handleClickOpen}>
+                    <EditIcon />
+                </IconButton>
+                <SimpleDialog
+                    open={open}
+                    onClose={handleClose}
+                    imagenes={imagenes}
+                />
+            </>
+        );
 }
