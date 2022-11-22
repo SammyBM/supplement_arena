@@ -48,11 +48,12 @@ function filterArrays(arr1, arr2, type) {
  * 
  * @returns {Array<Articulo>} An array of "articulo" objects with the provided characteristics.
  */
-export function busquedaPerfiles(articulo, omegas = null, aminos = null, acidosGrasos = null, ingredientes = null, alergenos = null) {
+export async function busquedaPerfiles(articulo, omegas = null, aminos = null, acidosGrasos = null, ingredientes = null, alergenos = null) {
     let resultados, om, am, ac, ing, alg;
 
-    Service.getDataQuery("/articulos/read_by_props", "articulo", articulo).then((res) => {
+    await Service.getDataQuery("/articulos/read_by_props", "articulo", articulo).then((res) => {
         resultados = res.records;
+        console.log(resultados);
         if (aminos != null) {
             Service.getDataQuery("/perfiles_aminos/read_by_props", "perfil_busqueda", aminos).then((res) => {
                 // Sacar registros con caracteristicas y filtrar por IDs en comun
@@ -77,14 +78,14 @@ export function busquedaPerfiles(articulo, omegas = null, aminos = null, acidosG
                 resultados = filterArrays(resultados, ac, 3);
             });
         }
-        if (ingredientes != null) {
+        if (ingredientes != null && ingredientes.length > 0) {
             Service.getDataQuery("/perfiles_ingredientes/read_by_props", "perfil_busqueda", ingredientes).then((res) => {
                 ing = res.records;
             }).catch((err) => console.error(err)).finally(() => {
                 resultados = filterArrays(resultados, ing, 4);
             });
         }
-        if (alergenos != null) {
+        if (alergenos != null && alergenos.length > 0) {
             Service.getDataQuery("/perfiles_ingredientes/avoid_alergenos", "perfil_busuqeda", alergenos).then((res) => {
                 alg = res.records;
             }).catch((err) => console.error(err)).finally(() => {

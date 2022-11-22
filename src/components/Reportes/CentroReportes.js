@@ -13,7 +13,7 @@ export default function CentroReportes() {
     const [reportes, setReportes] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
 
-    const skeletons = [1, 2, 3, 4, 5].map((n) => <Grid item xs={12} md={8}><Skeleton variant="rectangular" width={210} height={118} /></Grid>);
+    const skeletons = [1, 2, 3, 4, 5].map((n) => <Grid item xs={12} md={8} key={n}><Skeleton variant="rectangular" width={210} height={118} /></Grid>);
 
     React.useEffect(() => {
         setTimeout(async () => {
@@ -36,7 +36,7 @@ export default function CentroReportes() {
                 <Grid container direction="column" alignItems="center" spacing={1} >
                     {loading ?
                         skeletons :
-                        reportes.map((item) => <Grid item xs={12} md={8}><Reporte reporte={item} /></Grid>)
+                        reportes.map((item) => <Grid item xs={12} md={8} key={item.reporteID}><Reporte reporte={item} /></Grid>)
                     }
                 </Grid>
             </Paper>
